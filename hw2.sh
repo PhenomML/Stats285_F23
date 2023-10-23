@@ -9,8 +9,8 @@
 #SBATCH --output=hw2.out
 
 ## Load the python module
-module load anaconda3/2023.07
-module load python/3.9
+#module load anaconda3/2023.07
+ml python/3.11.4
 
 ## Run the python script
 time python3 ~/Stats285_hw3/main.py
