@@ -1,0 +1,83 @@
+[Homework 2. A Brush with Pain and Suffering]
+
+This may be elementary for some students but may be breaking new ground for others.
+It gets us all to the same “bare metal” server experience and the pain and suffering
+people had since the 1980’s. Our goal in later weeks is to do things in a more modern
+way and to understand how things are improving.
+
+We assume that you are using MacOS laptop with some recent version of MacOS
+and FarmShare. Small changes might be needed on linux laptops or on Sherlock.
+
+1) Check you can access in the  in Canvas>Stats285>Files>Homework>hw2.zip
+   Download the file onto your computer.
+
+2) In a folder of your choice, unzip the file. You should see a folder called hw2.
+
+3) Get the full unix path of the folder hw2. You will need to copy paste this exact string in multiple places below. 
+Below, we refer to this location as <PATH>.
+   (Ex. It should look something like "/Users/username/Downloads/hw2".)
+   (One way to find this is to open a terminal window and drag the folder from a Finder window into the terminal window, then look at the zsh command line.)
+   (You can open a terminal window by pressing command+space and typing "terminal" into the search bar. Then press enter.)
+
+3) Familiarize yourself with the contents of the folder. You should see the following files:
+     hw2.sh
+     hw2script.py
+   Explain what you think hw2script.py does.
+
+4) Run hw2script.py on your laptop. Check that it runs for you.
+   [a] Supply the transcript of your run.
+   [b] From the output, how long does it take to run?
+
+   (You may need to install python, numpy, & pandas. There are many online tutorials on how to do this.)
+   (In our experience, ChatGPT gave the clearest/easiest installation instructions.)
+   (You may need to review how to run python jobs in MacOS)
+
+5) Modify the program to use nrow=10000 and ncol=1000. Read the wall time from the output. Now how long does the code take to run?
+
+6) Revert the code to nrows=1000 and ncols=1000. Run the program on Stanford's Farmshare server.
+   (See instructions below.)
+
+* Open two Terminal windows. (On a Mac, you can create a new terminal window by pressing command+space and typing
+  "terminal" into the search bar. Then press enter.)
+
+* In the first window, run the line below:
+    echo -n -e "\033]0;MAC LAPTOP\007"
+  (This will rename the window to "MAC LAPTOP" for easy reference later.)
+
+* In the second window, run the line below:
+    echo -n -e "\033]0;FARMSHARE\007"
+  (This will rename the window to "FARMSHARE" for easy-reference later.)
+
+* In the below instructions, we will use [In "MAC LAPTOP"] to refer to commands to be run in the first window
+  and [In "FARMSHARE"] to refer to commands to be run the second window.
+
+* [In "FARMSHARE"] Log into Stanford's Farmshare server by entering the below (replace <suid> with your Stanford UserID):
+    ssh <suid>@rice.stanford.edu
+  (For more details and troubleshooting, see https://srcc.stanford.edu/farmshare/connecting)
+
+* [In "FARMSHARE"] Load the anaconda module by entering the line below:
+    module load anaconda3/5.0.1
+
+* [In "FARMSHARE"] Create a folder for stats285 by entering the line below:
+    mkdir ~/stats285
+
+* [In "MAC LAPTOP"] Copy the "hw2" into stanford farmshare by entering the line below:
+    scp -r <path> <suid>@rice.stanford.edu:~/stats285
+
+* [In "FARMSHARE"] Navigate into the hw2 folder by entering the line below:
+    cd ~/stats285/hw2
+
+* [In "FARMSHARE"] Send the hw2.sh script into the scheduler by entering the line below:
+    sbatch hw2.sh
+
+* [In "FARMSHARE"] Check the status of your job by entering the line below:
+    squeue -u <suid>
+
+* [In "FARMSHARE"] When the code finishes running, it should generate a file called "hw2data.csv" into
+  into the hw2 folder. It should also generate output files 'hw2.out' and 'hw2.err' into the hw2 folder.
+  Copy them back to your laptop using the following line:
+    scp -r <suid>@rice.stanford.edu:~/stats285/hw2 <path>
+
+7) Based on the output, what is the timing comparison between the laptop and the compute node?
+   (The output can be found in the hw2.out file. You can view it using the "cat hw2.out" command after navigating to
+   it in the terminal.)
