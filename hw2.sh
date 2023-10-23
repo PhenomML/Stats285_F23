@@ -12,4 +12,4 @@
 module load anaconda3/2023.07
 
 ## Run the python script
-time python ~/Stats285_hw3/main.py
+time python3 ~/Stats285_hw3/main.py
