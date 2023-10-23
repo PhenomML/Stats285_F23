@@ -1,0 +1,13 @@
+name: stats285
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - blas[build=mkl]
+  - python=3.11
+  - numpy
+  - pandas
+  - google-auth
+  - sqlalchemy
+  - pg8000
+  - cloud-sql-python-connector
