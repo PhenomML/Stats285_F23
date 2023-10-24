@@ -2,17 +2,60 @@
 
 Modern use of computers generally involves distributing code to many different nodes on the internet. So far we were logging in to each node and sending code by manual copying. This model doesn’t scale. Instead, we will introduce a method of code distribution using an internet resource — [GitHub](https://github.com).  Getting introduced to `git` and GitHub will have other advantages for us, down the road. The model we will introduce is widely used. 
 
-1. In course readings on canvas, find the github folder. In the history of “git” article, what is claimed to be Linus Torvalds reason for the name “git”. Who does Linus Torvalds credit as the project lead for “git”? Why did Torvalds think that he needed to design and start “git”? What is the relation between “git” and Linux? What is the relation between Linux and “the cloud”? What is the relation between “git” and “github”? Is Torvalds involved in Github?
+### Short Answer Questions
 
-2. In the “history of github” article, when did Github pass 1 million repos? When did it pass 10 million repos? How many repos are there now?
+On Canvas, navigate to Files -> Readings -> Github.
 
-3. Github is a commercial site. Some of it’s commercial services include Github copilot. Explain this service. This service is based on a secondary use for the code that’s made available on github repos by github users. What is this secondary use? Are Github customers aware that their code is put to this secondary use? How much code do you think is available for the Github company to put to this secondary use? Who owns Github? Who is the largest investor in OpenAI? Does OpenAI make use of github code?
+#### History of Git (Welcome to the Jungle article)
+
+Read the "History of Git: The Road to Domination" article. Answer the following questions.
+
+1. What is claimed to be Linus Torvalds reason for the name “git”. 
+
+2. Who does Linus Torvalds credit as the project lead for “git”? 
+
+3. Why did Torvalds think that he needed to design and start “git”? 
+
+4. What is the relation between “git” and Linux? 
+
+5. What is the relation between Linux and “the cloud”? 
+
+6. What is the relation between “git” and “github”? 
+
+7. Is Torvalds involved in Github?
+
+#### History of Github (Evans & Debacker article)
+
+Read the "History of GitHub" article from Evans & Debacker. Answer the following questions.
+
+1. When did Github pass 1 million repos? 
+
+2. When did it pass 10 million repos? 
+
+3. How many repos are there now?
+
+#### Look-Up Questions
+
+Using the resources available to use (e.g. Google, Wikipedia, etc.), answer the following questions.
+
+3. Github is a commercial site. Some of it’s commercial services include Github copilot. Explain this service. 
+
+4. Github copilot is based on a secondary use for the code that’s made available on github repos by github users. What is this secondary use? 
+
+5. Are Github customers aware that their code is put to this secondary use? 
+6. How much code do you think is available for the Github company to put to this secondary use? 
+7. Who owns Github? 
+8. Who is the largest investor in OpenAI? 
+9. Does OpenAI make use of github code?
 
 4. Do you have an existing Github account? If so, is it Paid or Free?  If so, have you created any public repos? Private repos? Say a bit about your motivations and experiences.
 
 5. The h-index arose as a method to quantify influence of authors in academia. It assigns a value to the author based on how many citations each paper by the author has gotten. In “GitHub Stars and the h-index” Vanderkam creates a similar notion for github repos based on Github Stars. In “Growth Hacking Github — how to get github stars” the author identifies some highly-starred repos. Name some highly starred repos. name some highly h-indexed-repo authors. 
 
 6. Name some push practices that are frowned upon in a data science community. Explain why they are frowned upon.
+
+
+### Exercises
 
 To run our code on many systems of different scale -- laptop, server, cluster, and supercomputer -- we need to distribute the same code to each computation node. And we need to ensure that we have the same computational environment everywhere. As Python programmers, we will use a system for managing scientific code called [Conda](https://docs.conda.io/en/latest/). (In hw2, you were likely lucky to have your code run. We need to remove luck from your scientific process by controlling your computational/experimental environment.) You can install Conda for [Mac here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html) and [Windows here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html). You have a choice of Miniconda or Anaconda; Miniconda is installed via the command line versus Anaconda has a GUI; your choice. The configuration of your Python environment is managed in an `environment.yml` file.
 
