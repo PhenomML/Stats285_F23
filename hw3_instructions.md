@@ -16,6 +16,12 @@ One of the first rules of code is that it changes. Version control systems have 
 
 This assignment expects you to already have a free GitHub account.
 
+1. Open a terminal window on your laptop.
+
+2. Issue the following command: `git clone https://github.com/adonoho/Stats285_hw3`
+
+3. Change directory to `Stats285_hw3`.
+
 1. Login to FarmShare.
 
 2. Issue the following command: `git clone https://github.com/adonoho/Stats285_hw3`
