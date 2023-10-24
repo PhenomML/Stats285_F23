@@ -20,11 +20,13 @@ One of the first rules of code is that it changes. Version control systems have 
 
 This assignment expects you to already have a free GitHub account.
 
-1. Open a terminal window on your laptop.
+7. Open a terminal window on your laptop.
 
 2. Issue the following command: `git clone https://github.com/adonoho/Stats285_hw3`
 
 3. Change directory to `Stats285_hw3`.
+
+4. Local instructions here.
 
 1. Login to FarmShare.
 
@@ -36,10 +38,12 @@ This assignment expects you to already have a free GitHub account.
 
 5. Execute the same command from last week: `sbatch hw2.sh`, followed by `squeue` .
 
-6. Look at the branches of different code already in this project: `git branch -a`
-
-7. You will see both local and remote branches. On the remote branches, you will see where hw3 will be developed. If you use the GitHub feature to watch the repo, GitHub will email you when it changes.
+---
 
 ### Our current status:
 
 Parallel systems are heavily protected on the internet. We originally planned to host a database on Sherlock and get each of you credentials to write your data to the DB and then run the gather phase on your personal laptop. You would use the same code repository on FarmShare and your laptop. Alas, FarmShare codes cannot access Sherlock resources. We are looking at either using a Stanford managed instance of MySQL or a group managed instance of PostgreSQL on GCP. This will all be resolved by Wednesday and the code published on GitHub.
+
+6. Look at the branches of different code already in this project: `git branch -a`
+
+7. You will see both local and remote branches. On the remote branches, you will see where hw3 will be developed. If you use the GitHub feature to watch the repo, GitHub will email you when it changes.
