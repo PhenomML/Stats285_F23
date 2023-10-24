@@ -12,7 +12,7 @@ Modern use of computers generally involves distributing code to many different n
 
 5. The h-index arose as a method to quantify influence of authors in academia. It assigns a value to the author based on how many citations each paper by the author has gotten. In “GitHub Stars and the h-index” Vanderkam creates a similar notion for github repos based on Github Stars. In “Growth Hacking Github — how to get github stars” the author identifies some highly-starred repos. Name some highly starred repos. name some highly h-indexed-repo authors. 
 
-6. Name some push practices that are frowned upon. Explain why they are frowned upon.
+6. Name some push practices that are frowned upon in a data science community. Explain why they are frowned upon.
 
 To run our code on many systems of different scale -- laptop, server, cluster, and supercomputer -- we need to distribute the same code to each computation node. We use a distributed version control system called `git` and a service called [GitHub](https://github.com) to reliably distribute our code.
 
