@@ -2,6 +2,8 @@
 
 Modern use of computers generally involves distributing code to many different nodes on the internet. So far we were logging in to each node and sending code by manual copying. This model doesn’t scale. Instead, we will introduce a method of code distribution using an internet resource — [GitHub](https://github.com).  Getting introduced to `git` and GitHub will have other advantages for us, down the road. The model we will introduce is widely used. 
 
+### Readings
+
 1. In course readings on canvas, find the github folder. In the history of “git” article, what is claimed to be Linus Torvalds reason for the name “git”. Who does Linus Torvalds credit as the project lead for “git”? Why did Torvalds think that he needed to design and start “git”? What is the relation between “git” and Linux? What is the relation between Linux and “the cloud”? What is the relation between “git” and “github”? Is Torvalds involved in Github?
 
 2. In the “history of github” article, when did Github pass 1 million repos? When did it pass 10 million repos? How many repos are there now?
@@ -13,6 +15,9 @@ Modern use of computers generally involves distributing code to many different n
 5. The h-index arose as a method to quantify influence of authors in academia. It assigns a value to the author based on how many citations each paper by the author has gotten. In “GitHub Stars and the h-index” Vanderkam creates a similar notion for github repos based on Github Stars. In “Growth Hacking Github — how to get github stars” the author identifies some highly-starred repos. Name some highly starred repos. name some highly h-indexed-repo authors. 
 
 6. Name some push practices that are frowned upon in a data science community. Explain why they are frowned upon.
+
+
+### Exercises
 
 To run our code on many systems of different scale -- laptop, server, cluster, and supercomputer -- we need to distribute the same code to each computation node. And we need to ensure that we have the same computational environment everywhere. As Python programmers, we will use a system for managing scientific code called [Conda](https://docs.conda.io/en/latest/). (In hw2, you were likely lucky to have your code run. We need to remove luck from your scientific process by controlling your computational/experimental environment.) You can install Conda for [Mac here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html) and [Windows here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html). You have a choice of Miniconda or Anaconda; Miniconda is installed via the command line versus Anaconda has a GUI; your choice. The configuration of your Python environment is managed in an `environment.yml` file.
 
