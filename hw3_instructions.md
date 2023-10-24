@@ -1,5 +1,17 @@
 # Homework 3. Easing the Pain with Version Control
 
+Modern use of computers generally involves distributing code to many different nodes on the internet. So far we were logging in to each node and sending code by manual copying. This model doesn’t scale. Instead, we will introduce a method of code distribution using an internet resource — [GitHub](https://github.com).  Getting introduced to `git` and GitHub will have other advantages for us, down the road. The model we will introduce is widely used. 
+
+1. In course readings on canvas, find the github folder. In the history of “git” article, what is claimed to be Linus Torvalds reason for the name “git”. Who does Linus Torvalds credit as the project lead for “git”? Why did Torvalds think that he needed to design and start “git”? What is the relation between “git” and Linux? What is the relation between Linux and “the cloud”? What is the relation between “git” and “github”? Is Torvalds involved in Github?
+
+2. In the “history of github” article, when did Github pass 1 million repos? When did it pass 10 million repos? How many repos are there now?
+
+3. Github is a commercial site. Some of it’s commercial services include Github copilot. Explain this service. This service is based on a secondary use for the code that’s made available on github repos by github users. What is this secondary use? Are Github customers aware that their code is put to this secondary use? How much code do you think is available for the Github company to put to this secondary use? Who owns Github? Who is the largest investor in OpenAI? Does OpenAI make use of github code?
+
+4. Do you have an existing Github account? If so, is it Paid or Free?  If so, have you created any public repos? Private repos? Say a bit about your motivations and experiences.
+
+To run our code on many systems of different scale -- laptop, server, cluster, and supercomputer -- we need to distribute the same code to each computation node. We use a distributed version control system called `git` and a service called [GitHub](https://github.com) to reliably distribute our code.
+
 One of the first rules of code is that it changes. Version control systems have migrated to the center of the server and supercomputer ecosystems. Today's homework is the beginning of showing you how code evolves. We will start with a modest rewriting of HW2 to use functions and embrace associating parameters and observables. Unlike last week though, the code is delivered as a URL to a GitHub repository, [Stats285_hw3](https://github.com/adonoho/Stats285_hw3). Why is this important? Because code written by others changes. This code is going to change. We will be updating it to do the tall and skinny SVD and to write the results to a remote database.
 
 This assignment expects you to already have a free GitHub account.
