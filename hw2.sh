@@ -9,7 +9,7 @@
 #SBATCH --output=hw2.out
 
 ## Load the python module
-ml anaconda3/2023.07
+module load anaconda3/2023.07
 source activate stats285
 
 ## Run the python script
