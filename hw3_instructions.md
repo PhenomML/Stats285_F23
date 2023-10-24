@@ -105,7 +105,7 @@ This assignment expects you to already have a free GitHub account.
 
 17. Examine the contents; does it look modestly familiar?
 
-18. Check if the `conda` environment`stats285` is still around?  
+18. Check if the `conda` environment `stats285` is still around?  
 ```
 	ml anaconda3/2023.07
 	conda env list
