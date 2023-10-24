@@ -14,9 +14,9 @@ Modern use of computers generally involves distributing code to many different n
 
 6. Name some push practices that are frowned upon in a data science community. Explain why they are frowned upon.
 
-To run our code on many systems of different scale -- laptop, server, cluster, and supercomputer -- we need to distribute the same code to each computation node. We use a distributed version control system called `git` and a service called [GitHub](https://github.com) to reliably distribute our code.
+To run our code on many systems of different scale -- laptop, server, cluster, and supercomputer -- we need to distribute the same code to each computation node. And we need to ensure that we have the same computational environment everywhere. As Python programmers, we will use a system for managing scientific code called [Conda](https://docs.conda.io/en/latest/). (In hw2, you were likely lucky to have your code run. We need to remove luck from your scientific process by controlling your computational/experimental environment.) You can install Conda for [Mac here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html) and [Windows here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html). You have a choice of Miniconda or Anaconda; Miniconda is installed via the command line versus Anaconda has a GUI; your choice. The configuration of your Python environment is managed in an `environment.yml` file.
 
-One of the first rules of code is that it changes. Version control systems have migrated to the center of the server and supercomputer ecosystems. Today's homework is the beginning of showing you how code evolves. We will start with a modest rewriting of HW2 to use functions and embrace associating parameters and observables. Unlike last week though, the code is delivered as a URL to a GitHub repository, [Stats285_hw3](https://github.com/adonoho/Stats285_hw3). Why is this important? Because code written by others changes. This code is going to change. We will be updating it to do the tall and skinny SVD and to write the results to a remote database.
+Version control systems have migrated to the center of the server and supercomputer ecosystems. Today's homework is the beginning of showing you how code evolves. We will start with a modest rewriting of HW2 to use functions and embrace associating parameters and observables. Unlike last week though, the code is delivered as a URL to a GitHub repository, [Stats285_hw3](https://github.com/adonoho/Stats285_hw3). Why is this important? Because you want the code on your servers to be the same as the code you developed and tested on your laptop. This is something that version control systems do very well. We should exploit them.
 
 This assignment expects you to already have a free GitHub account.
 
@@ -26,9 +26,24 @@ This assignment expects you to already have a free GitHub account.
 
 3. Change directory to `Stats285_hw3`.
 
-4. Local instructions here.
+4. Issue the following command: `conda env create --name stats285 --file environment.yml`
 
-1. Login to FarmShare.
+4. Issue the following command: `conda activate stats285`
+
+4. Issue the following command: `python --version` You should see: `Python 3.11.6`.
+
+4. Issue the following command: `python main.py` You should see something like:
+```
+	INFO:root:Data Generated
+	INFO:root:nrow = 1000
+	INFO:root:ncol = 1000
+	INFO:root:u_alignment = -0.9999441742880615
+	INFO:root:v_alignment = -0.9999459499387543
+	INFO:root:signal_error = 4.447919645101738e-05
+	INFO:root:--- 0.38405895233154297 seconds ---
+```
+
+14. Login to FarmShare.
 
 2. Issue the following command: `git clone https://github.com/adonoho/Stats285_hw3`
 
@@ -43,6 +58,8 @@ This assignment expects you to already have a free GitHub account.
 ### Our current status:
 
 Parallel systems are heavily protected on the internet. We originally planned to host a database on Sherlock and get each of you credentials to write your data to the DB and then run the gather phase on your personal laptop. You would use the same code repository on FarmShare and your laptop. Alas, FarmShare codes cannot access Sherlock resources. We are looking at either using a Stanford managed instance of MySQL or a group managed instance of PostgreSQL on GCP. This will all be resolved by Wednesday and the code published on GitHub.
+
+We use a distributed version control system called `git` and a service called [GitHub](https://github.com) to reliably distribute our code.
 
 6. Look at the branches of different code already in this project: `git branch -a`
 
