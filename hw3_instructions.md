@@ -22,17 +22,26 @@ This assignment expects you to already have a free GitHub account.
 
 7. Open a terminal window on your laptop.
 
-2. Issue the following command: `git clone https://github.com/adonoho/Stats285_hw3`
+8. Issue the following command:  
+	`git clone https://github.com/adonoho/Stats285_hw3`
 
-3. Change directory to `Stats285_hw3`.
+9. Change directory to:  
+	`cd Stats285_hw3/`
 
-4. Issue the following command: `conda env create --name stats285 --file environment.yml`
+10. Issue the following command:  
+	`conda env create --name stats285 --file environment.yml`
 
-4. Issue the following command: `conda activate stats285`
+11. Issue the following command:  
+	`conda activate stats285`
 
-4. Issue the following command: `python --version` You should see: `Python 3.11.6`.
+12. Issue the following command:  
+	`python --version`  
+	You should see: `Python 3.11.6`.
 
-4. Issue the following command: `python main.py` You should see something like:
+13. Issue the following command:  
+	`python main.py`  
+
+	You should see something like:
 ```
 	INFO:root:Data Generated
 	INFO:root:nrow = 1000
@@ -45,22 +54,31 @@ This assignment expects you to already have a free GitHub account.
 
 14. Login to FarmShare.
 
-2. Issue the following command: `git clone https://github.com/adonoho/Stats285_hw3`
+15. Issue the following command:  
+	`git clone https://github.com/adonoho/Stats285_hw3`
 
-3. Change directory to `Stats285_hw3`.
+16. Change directory to  
+	`cd Stats285_hw3/`
 
-4. Examine the contents; does it look modestly familiar?
+17. Examine the contents; does it look modestly familiar?
 
-5. Execute the same command from last week: `sbatch hw2.sh`, followed by `squeue` .
+18. Check if the `conda` environment`stats285` is still around?  
+```
+	ml anaconda3/2023.07
+	conda env list
+```
 
----
+19. If so, delete it:  
+	`conda env remove --name stats285`
 
-### Our current status:
+20. Create a new environment:  
+	`conda env create --name stats285 --file environment.yml`  
+	(This can take a few minutes.)
 
-Parallel systems are heavily protected on the internet. We originally planned to host a database on Sherlock and get each of you credentials to write your data to the DB and then run the gather phase on your personal laptop. You would use the same code repository on FarmShare and your laptop. Alas, FarmShare codes cannot access Sherlock resources. We are looking at either using a Stanford managed instance of MySQL or a group managed instance of PostgreSQL on GCP. This will all be resolved by Wednesday and the code published on GitHub.
+21. Turn it on:  
+	`source activate stats285`  
+	(Note, FarmShare is different from other Unix/Linux shells.)
 
-We use a distributed version control system called `git` and a service called [GitHub](https://github.com) to reliably distribute our code.
-
-6. Look at the branches of different code already in this project: `git branch -a`
-
-7. You will see both local and remote branches. On the remote branches, you will see where hw3 will be developed. If you use the GitHub feature to watch the repo, GitHub will email you when it changes.
+22. Execute the same command from last week:  
+	`sbatch hw2.sh`  
+	`squeue`

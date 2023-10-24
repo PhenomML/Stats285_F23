@@ -10,6 +10,7 @@
 
 ## Load the python module
 ml anaconda3/2023.07
+source activate stats285
 
 ## Run the python script
 time python3 ~/Stats285_hw3/main.py
