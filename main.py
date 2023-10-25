@@ -71,7 +71,7 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
     # Save u_est, v_est, u_true, v_true in a CSV file with an index column
     df = pd.DataFrame({'nrow': nrow, 'ncol': ncol, 'seed': seed,  # P, Parameters
                        "u_est": u_est, "v_est": v_est, "u_true": u_true, "v_true": v_true})  # W, Observables
-    df.to_csv("hw2data.csv", index_label="index")
+    df.to_csv("hw3data.csv", index_label="index")
 
     # Print runtime
     logging.info(f"--- {time.time() - start_time} seconds ---")
