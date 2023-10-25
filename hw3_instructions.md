@@ -1,6 +1,9 @@
 # Homework 3. Easing the Pain with Version Control
 
-Modern use of computers generally involves distributing code to many different nodes on the internet. So far we were logging in to each node and sending code by manual copying. This model doesn’t scale. Instead, we will introduce a method of code distribution using an internet resource — [GitHub](https://github.com).  Getting introduced to `git` and GitHub will have other advantages for us, down the road. The model we will introduce is widely used. 
+Modern use of computers generally involves distributing code to many different nodes on the internet. So far we were 
+logging in to each node and sending code by manual copying. This model doesn’t scale. Instead, we will introduce a 
+method of code distribution using an internet resource — [GitHub](https://github.com).  Getting introduced to `git` and GitHub will 
+have other advantages for us, down the road. The model we will introduce is widely used. 
 
 ### Short Answer Questions
 
@@ -34,11 +37,13 @@ Read the "History of GitHub" article from Evans & Debacker. Answer the following
 
 3. How many repos are there now?
 
+7. Who currently owns Github? 
+
 #### Growth Hacking Github (Lin article)
 
 Read the "Growth Hacking Github" article by Lin. Answer the following questions.
 
-1The h-index arose as a method to quantify influence of authors in academia. It assigns a value to the author based on how many citations each paper by the author has gotten. In “GitHub Stars and the h-index” Vanderkam creates a similar notion for github repos based on Github Stars. In “Growth Hacking Github — how to get github stars” the author identifies some highly-starred repos. Name some highly starred repos. name some highly h-indexed-repo authors. 
+1. The h-index arose as a method to quantify influence of authors in academia. It assigns a value to the author based on how many citations each paper by the author has gotten. In “GitHub Stars and the h-index” Vanderkam creates a similar notion for github repos based on Github Stars. In “Growth Hacking Github — how to get github stars” the author identifies some highly-starred repos. Name some highly starred repos. name some highly h-indexed-repo authors. 
 
 #### Look-Up Questions
 
@@ -51,8 +56,6 @@ Using the resources available to use (e.g. Google, Wikipedia, etc.), answer the 
 5. Are Github customers aware that their code is put to this secondary use? 
 
 6. How much code do you think is available for the Github company to put to this secondary use? 
-
-7. Who owns Github? 
 
 8. Who is the largest investor in OpenAI? 
 
