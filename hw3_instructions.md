@@ -49,7 +49,7 @@ similar notion for github repos based on Github Stars. Read the "Growth Hacking 
 
 #### Look-Up Questions
 
-Using the resources available to use (e.g. Google, Wikipedia, etc.), answer the following questions.
+Using the resources available to you (e.g. Google, Wikipedia, etc.), answer the following questions.
 
 1. Github is a commercial site. Some of it’s commercial services include Github copilot. Explain this service. 
 
