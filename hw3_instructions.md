@@ -39,13 +39,29 @@ Read the "History of GitHub" article from Evans & Debacker. Answer the following
 
 7. Who currently owns Github? 
 
-#### Growth Hacking Github (Lin article)
+9. What are some concerns people had when Github was acquired?
+
+8. Who are some competitors of Github?
+
+#### Github Stars and the h-index (Vanderkam article)
 
 The h-index arose as a method to quantify influence of authors in academia. It assigns a value to the author based
 on how many citations each paper by the author has gotten. In “GitHub Stars and the h-index” Vanderkam creates a 
-similar notion for github repos based on Github Stars. Read the "Growth Hacking Github" article by Lin. Answer the following questions.
+similar notion for github repos based on Github Stars. Read the article and answer the following questions.
 
-1. Name some highly starred repos. Name some highly h-indexed-repo authors. 
+1. Name some highly starred repos.
+
+1. Name some highly h-indexed-repo authors. 
+
+2. Using resources available to you (e.g. Google, Wikipedia, etc.), look up and describe how the h-index is calculated.
+
+#### Growth Hacking Github (Lin article)
+
+Read the "Growth Hacking Github" article by Lin and answer the following questions.
+
+1. To what factors does the author attribute the success of Redux Toolkit?
+2. To what factors does the author attribute the success of Huggingface Transformers?
+3. Describe, in your own words, ten strategies the author recommends for increasing the number of Github stars.
 
 #### Look-Up Questions
 
