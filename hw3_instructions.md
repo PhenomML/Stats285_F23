@@ -111,7 +111,7 @@ This assignment expects you to already have a free GitHub account.
 
 #### Running code on your Laptop
 
-1. Open a terminal window on your laptop. In the shell, run this command:
+1. Open a terminal window on your laptop. In the shell, run this command:  
     `echo -n -e "\033]0;LAPTOP\007"`
 
 2. Issue the following command:  
@@ -146,7 +146,7 @@ This assignment expects you to already have a free GitHub account.
 
 #### Running code on a server
 
-1. Open another terminal window on your laptop. In the shell, run this command:
+1. Open another terminal window on your laptop. In the shell, run this command:  
     `echo -n -e "\033]0;FARMSHARE\007"`
 
 2. Login to FarmShare. [or Sherlock, if you have an account there]
