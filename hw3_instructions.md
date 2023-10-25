@@ -79,10 +79,11 @@ Using the resources available to you (e.g. Google, Wikipedia, etc.), answer the 
 
 9. Does OpenAI make use of Github code?
 
-4. Do you have an existing Github account? If so, is it Paid or Free?  If so, have you created any public repos? Private repos? Say a bit about your motivations and experiences.
-
 6. Name and explain some disadvantages of Github for doing data science.
-
+4. Do you have an existing Github account? If so, is it paid or free?  
+If so, have you created any public or private repos? 
+If not, have you ever tried to use Github before? Was there any obstacles you faced?
+(In either case, say a bit about your motivations and experiences.)
 
 ### Exercises
 
