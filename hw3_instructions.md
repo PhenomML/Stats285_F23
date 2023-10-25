@@ -101,7 +101,7 @@ So actually, we were lucky that in last week's homework, the user-specific code 
 
 In the future, it's better to specify the *entire stack* we are assuming, including specific versions of software, and install exactly the specified stack on each node, so that we can be sure that every node has the same computational environment, and can run the same code. 
 
-As Python programmers, we will use a system for managing stacks of scientific code called [Conda](https://docs.conda.io/en/latest/). It allows us to efficiently and conveniently define and install `the rest of our stack' as a computational environment.  
+As Python programmers, we will use a system for managing stacks of scientific code called [Conda](https://docs.conda.io/en/latest/). It allows us to efficiently and conveniently define and install 'the rest of our stack' as a computational environment.  
 
 You can install Conda on your laptop. [Mac here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html) and [Windows here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/windows.html). You have a choice of Miniconda or Anaconda; Miniconda is installed via the command line while Anaconda has a GUI; your choice. The configuration of your Python environment is managed in an `environment.yml` file.
 
