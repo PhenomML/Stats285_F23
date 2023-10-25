@@ -4,6 +4,8 @@ Modern use of computers generally involves distributing code to many different n
 logging in to each node and sending code by manual copying. This model doesn’t scale. Instead, we will introduce a 
 method of code distribution using an internet resource — [GitHub](https://github.com).  Getting introduced to `git` and GitHub will have other advantages for us, down the road. The model we will introduce is widely used. 
 
+If you are new to Github, you might consult this [Quickstart](https://docs.github.com/en/get-started/quickstart/hello-world)
+
 ## Short Answer Questions
 
 On Canvas, navigate to Files -> Readings -> Github.
