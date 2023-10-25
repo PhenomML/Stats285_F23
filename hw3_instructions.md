@@ -41,9 +41,11 @@ Read the "History of GitHub" article from Evans & Debacker. Answer the following
 
 #### Growth Hacking Github (Lin article)
 
-Read the "Growth Hacking Github" article by Lin. Answer the following questions.
+The h-index arose as a method to quantify influence of authors in academia. It assigns a value to the author based
+on how many citations each paper by the author has gotten. In “GitHub Stars and the h-index” Vanderkam creates a 
+similar notion for github repos based on Github Stars. Read the "Growth Hacking Github" article by Lin. Answer the following questions.
 
-1. The h-index arose as a method to quantify influence of authors in academia. It assigns a value to the author based on how many citations each paper by the author has gotten. In “GitHub Stars and the h-index” Vanderkam creates a similar notion for github repos based on Github Stars. In “Growth Hacking Github — how to get github stars” the author identifies some highly-starred repos. Name some highly starred repos. name some highly h-indexed-repo authors. 
+1. Name some highly starred repos. Name some highly h-indexed-repo authors. 
 
 #### Look-Up Questions
 
@@ -59,11 +61,11 @@ Using the resources available to use (e.g. Google, Wikipedia, etc.), answer the 
 
 8. Who is the largest investor in OpenAI? 
 
-9. Does OpenAI make use of github code?
+9. Does OpenAI make use of Github code?
 
 4. Do you have an existing Github account? If so, is it Paid or Free?  If so, have you created any public repos? Private repos? Say a bit about your motivations and experiences.
 
-6. Name some push practices that are frowned upon in a data science community. Explain why they are frowned upon.
+6. Name and explain some disadvantages of Github for doing data science.
 
 
 ### Exercises
