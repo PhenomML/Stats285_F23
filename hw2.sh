@@ -8,8 +8,5 @@
 #SBATCH --error=hw2.err
 #SBATCH --output=hw2.out
 
-## Load the python module
-ml anaconda3/2023.07
-
 ## Run the python script
 time python3 ~/Stats285_hw3/main.py
