@@ -180,7 +180,7 @@ This assignment expects you to already have a free GitHub account.
 	`sbatch hw2.sh`  
 	`squeue`
 
-23. Unlike hw2, we now are using the logging tool in Python. FarmShare will place this data in the error stream, `hw2.err`. In that file, you should see a similar output to step 13 above.  
+11. Unlike hw2, we now are using the logging tool in Python. FarmShare will place this data in the error stream, `hw2.err`. In that file, you should see a similar output to laptop step 7 above.  
 ```
 	INFO:root:Data Generated
 	INFO:root:nrow = 1000
@@ -193,7 +193,7 @@ This assignment expects you to already have a free GitHub account.
 	545112inputs+208outputs (108major+31186minor)pagefaults 0swaps
 ```
 
-24. We also have written a new format `.csv` file, `hw2data.csv`. It shows some characteristics of `numpy`/`pandas` where scalars, the parameters in our case, are "broadcast" to match the "shape" of the observables.  
+12. We also have written a new format `.csv` file, `hw2data.csv`. It shows some characteristics of `numpy`/`pandas` where scalars, the parameters in our case, are "broadcast" to match the "shape" of the observables.  
 ```
 	index,nrow,ncol,seed,u_est,v_est,u_true,v_true
 	0,1000,1000,285,-0.03236102757929593,0.031223329570119786,0.03162277660168379,-0.03162277660168379
