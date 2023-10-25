@@ -8,7 +8,7 @@ If you are new to Github, you might consult this [Quickstart](https://docs.githu
 
 ## Short Answer Questions
 
-On Canvas, navigate to Files -> Readings -> Github.
+On Canvas, navigate to Files -> Readings -> Github. Write your answers in a PDF document and submit them on Canvas.
 
 #### History of Git (Welcome to the Jungle article)
 
@@ -200,3 +200,4 @@ This assignment expects you to already have a free GitHub account.
 	1,1000,1000,285,0.03139612247692286,-0.03127049843880714,-0.03162277660168379,0.03162277660168379
 ```
 
+13. Submit `hw3.err`, `hw2.out`, and `hw3data.csv` on Canvas.
