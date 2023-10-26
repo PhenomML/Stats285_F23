@@ -1,5 +1,7 @@
 # Homework 3. Easing the Pain with Version Control
 
+Due on **Friday 11/3** at 11:59PM.
+
 Modern use of computers generally involves distributing code to many different nodes on the internet. So far we were 
 logging in to each node and sending code by manual copying. This model doesn’t scale. Instead, we will introduce a 
 method of code distribution using an internet resource — [GitHub](https://github.com).  Getting introduced to `git` and GitHub will have other advantages for us, down the road. The model we will introduce is widely used. 
