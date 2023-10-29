@@ -8,6 +8,7 @@ dependencies:
   - numpy
   - pandas
   - sqlalchemy
+  - google-auth
   - dask
   - pip
   - pip:

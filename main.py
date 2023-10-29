@@ -101,11 +101,11 @@ def build_params(size: int = 1, su_id: str = 'su_ID') -> dict:
 
 
 def do_local_experiment():
-    exp = build_params(size=1000, su_id='adonoho')
+    exp = build_params(size=1000, su_id='adonoho_1')
     with LocalCluster() as cluster:
         with Client(cluster) as client:
-            do_on_cluster(exp, experiment, client)
-            # do_on_cluster(exp, experiment, client, credentials=get_gbq_credentials())
+            # do_on_cluster(exp, experiment, client)
+            do_on_cluster(exp, experiment, client, credentials=get_gbq_credentials())
 
 
 if __name__ == "__main__":
