@@ -10,6 +10,7 @@ dependencies:
   - sqlalchemy
   - google-auth
   - dask
+  - dask-jobqueue
   - pip
   - pip:
     - git+https://github.com/adonoho/EMS.git

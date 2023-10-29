@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from dask.distributed import Client, LocalCluster
+from dask_jobqueue import SLURMCluster
 from EMS.manager import do_on_cluster, get_gbq_credentials
 import logging
 
@@ -100,6 +101,14 @@ def build_params(size: int = 1, su_id: str = 'su_ID') -> dict:
     return exp
 
 
+def do_cluster_experiment():
+    exp = build_params(size=1000, su_id='adonoho_2')
+    with SLURMCluster(cores=8, processes=1, walltime='00:30:00') as cluster:
+        with Client(cluster) as client:
+            # do_on_cluster(exp, experiment, client)
+            do_on_cluster(exp, experiment, client, credentials=get_gbq_credentials())
+
+
 def do_local_experiment():
     exp = build_params(size=1000, su_id='adonoho_1')
     with LocalCluster() as cluster:
@@ -110,4 +119,5 @@ def do_local_experiment():
 
 if __name__ == "__main__":
     # experiment(nrow=1000, ncol=1000, seed=285)
-    do_local_experiment()
+    # do_local_experiment()
+    do_cluster_experiment()
