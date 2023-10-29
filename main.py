@@ -4,6 +4,8 @@ import time
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
+from dask.distributed import Client, LocalCluster
+from EMS.manager import do_on_cluster, get_gbq_credentials
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -12,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 def generate_data(nrow: int, ncol: int, seed: int = 0) -> tuple:
 
     # Set seed
-    np.random.seed(seed)
+    rng = np.random.default_rng(1 + seed * 10000)  # Ensure the seed is non-zero and spans a large range of values.
 
     # Create length-n vector u with element equal to (-1)^i/sqrt(n)
     u = np.array([(-1)**i/np.sqrt(nrow) for i in range(nrow)])
@@ -22,7 +24,7 @@ def generate_data(nrow: int, ncol: int, seed: int = 0) -> tuple:
     signal = 3 * np.outer(u,v)
 
     # noise matrix of normal(0,1)
-    noise = np.random.normal(0,1,(nrow,ncol))/np.sqrt(nrow*ncol)
+    noise = rng.normal(0,1,(nrow,ncol))/np.sqrt(nrow*ncol)
 
     # observations matrix
     X = signal + noise
@@ -71,12 +73,40 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
     # Save u_est, v_est, u_true, v_true in a CSV file with an index column
     df = pd.DataFrame({'nrow': nrow, 'ncol': ncol, 'seed': seed,  # P, Parameters
                        "u_est": u_est, "v_est": v_est, "u_true": u_true, "v_true": v_true})  # W, Observables
-    df.to_csv("hw2data.csv", index_label="index")
+    # df.to_csv("hw2data.csv", index_label="index")
 
     # Print runtime
     logging.info(f"--- {time.time() - start_time} seconds ---")
     return df
 
 
+def build_params(size: int = 1, su_id: str = 'su_ID') -> dict:
+
+    match size:
+        case 1:
+            exp = dict(table_name=f'stats285_{su_id}_hw4_{size}_blocks',
+                        params=[{
+                            'nrow': [1000],
+                            'ncol': [1000],
+                            'seed': [285]
+                        }])
+        case _:
+            exp = dict(table_name=f'stats285_{su_id}_hw4_{size}_blocks',
+                        params=[{
+                            'nrow': [1000],
+                            'ncol': [1000],
+                            'seed': list(range(size))
+                        }])
+    return exp
+
+
+def do_local_experiment():
+    exp = build_params(size=1000)
+    with LocalCluster() as cluster:
+        with Client(cluster) as client:
+            do_on_cluster(exp, experiment, client, credentials=get_gbq_credentials())
+
+
 if __name__ == "__main__":
-    experiment(nrow=1000, ncol=1000, seed=285)
+    # experiment(nrow=1000, ncol=1000, seed=285)
+    do_local_experiment()
