@@ -108,6 +108,7 @@ def do_cluster_experiment():
         with Client(cluster) as client:
             # do_on_cluster(exp, experiment, client)
             do_on_cluster(exp, experiment, client, credentials=get_gbq_credentials())
+        cluster.scale(0)
 
 
 def do_local_experiment():
