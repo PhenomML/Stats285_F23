@@ -42,16 +42,17 @@ Please spend at least **60 minutes** on the **preferred option** before switchin
   * Save the Tableau Prep Flow and Tableau Desktop Workbook.
 
 * **Back Up Option:** Replicate the Tableau Prep Flow and Tableau Desktop Workbook that X.Y. created in the 10/30 lecture.
-  * In 1-3 paragraphs, explain why the Tableau framework has more "friction" than you expected and what obstacles 
-    prevented you from completed the "preferred option" above. What do you think could have been done to reduce the friction?
-  * Save the Tableau Prep Flow and Tableau Desktop Workbook.
+  * In 1-3 paragraphs, explain why the Tableau framework had more "friction" than you expected. Describe what challenges
+    and obstacles prevented you from completed the "preferred option" above. What do you think could have been done to 
+    reduce the friction? What other tool (ggplot, matplotlib, etc) would you have otherwise used to complete the task?
+  * Save the replicated Tableau Prep Flow and Tableau Desktop Workbook.
 
 ### Short Answer Questions
 Additionally, please answer the following question:
 
 * Have you used ggplot, matplotlib, or seaborn before (in R, Python, or MATLAB)? If so, how does Tableau compare to 
   these tools? If not, what tools have you used for plotting before? How does Tableau compare to these tools?
-* What is your preference for data visualization tool now for data visualization (its okay if its not Tableau)? Explain why.
+* What is your preference for data visualization tool now for data visualization (it's okay if it's not Tableau)? Explain why.
 
 ### Submission Instructions
 
