@@ -73,7 +73,8 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
 
     # Save u_est, v_est, u_true, v_true in a CSV file with an index column
     df = pd.DataFrame({'nrow': nrow, 'ncol': ncol, 'seed': seed,  # P, Parameters
-                       "u_est": u_est, "v_est": v_est, "u_true": u_true, "v_true": v_true})  # W, Observables
+                       "u_est": u_est, "v_est": v_est, "u_true": u_true, "v_true": v_true,  # W, Observables
+                       "u_alignment": u_align, "v_alignment": v_align, "signal_error": signal_error})
     # df.to_csv("hw2data.csv", index_label="index")
 
     # Print runtime
@@ -101,25 +102,25 @@ def build_params(size: int = 1, su_id: str = 'su_ID') -> dict:
     return exp
 
 
-def do_cluster_experiment():
-    exp = build_params(size=1000, su_id='adonoho_2')
+def do_cluster_experiment(size: int = 1, su_id: str = 'su_ID', credentials = None):
+    exp = build_params(size=size, su_id=su_id)
     with SLURMCluster(cores=8, memory='4GiB', processes=1, walltime='00:30:00') as cluster:
         cluster.scale(8)
         with Client(cluster) as client:
-            # do_on_cluster(exp, experiment, client)
-            do_on_cluster(exp, experiment, client, credentials=get_gbq_credentials())
+            do_on_cluster(exp, experiment, client, credentials=credentials)
         cluster.scale(0)
 
 
-def do_local_experiment():
-    exp = build_params(size=1000, su_id='adonoho_1')
+def do_local_experiment(size: int = 1, su_id: str = 'su_ID', credentials = None):
+    exp = build_params(size=size, su_id=su_id)
     with LocalCluster() as cluster:
         with Client(cluster) as client:
-            # do_on_cluster(exp, experiment, client)
-            do_on_cluster(exp, experiment, client, credentials=get_gbq_credentials())
+            do_on_cluster(exp, experiment, client, credentials=credentials)
 
 
 if __name__ == "__main__":
     # experiment(nrow=1000, ncol=1000, seed=285)
-    # do_local_experiment()
-    do_cluster_experiment()
+    do_local_experiment(size=1, su_id='su_ID_1')
+    # do_local_experiment(size=1000, su_id='su_ID_2')
+    # do_local_experiment(size=1000, su_id='su_ID_3', credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+    # do_cluster_experiment(size=1000, su_id='su_ID_4', credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
