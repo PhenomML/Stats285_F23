@@ -142,10 +142,11 @@ def do_sbatch_array():
     results =[]
     for s in range(seed, seed + 100):
         results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
-        if not(len(results) % 50):  # Write twice.
+        if not(len(results) % 20):  # Write 5 times.
             df = pd.concat(results)
             results = []
-            sleep(randint(seed/10, seed/10 + 10))
+            if seed > 0:  # Delay every write except the first.
+                sleep(randint(2, 5))
             df.to_gbq(f'HW4.{table_name}',
                       if_exists='append',
                       progress_bar=False,
