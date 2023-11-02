@@ -4,9 +4,8 @@ import time
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
-from dask.distributed import Client, LocalCluster
-from dask_jobqueue import SLURMCluster
-from EMS.manager import do_on_cluster, get_gbq_credentials
+from google.oauth2 import service_account
+from EMS.manager import get_gbq_credentials
 import argparse
 import logging
 
@@ -88,6 +87,16 @@ def parse_reduction() -> tuple:
     return args.table_name
 
 
+def write_to_gbq(task_id: int, table_name: str, results: list, credentials: service_account.Credentials):
+    df = pd.concat(results)
+    if task_id > 0:  # Delay every write except the first.
+        time.sleep(np.random.randint(7, 15))
+    df.to_gbq(f'HW4.{table_name}',
+              if_exists='append',
+              progress_bar=False,
+              credentials=credentials)
+
+
 def do_sbatch_array():
     nrow, ncol, task_id, table_name = parse()
     cred = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
@@ -95,13 +104,10 @@ def do_sbatch_array():
     results =[]
     for s in range(task_id, task_id + 100):
         results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
-    df = pd.concat(results)
-    if task_id > 0:  # Delay every write except the first.
-        time.sleep(np.random.randint(10, 15))
-    df.to_gbq(f'HW4.{table_name}',
-              if_exists='append',
-              progress_bar=False,
-              credentials=cred)
+        if not(s % 50):
+            write_to_gbq(task_id, table_name, results, cred)
+            results = []
+    write_to_gbq(task_id, table_name, results, cred)
 
 
 if __name__ == "__main__":
