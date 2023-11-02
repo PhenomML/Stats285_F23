@@ -145,7 +145,7 @@ def do_sbatch_array():
         if not(len(results) % 50):  # Write twice.
             df = pd.concat(results)
             results = []
-            sleep(randint(10, 30))
+            sleep(randint(seed/10, seed/10 + 10))
             df.to_gbq(f'HW4.{table_name}',
                       if_exists='append',
                       progress_bar=False,
