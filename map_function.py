@@ -136,12 +136,14 @@ def do_sbatch_array():
     nrow, ncol, seed, table_name = parse()
     cred = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
 
+    results =[]
     for s in range(seed, seed + 100):
-        df = experiment(nrow=nrow, ncol=ncol, seed=s)
-        df.to_gbq(f'HW4.{table_name}',
-                  if_exists='append',
-                  progress_bar=False,
-                  credentials=cred)
+        results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
+    df = pd.concat(results)
+    df.to_gbq(f'HW4.{table_name}',
+              if_exists='append',
+              progress_bar=False,
+              credentials=cred)
 
 
 if __name__ == "__main__":
