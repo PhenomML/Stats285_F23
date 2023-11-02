@@ -1,6 +1,5 @@
 #!/bin/sh
 
-## farmshare deployment file that requests 8 cpu cores for 30 minutes to run main.py
 #SBATCH --job-name=hw4_array
 #SBATCH --partition=normal
 #SBATCH --cpus-per-task=1
@@ -10,9 +9,9 @@
 #SBATCH --array=0-999:100
 #SBATCH --nodes 10
 
-for i in {0..999..100}
+for i in {0..9}
 do
-  srun -n 1 python3 ~/Stats285_hw3/map_function.py 1000 1000 $((SLURM_ARRAY_TASK_ID+i)) test_batch &
+  srun -n 1 python3 ~/Stats285_hw3/map_function.py 1000 1000 $((SLURM_ARRAY_TASK_ID)) test_batch &
 done
 
 wait # important to make sure the job doesn't exit before the background tasks are done
