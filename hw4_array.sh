@@ -10,7 +10,6 @@
 #SBATCH --array=0-999:100
 #SBATCH --nodes 10
 
-## Run the python script
 for i in {0..999..100}
 do
   srun -n 1 python3 ~/Stats285_hw3/map_function.py 1000 1000 $((SLURM_ARRAY_TASK_ID+i)) test_batch &
