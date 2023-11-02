@@ -90,7 +90,7 @@ def parse_reduction() -> tuple:
 def write_to_gbq(task_id: int, table_name: str, results: list, credentials: service_account.Credentials):
     df = pd.concat(results)
     if task_id > 0:  # Delay every write except the first.
-        time.sleep(np.random.randint(7, 15))
+        time.sleep(np.random.randint(10, 30))
     df.to_gbq(f'HW4.{table_name}',
               if_exists='append',
               progress_bar=False,
