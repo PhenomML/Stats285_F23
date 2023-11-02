@@ -132,6 +132,9 @@ def parse() -> tuple:
     return args.nrow, args.ncol, args.seed, args.table_name
 
 
+from random import randint
+from time import sleep
+
 def do_sbatch_array():
     nrow, ncol, seed, table_name = parse()
     cred = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
@@ -142,6 +145,7 @@ def do_sbatch_array():
         if not(len(results) % 50):  # Write twice.
             df = pd.concat(results)
             results = []
+            sleep(randint(10, 30))
             df.to_gbq(f'HW4.{table_name}',
                       if_exists='append',
                       progress_bar=False,
