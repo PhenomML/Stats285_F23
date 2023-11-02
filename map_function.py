@@ -139,7 +139,7 @@ def do_sbatch_array():
     results =[]
     for s in range(seed, seed + 100):
         results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
-        if not(len(results) % 20):  # Write 5 times.
+        if not(len(results) % 50):  # Write twice.
             df = pd.concat(results)
             results = []
             df.to_gbq(f'HW4.{table_name}',
