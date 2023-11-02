@@ -7,9 +7,11 @@ from pandas import DataFrame
 from dask.distributed import Client, LocalCluster
 from dask_jobqueue import SLURMCluster
 from EMS.manager import do_on_cluster, get_gbq_credentials
+import argparse
 import logging
 
 logging.basicConfig(level=logging.INFO)
+
 
 # Function that generates data with noise; will use again in later homeworks
 def generate_data(nrow: int, ncol: int, seed: int = 0) -> tuple:
@@ -73,7 +75,8 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
 
     # Save u_est, v_est, u_true, v_true in a CSV file with an index column
     df = pd.DataFrame({'nrow': nrow, 'ncol': ncol, 'seed': seed,  # P, Parameters
-                       "u_est": u_est, "v_est": v_est, "u_true": u_true, "v_true": v_true})  # W, Observables
+                       "u_est": u_est, "v_est": v_est, "u_true": u_true, "v_true": v_true,  # W, Observables
+                       "u_alignment": u_align, "v_alignment": v_align, "signal_error": signal_error})
     # df.to_csv("hw2data.csv", index_label="index")
 
     # Print runtime
@@ -119,7 +122,30 @@ def do_local_experiment():
             do_on_cluster(exp, experiment, client, credentials=get_gbq_credentials())
 
 
+def parse() -> tuple:
+    parser = argparse.ArgumentParser(prog='map_function')
+    parser.add_argument('nrow', type=int)
+    parser.add_argument('ncol', type=int)
+    parser.add_argument('seed', type=int)
+    parser.add_argument('table_name', type=str)
+    args = parser.parse_args()
+    return args.nrow, args.ncol, args.seed, args.table_name
+
+
+def do_sbatch_array():
+    nrow, ncol, seed, table_name = parse()
+    cred = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
+
+    for s in range(seed, seed + 100):
+        df = experiment(nrow=nrow, ncol=ncol, seed=s)
+        df.to_gbq(f'HW4.{table_name}',
+                  if_exists='append',
+                  progress_bar=False,
+                  credentials=cred)
+
+
 if __name__ == "__main__":
     # experiment(nrow=1000, ncol=1000, seed=285)
+    do_sbatch_array()
     # do_local_experiment()
-    do_cluster_experiment()
+    # do_cluster_experiment()
