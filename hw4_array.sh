@@ -11,9 +11,9 @@
 #SBATCH --nodes 10
 
 ## Run the python script
-for i in {0..9}
+for i in {0..999..100}
 do
-  srun -n 1 python3 ~/Stats285_hw3/map_function.py 1000 1000 $((SLURM_ARRAY_TASK_ID+i*100)) test_batch &
+  srun -n 1 python3 ~/Stats285_hw3/map_function.py 1000 1000 $((SLURM_ARRAY_TASK_ID+i)) test_batch &
 done
 
 wait # important to make sure the job doesn't exit before the background tasks are done
