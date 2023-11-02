@@ -139,11 +139,13 @@ def do_sbatch_array():
     results =[]
     for s in range(seed, seed + 100):
         results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
-    df = pd.concat(results)
-    df.to_gbq(f'HW4.{table_name}',
-              if_exists='append',
-              progress_bar=False,
-              credentials=cred)
+        if not(len(results) % 2):  # Halve the number of writes.
+            df = pd.concat(results)
+            results = []
+            df.to_gbq(f'HW4.{table_name}',
+                      if_exists='append',
+                      progress_bar=False,
+                      credentials=cred)
 
 
 if __name__ == "__main__":
