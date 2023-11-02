@@ -2,12 +2,12 @@
 
 #SBATCH --job-name=hw4_array
 #SBATCH --partition=normal
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=4
 #SBATCH --time=00:30:00
 #SBATCH --error=hw4_array.err
 #SBATCH --output=hw4_array.out
 #SBATCH --array=0-999:100
-#SBATCH --nodes 10
+#SBATCH --nodes 1
 
 for i in {0..9}
 do
