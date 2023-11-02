@@ -13,7 +13,7 @@ dependencies:
   - dask-jobqueue
   - pip
   - pip:
-    - git+https://github.com/adonoho/EMS.git
+    - git+https://github.com/adonoho/EMS.git@debug-DB-disconnect
 variables:
   MKL_NUM_THREADS: '1'
   OPENBLAS_NUM_THREADS: '1'
