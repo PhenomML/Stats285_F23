@@ -91,7 +91,7 @@ def write_to_gbq(task_id: int, table_name: str, results: list, credentials: serv
     if len(results) > 0:
         df = pd.concat(results)
         if task_id > 0:  # Delay every write except the first.
-            time.sleep(np.random.randint(10, 30))
+            time.sleep(np.random.randint(5, 10))
         df.to_gbq(f'HW4.{table_name}',
                   if_exists='append',
                   progress_bar=False,
