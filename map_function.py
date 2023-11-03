@@ -88,13 +88,14 @@ def parse_reduction() -> tuple:
 
 
 def write_to_gbq(task_id: int, table_name: str, results: list, credentials: service_account.Credentials):
-    df = pd.concat(results)
-    if task_id > 0:  # Delay every write except the first.
-        time.sleep(np.random.randint(10, 30))
-    df.to_gbq(f'HW4.{table_name}',
-              if_exists='append',
-              progress_bar=False,
-              credentials=credentials)
+    if len(results) > 0:
+        df = pd.concat(results)
+        if task_id > 0:  # Delay every write except the first.
+            time.sleep(np.random.randint(10, 30))
+        df.to_gbq(f'HW4.{table_name}',
+                  if_exists='append',
+                  progress_bar=False,
+                  credentials=credentials)
 
 
 def do_sbatch_array():
@@ -104,7 +105,8 @@ def do_sbatch_array():
     results =[]
     for s in range(task_id, task_id + 100):
         results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
-        if not(s % 50):
+        i = s - task_id
+        if not(i % 33) and i > 0:  # Make 3 writes to the DB.
             write_to_gbq(task_id, table_name, results, cred)
             results = []
     write_to_gbq(task_id, table_name, results, cred)
