@@ -106,7 +106,7 @@ def do_sbatch_array():
     for s in range(task_id, task_id + 100):
         results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
         i = s - task_id
-        if not(i % 33) and i > 0:  # Make 3 writes to the DB.
+        if not(i % 50) and i > 0:  # Make 2 writes to the DB.
             write_to_gbq(task_id, table_name, results, cred)
             results = []
     write_to_gbq(task_id, table_name, results, cred)

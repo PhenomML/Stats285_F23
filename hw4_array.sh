@@ -11,7 +11,7 @@
 
 for i in {0..9}
 do
-  srun -n 1 python3 ~/Stats285_hw3/map_function.py 1000 1000 $((SLURM_ARRAY_TASK_ID)) su_id_test_batch_16 &
+  srun -n 1 python3 ~/Stats285_hw3/map_function.py 1000 1000 $((SLURM_ARRAY_TASK_ID)) su_id_test_batch_17 &
 done
 
 wait # important to make sure the job doesn't exit before the background tasks are done
