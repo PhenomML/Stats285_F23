@@ -8,5 +8,6 @@
 #SBATCH --error=hw4.err
 #SBATCH --output=hw4.out
 
+
 ## Run the python script
 time python3 ~/Stats285_hw3/main.py
