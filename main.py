@@ -72,13 +72,12 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
     # logging.info(f"signal_error = {signal_error}")
 
     # Save u_est, v_est, u_true, v_true in a CSV file with an index column
-    df = pd.DataFrame({'nrow': nrow, 'ncol': ncol, 'seed': seed,  # P, Parameters
-                       "u_est": u_est, "v_est": v_est, "u_true": u_true, "v_true": v_true,  # W, Observables
-                       "u_alignment": u_align, "v_alignment": v_align, "signal_error": signal_error})
-    # df.to_csv("hw2data.csv", index_label="index")
+    d = {'nrow': nrow, 'ncol': ncol, 'seed': seed, "v_alignment": v_align}
+    d.update({f've{i:0>3}': ve for i, ve in enumerate(v_est)})
+    df = pd.DataFrame(data=d, index=[0])
 
     # Print runtime
-    logging.info(f"--- {time.time() - start_time} seconds ---")
+    logging.info(f"Seed: {seed}; {time.time() - start_time} seconds.")
     return df
 
 
