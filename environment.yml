@@ -9,8 +9,11 @@ dependencies:
   - pandas
   - sqlalchemy
   - google-auth
+  - google-cloud-sdk
+  - google-colab
   - dask
   - dask-jobqueue
+  - jupyter
   - pip
   - pip:
     - git+https://github.com/adonoho/EMS.git
