@@ -43,7 +43,7 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
     # ncol = 1000
     X, u_true, v_true, signal_true = generate_data(nrow, ncol, seed=seed)
 
-    logging.info('Data Generated')
+    # logging.info('Data Generated')
 
     # Analyze the data using SVD
     U, S, Vh = np.linalg.svd(X)
@@ -65,11 +65,11 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
     signal_error = np.linalg.norm(signal_est-signal_true)/np.sqrt(nrow*ncol)
 
     # Print results to text file
-    logging.info(f"nrow = {nrow}")
-    logging.info(f"ncol = {ncol}")
-    logging.info(f"u_alignment = {u_align}")
-    logging.info(f"v_alignment = {v_align}")
-    logging.info(f"signal_error = {signal_error}")
+    # logging.info(f"nrow = {nrow}")
+    # logging.info(f"ncol = {ncol}")
+    # logging.info(f"u_alignment = {u_align}")
+    # logging.info(f"v_alignment = {v_align}")
+    # logging.info(f"signal_error = {signal_error}")
 
     # Save u_est, v_est, u_true, v_true in a CSV file with an index column
     df = pd.DataFrame({'nrow': nrow, 'ncol': ncol, 'seed': seed,  # P, Parameters
