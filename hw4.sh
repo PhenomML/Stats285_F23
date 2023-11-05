@@ -1,12 +1,12 @@
 #!/bin/sh
 
 ## farmshare deployment file that requests 16 cpu cores for 10 minutes to run main.py
-#SBATCH --job-name=hw4
+#SBATCH --job-name=hw5
 #SBATCH --partition=normal
 #SBATCH --cpus-per-task=16
-#SBATCH --time=00:10:00
-#SBATCH --error=hw4.err
-#SBATCH --output=hw4.out
+#SBATCH --time=00:15:00
+#SBATCH --error=hw5.err
+#SBATCH --output=hw5.out
 
 
 ## Run the python script
