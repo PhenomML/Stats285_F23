@@ -34,16 +34,9 @@ def generate_data(nrow: int, ncol: int, seed: int = 0) -> tuple:
 
 
 def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
-    # Begin saving runtime
     start_time = time.time()
 
-    # Generate data
-    # seed = 285
-    # nrow = 1000
-    # ncol = 1000
     X, u_true, v_true, signal_true = generate_data(nrow, ncol, seed=seed)
-
-    # logging.info('Data Generated')
 
     # Analyze the data using SVD
     U, S, Vh = np.linalg.svd(X)
@@ -63,13 +56,6 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
 
     # Calculate distance between signal_est and signal_true
     signal_error = np.linalg.norm(signal_est-signal_true)/np.sqrt(nrow*ncol)
-
-    # Print results to text file
-    # logging.info(f"nrow = {nrow}")
-    # logging.info(f"ncol = {ncol}")
-    # logging.info(f"u_alignment = {u_align}")
-    # logging.info(f"v_alignment = {v_align}")
-    # logging.info(f"signal_error = {signal_error}")
 
     # Save u_est, v_est, u_true, v_true in a CSV file with an index column
     d = {'nrow': nrow, 'ncol': ncol, 'seed': seed, "v_alignment": v_align}
@@ -122,5 +108,4 @@ if __name__ == "__main__":
     # do_local_experiment(size=1, su_id='su_ID_1')
     do_local_experiment(size=1000, su_id='adonoho_slurm_large')
     # do_local_experiment(size=1000, su_id='adonoho_slurm_large_2', credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
-    # do_local_experiment(size=1000, su_id='adonoho_maz_3', credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
     # do_cluster_experiment(size=1000, su_id='su_ID_4', credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
