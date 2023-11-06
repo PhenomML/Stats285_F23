@@ -89,7 +89,7 @@ def build_params(size: int = 1, su_id: str = 'su_ID') -> dict:
 
 def do_cluster_experiment(size: int = 1, su_id: str = 'su_ID', credentials = None):
     exp = build_params(size=size, su_id=su_id)
-    with SLURMCluster(cores=16, memory='4GiB', processes=1, walltime='00:15:00') as cluster:
+    with SLURMCluster(cores=8, memory='4GiB', processes=1, walltime='00:15:00') as cluster:
         cluster.scale(8)
         with Client(cluster) as client:
             do_on_cluster(exp, experiment, client, credentials=credentials)

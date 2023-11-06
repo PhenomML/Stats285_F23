@@ -1,4 +1,4 @@
-# Homework 4. Driving Parameters while Growing into a Cluster.
+# Homework 5. Driving Parameters while Growing into a Cluster.
 
 Heretofore, we have been running on a single node. Today's computing activity will introduce our use of parameter ramps and the beginnings of using a cluster -- first on a larger node and then on an array of nodes.
 
@@ -31,11 +31,13 @@ On Canvas, navigate to Files -> Readings -> *Insert Here*
 
 We have been very careful to keep our code simple. Why? Debugging a server is quite a bit more difficult than debugging code on your laptop, a parallel server, unsurprisingly, more so. Hence, we want you to perfect your code on your laptop and then scale it up without change. To this end, we introduced simple code that created the results of a 1000 x 1000 SVD of noisy data. We then repackaged it as a function that takes keyword arguments and returns a DataFrame. This code we ran on both your laptop and a server. That brings us to our fourth computer activity -- computing with a cluster to create the core data for a 1,000,000 x 1,000 SVD and saving your data to the cloud. Once the data is in the cloud, it is easy to read it into a Jupyter or Colab notebook to finish the tall and skinny SVD calculation.
 
+We are starting by following the advice of the Stanford Research Computing Center, SRCC, staff to use the `sbatch` array command to launch a group of tasks while allowing `sbatch` to assign some of your parameters. In this example, we take the same experimental function, `map_function.py` in the project, and drive it from the command line. We also introduce saving the data to the remote database, Google BigQuery. What you will find is that the `sbatch` array command is really oriented around the command line and creating text files. It isn't a good fit for database centric computing. (If you really want to explore this pattern, we will help you modify the `map_function.py` to write appropriately titled `.csv` files.) This experiment is driven by the `sbatch` script `hw5_array.sh`. 
+
 We are going to start using a simple system to run many independent tasks, also known as an embarrassingly parallel problem. This system, [EMS or Experiment Management System](https://github.com/adonoho/EMS), takes a definition of your parameters as arrays and then calls your function with the combination of all parameter values. It then stores the result of each function in a database. (This is the beginning of a research tool for the Stanford Donoho Lab. Yet, even at this early date, it is useful.)
 
 Because modern laptops contain many processors, the one I am writing this on has 6 symmetric cores and can run 12 concurrent tasks, you can frequently run your code quite a bit faster than normal using EMS. EMS depends upon a Python system called Dask which can allow quite complex parallel operations. As our tasks are embarrassingly parallel, we will not be exploiting Dask for other than processor/thread/worker management. But it is available for more advanced work. For example, there is an advanced way to use Dask to solve the [Tall & Skinny SVD problem](https://examples.dask.org/machine-learning/svd.html#Compute-SVD-of-Tall-and-Skinny-Matrix).
 
-EMS always saves your data locally via SQLite in your `data/` directory. On Mac or Windows, you can examine this file using [SQLite Studio](https://sqlitestudio.pl). Hence, you can always use EMS without a cloud database. This is quite useful for debugging your code. You can easily compare your data between runs by just changing your table name. Then, when you are ready to start more formal experimentation, we can start telling EMS to additionally use a cloud database, Google Big Query in this class. If you insist, EMS also includes a Python script to copy a table from the database to a `.csv` file.
+EMS always saves your data locally via SQLite in your `data/` directory. On Mac or Windows, you can examine this file using [SQLite Studio](https://sqlitestudio.pl). Hence, you can always use EMS without a cloud database. This is quite useful for debugging your code. You can easily compare your data between runs by just changing your table name. Then, when you are ready to start more formal experimentation, we can start telling EMS to additionally use a cloud database, Google Big Query in this class. If you insist, EMS also includes a Python script to copy a table from the local database to a `.csv` file.
 
 To turn on saving your data to the cloud database, we need to do two things. First, we need to save credentials that tell the database to accept data from our task in a standard location and then tell EMS to use them. The class will provide you with these credentials and we will show you where to install them on FarmShare and your laptop. These credentials are focussed upon just Google Big Query operations. Nonetheless, you can hurt yourself and your classmates by misusing these permissions. Be nice.
 
@@ -45,7 +47,7 @@ The computer activity is rounded out by loading your data into a notebook and th
 
 ```
 mkdir .config/gcloud
-scp stanford-stats-285-donoho-0dc233389eb9.json adonoho@rice.stanford.edu:~/.config/gcloud/
+scp stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.config/gcloud/
 ```
 
 #### Running code on your Laptop
