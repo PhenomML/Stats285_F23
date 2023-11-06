@@ -17,7 +17,7 @@ dependencies:
   - jupyter
   - pip
   - pip:
-    - git+https://github.com/adonoho/EMS.git
+    - git+https://github.com/adonoho/EMS.git@HW5
 variables:
   MKL_NUM_THREADS: '1'
   OPENBLAS_NUM_THREADS: '1'
