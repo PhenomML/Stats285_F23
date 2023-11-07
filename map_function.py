@@ -120,7 +120,7 @@ def do_sbatch_array_to_csv():
         results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
     df = pd.concat(results)
     df.reset_index(drop=True, inplace=True)
-    df.drop(columns=['index'])
+    df.drop(columns=['index'], inplace=True)
     logging.info(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
     df.to_csv(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
 
