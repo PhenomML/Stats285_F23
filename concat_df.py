@@ -20,11 +20,11 @@ def concat_df():
     files = parse()
     dfs = []
     for f in files:
-        dfs.append(pd.read_csv(f))
+        dfs.append(pd.read_csv(f, index_col=0))
     df = pd.concat(dfs)
     df.reset_index(drop=True, inplace=True)
     # df.drop(columns=['index'], inplace=True)
-    logging.info(f'{df}')
+    # logging.info(f'{df}')
     df.to_csv(sys.stdout)
 
 
