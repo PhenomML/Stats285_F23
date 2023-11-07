@@ -3,9 +3,13 @@
 import argparse
 import pandas as pd
 import sys
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 def parse() -> list:
+    logging.info(f'{" ".join(sys.argv)}')
     parser = argparse.ArgumentParser(prog='concat_df')
     parser.add_argument('files', type=str, nargs='*')
     args = parser.parse_args()
@@ -20,6 +24,7 @@ def concat_df():
     df = pd.concat(dfs)
     df.reset_index(drop=True, inplace=True)
     # df.drop(columns=['index'], inplace=True)
+    logging.info(f'{df}')
     df.to_csv(sys.stdout)
 
 
