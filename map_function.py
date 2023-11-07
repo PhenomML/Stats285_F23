@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import time
+import os
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
@@ -79,9 +80,6 @@ def parse() -> tuple:
 
 def parse_reduction() -> tuple:
     parser = argparse.ArgumentParser(prog='reduce_function')
-    # parser.add_argument('nrow', type=int)
-    # parser.add_argument('ncol', type=int)
-    # parser.add_argument('seed', type=int)
     parser.add_argument('table_name', type=str)
     args = parser.parse_args()
     return args.table_name
@@ -120,7 +118,8 @@ def do_sbatch_array_to_csv():
         results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
     df = pd.concat(results)
     df.reset_index(drop=True, inplace=True)
-    df.to_csv(f'{table_name}_{task_id:0>3}.csv')
+    logging.info(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
+    df.to_csv(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
 
 
 if __name__ == "__main__":

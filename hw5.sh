@@ -10,4 +10,4 @@
 
 
 ## Run the python script
-time python3 ~/Stats285_hw3/main.py
+time python3 ~/Stats285_F23/main.py

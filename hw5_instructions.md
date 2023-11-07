@@ -56,13 +56,20 @@ scp stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.confi
     `echo -n -e "\033]0;LAPTOP\007"`
 
 2. Issue the following command:  
-	`git clone https://github.com/adonoho/Stats285_hw3`
+	`git clone https://github.com/adonoho/Stats285_F23`
 
 3. Change directory to:  
-	`cd Stats285_hw3/`
+	`cd Stats285_F23/`
 
-4. Issue the following command:  
-	`conda env create --name stats285 --file environment.yml`
+6. Check if the `conda` environment `stats285` is still around?  
+	`conda env list`
+
+7. If so, delete it:  
+	`conda env remove --name stats285`
+
+8. Create a new environment:  
+	`conda env create --name stats285 --file environment.yml`  
+	(This can take a few minutes.)
 
 5. Issue the following command:  
 	`conda activate stats285`
@@ -72,17 +79,33 @@ scp stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.confi
 	You should see: `Python 3.11.6`.
 
 7. Issue the following command:  
-	`python main.py`  
+	`python main.py`
 
 	You should see something like:
 ```
-	INFO:root:Data Generated
-	INFO:root:nrow = 1000
-	INFO:root:ncol = 1000
-	INFO:root:u_alignment = -0.9999441742880615
-	INFO:root:v_alignment = -0.9999459499387543
-	INFO:root:signal_error = 4.447919645101738e-05
-	INFO:root:--- 0.38405895233154297 seconds ---
+(stats285) awd@Mazikeen Stats285_F23 % python main.py 
+INFO:EMS.manager:<Client: 'tcp://127.0.0.1:65285' processes=4 threads=12, memory=32.00 GiB>
+ERROR:EMS.manager:(sqlite3.OperationalError) no such table: stats285_adonoho_slurm_wide_small_hw4_1000_blocks
+[SQL: SELECT DISTINCT ncol,nrow,seed FROM stats285_adonoho_slurm_wide_small_hw4_1000_blocks]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+INFO:EMS.manager:Number of Instances to calculate: 1000
+INFO:root:Seed: 778; 6.318756103515625 seconds.
+INFO:root:Seed: 563; 6.379151105880737 seconds.
+INFO:root:Seed: 329; 6.416765928268433 seconds.
+INFO:root:Seed: 659; 6.467713117599487 seconds.
+INFO:root:Seed: 947; 6.609302997589111 seconds.
+INFO:root:Seed: 635; 6.593518972396851 seconds.
+INFO:root:Seed: 629; 6.604357004165649 seconds.
+INFO:root:Seed: 461; 6.622162818908691 seconds.
+INFO:root:Seed: 364; 6.653280019760132 seconds.
+INFO:root:Seed: 522; 6.6136579513549805 seconds.
+INFO:root:Seed: 332; 6.716217041015625 seconds.
+INFO:root:Seed: 411; 6.6921021938323975 seconds.
+INFO:EMS.manager:Count: 10; Time: 8; Seconds/Instance: 0.7887; Remaining (s): 781; Remaining Count: 990
+INFO:EMS.manager:   nrow  ncol  seed  v_alignment     ve000     ve001     ve002  ...     ve993     ve994     ve995     ve996    ve997     ve998     ve999
+0  1000  1000   411    -0.999947  0.031999 -0.031529  0.031496  ... -0.031423  0.032273 -0.030896  0.031236 -0.03182  0.031309 -0.031774
+
+[1 rows x 1004 columns]
 ```
 
 #### Running code on a server
@@ -93,10 +116,14 @@ scp stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.confi
 2. Login to FarmShare. [or Sherlock, if you have an account there]
 
 3. Issue the following command:  
-	`git clone https://github.com/adonoho/Stats285_hw3`
+	`mkdir .config/gcloud`
+	`git clone https://github.com/adonoho/Stats285_F23`
 
 4. Change directory to  
-	`cd Stats285_hw3/`
+	`cd Stats285_F23/`
+
+5. Return to your laptop:  
+	`scp stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.config/gcloud/`
 
 5. Examine the contents; does it look modestly familiar?
 
