@@ -2,6 +2,7 @@
 
 import time
 import os
+import sys
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
@@ -69,6 +70,7 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
 
 
 def parse() -> tuple:
+    logging.info(f'{" ".join(sys.argv)}')
     parser = argparse.ArgumentParser(prog='map_function')
     parser.add_argument('nrow', type=int)
     parser.add_argument('ncol', type=int)
