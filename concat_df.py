@@ -24,4 +24,4 @@ def concat_df():
 
 
 if __name__ == "__main__":
-    pass
+    concat_df()
