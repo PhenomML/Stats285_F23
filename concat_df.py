@@ -19,7 +19,7 @@ def concat_df():
         dfs.append(pd.read_csv(f))
     df = pd.concat(dfs)
     df.reset_index(drop=True, inplace=True)
-    df.drop(columns=['index'], inplace=True)
+    # df.drop(columns=['index'], inplace=True)
     df.to_csv(sys.stdout)
 
 
