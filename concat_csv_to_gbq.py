@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 
 def parse() -> tuple:
     logging.info(f'{" ".join(sys.argv)}')
-    parser = argparse.ArgumentParser(prog='concat_csv_to_df')
+    parser = argparse.ArgumentParser(prog='concat_csv_to_gbq')
     parser.add_argument('table_name', type=str)
     parser.add_argument('files', type=str, nargs='*')
     args = parser.parse_args()
