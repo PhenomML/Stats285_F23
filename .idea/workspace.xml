@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bcceca7f-a96c-42ce-9a55-ee0258d1e53c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hw5.sh" beforeDir="false" afterPath="$PROJECT_DIR$/hw5_large.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hw5_cluster.sh" beforeDir="false" afterPath="$PROJECT_DIR$/hw5_cluster.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hw5_instructions.md" beforeDir="false" afterPath="$PROJECT_DIR$/hw5_instructions.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -131,7 +130,7 @@
       <workItem from="1699137767045" duration="538000" />
       <workItem from="1699138372801" duration="2735000" />
       <workItem from="1699306993225" duration="5566000" />
-      <workItem from="1699372561882" duration="21541000" />
+      <workItem from="1699372561882" duration="22193000" />
     </task>
     <servers />
   </component>

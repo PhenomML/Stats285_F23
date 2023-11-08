@@ -65,21 +65,100 @@ The computer activity is rounded out by loading your data into a notebook and th
 	`source activate stats285`  
 	(Note, FarmShare is different from other Unix/Linux shells.)
 
-10. Execute `map_function.py` on a large node:  
+10. Execute `map_function.py` on an array of nodes:  
 	`sbatch hw5_array.sh`  
 	`squeue -u $USER`
-
-11. Look inside `hw5_array.err`. 
 ```
-	INFO:root:Data Generated
-	INFO:root:nrow = 1000
-	INFO:root:ncol = 1000
-	INFO:root:u_alignment = -0.999944174288061
-	INFO:root:v_alignment = -0.9999459499387543
-	INFO:root:signal_error = 4.4479196451017426e-05
-	INFO:root:--- 0.509589433670044 seconds ---
-	2.05user 0.29system 0:03.47elapsed 67%CPU (0avgtext+0avgdata 177812maxresident)k
-	545112inputs+208outputs (108major+31186minor)pagefaults 0swaps
+	(stats285) adonoho@rice03:~/Stats285_F23$ squeue -u $USER
+			 JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+		   2422878_0      normal hw5_arra  adonoho  R       0:14      1 wheat08
+		   2422878_100    normal hw5_arra  adonoho  R       0:14      1 wheat08
+		   2422878_200    normal hw5_arra  adonoho  R       0:14      1 wheat08
+		   2422878_300    normal hw5_arra  adonoho  R       0:14      1 wheat08
+		   2422878_400    normal hw5_arra  adonoho  R       0:14      1 wheat08
+		   2422878_500    normal hw5_arra  adonoho  R       0:14      1 wheat08
+		   2422878_600    normal hw5_arra  adonoho  R       0:14      1 wheat08
+		   2422878_700    normal hw5_arra  adonoho  R       0:14      1 wheat08
+		   2422878_800    normal hw5_arra  adonoho  R       0:14      1 wheat08
+		   2422878_900    normal hw5_arra  adonoho  R       0:14      1 wheat08
+```
+11. Upon completion, about 2 minutes, look inside `hw5_array.err`.  
+The beginning of the file:
+```
+	INFO:root:./map_function.py 1000 1000 300 su_id_hw5
+	INFO:root:./map_function.py 1000 1000 200 su_id_hw5
+	INFO:root:./map_function.py 1000 1000 100 su_id_hw5
+	INFO:root:./map_function.py 1000 1000 0 su_id_hw5
+	INFO:root:./map_function.py 1000 1000 400 su_id_hw5
+	INFO:root:./map_function.py 1000 1000 900 su_id_hw5
+	INFO:root:./map_function.py 1000 1000 700 su_id_hw5
+	INFO:root:./map_function.py 1000 1000 800 su_id_hw5
+	INFO:root:./map_function.py 1000 1000 500 su_id_hw5
+	INFO:root:./map_function.py 1000 1000 600 su_id_hw5
+	INFO:root:Seed: 300; 1.3961942195892334 seconds.
+	INFO:root:Seed: 200; 1.4054896831512451 seconds.
+	INFO:root:Seed: 0; 1.4151535034179688 seconds.
+	INFO:root:Seed: 100; 1.4287505149841309 seconds.
+	INFO:root:Seed: 600; 1.8204312324523926 seconds.
+	INFO:root:Seed: 700; 1.8267004489898682 seconds.
+	INFO:root:Seed: 800; 1.836639642715454 seconds.
+	INFO:root:Seed: 500; 1.8410115242004395 seconds.
+	INFO:root:Seed: 400; 1.8435065746307373 seconds.
+	INFO:root:Seed: 900; 1.8431742191314697 seconds.
+	INFO:root:Seed: 301; 1.026653528213501 seconds.
+	INFO:root:Seed: 201; 1.046555757522583 seconds.
+	INFO:root:Seed: 1; 1.0573809146881104 seconds.
+	INFO:root:Seed: 101; 1.0570011138916016 seconds.
+```  
+The end of the file:  
+```
+	INFO:root:Seed: 99; 0.8401017189025879 seconds.
+	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_000.csv
+	INFO:root:Seed: 994; 0.9245727062225342 seconds.
+	INFO:root:Seed: 695; 0.951512336730957 seconds.
+	INFO:root:Seed: 299; 0.8551983833312988 seconds.
+	INFO:root:Seed: 796; 0.9350428581237793 seconds.
+	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_200.csv
+	INFO:root:Seed: 595; 0.9323587417602539 seconds.
+	INFO:root:Seed: 496; 0.9254944324493408 seconds.
+	INFO:root:Seed: 896; 1.025771141052246 seconds.
+	INFO:root:Seed: 995; 0.910144567489624 seconds.
+	INFO:root:Seed: 797; 0.9598126411437988 seconds.
+	INFO:root:Seed: 696; 0.9822354316711426 seconds.
+	INFO:root:Seed: 596; 1.0276415348052979 seconds.
+	INFO:root:Seed: 497; 1.1631739139556885 seconds.
+	INFO:root:Seed: 996; 0.9988284111022949 seconds.
+	INFO:root:Seed: 897; 1.3057270050048828 seconds.
+	INFO:root:Seed: 798; 0.9735469818115234 seconds.
+	INFO:root:Seed: 697; 0.9932045936584473 seconds.
+	INFO:root:Seed: 597; 0.9295105934143066 seconds.
+	INFO:root:Seed: 498; 0.916872501373291 seconds.
+	INFO:root:Seed: 997; 0.9672515392303467 seconds.
+	INFO:root:Seed: 898; 0.9448280334472656 seconds.
+	INFO:root:Seed: 799; 0.9604976177215576 seconds.
+	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_700.csv
+	INFO:root:Seed: 698; 0.9734225273132324 seconds.
+	INFO:root:Seed: 598; 0.9164829254150391 seconds.
+	INFO:root:Seed: 499; 0.90018630027771 seconds.
+	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_400.csv
+	INFO:root:Seed: 998; 0.9398007392883301 seconds.
+	INFO:root:Seed: 899; 1.0349164009094238 seconds.
+	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_800.csv
+	INFO:root:Seed: 699; 0.9158093929290771 seconds.
+	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_600.csv
+	INFO:root:Seed: 599; 0.8771994113922119 seconds.
+	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_500.csv
+	INFO:root:Seed: 999; 0.9271728992462158 seconds.
+	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_900.csv
+```
+12. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. You should change the `su_id` to your Stanford ID.):
+```
+	(stats285) adonoho@rice03:~/Stats285_F23$ python3 gather_csv_to_gbq.py su_id_hw5 *.csv
+```
+`gather_csv_to_gbq.py` will log its command line arguments and will be followed by GBQ acknowledging the receipt of 1000 rows of data.
+```
+	INFO:root:gather_csv_to_gbq.py su_id_hw5 su_id_hw5_000.csv su_id_hw5_100.csv su_id_hw5_200.csv su_id_hw5_300.csv su_id_hw5_400.csv su_id_hw5_500.csv su_id_hw5_600.csv su_id_hw5_700.csv su_id_hw5_800.csv su_id_hw5_900.csv
+	1000 out of 1000 rows loaded.
 ```
 
 12. We also have written a new format `.csv` file, `hw2data.csv`. It shows some characteristics of `numpy`/`pandas` where scalars, the parameters in our case, are "broadcast" to match the "shape" of the observables.  

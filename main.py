@@ -71,14 +71,14 @@ def build_params(size: int = 1, su_id: str = 'su_ID') -> dict:
 
     match size:
         case 1:
-            exp = dict(table_name=f'stats285_{su_id}_hw4_{size}_blocks',
+            exp = dict(table_name=f'stats285_{su_id}_hw5_{size}_blocks',
                         params=[{
                             'nrow': [1000],
                             'ncol': [1000],
                             'seed': [285]
                         }])
         case _:
-            exp = dict(table_name=f'stats285_{su_id}_hw4_{size}_blocks',
+            exp = dict(table_name=f'stats285_{su_id}_hw5_{size}_blocks',
                         params=[{
                             'nrow': [1000],
                             'ncol': [1000],
