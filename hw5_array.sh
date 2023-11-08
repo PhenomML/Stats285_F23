@@ -9,8 +9,8 @@
 #SBATCH --array=0-999:100
 #SBATCH --nodes 1
 
-ml anaconda3/2023.07
-source activate stats285
+#ml anaconda3/2023.07
+#source activate stats285
 
 #while [ $SLURM_ARRAY_TASK_ID -le $SLURM_ARRAY_TASK_MAX ]
 for i in {0..9}
