@@ -122,8 +122,6 @@ def do_sbatch_array_to_csv():
     df.reset_index(drop=True, inplace=True)
     logging.info(f'{os.getcwd()}/{table_name}_{task_id:0>3}.csv')
     df.to_csv(f'{os.getcwd()}/{table_name}_{task_id:0>3}.csv', index=False)
-    # logging.info(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
-    # df.to_csv(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
 
 
 if __name__ == "__main__":

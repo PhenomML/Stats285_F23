@@ -22,7 +22,6 @@ def concat_df(files: list) -> pd.DataFrame:
     dfs = []
     for f in files:
         dfs.append(pd.read_csv(f))
-        # dfs.append(pd.read_csv(f, index_col=0))
     df = pd.concat(dfs)
     df.reset_index(drop=True, inplace=True)
     return df
@@ -40,4 +39,4 @@ if __name__ == "__main__":
     table_name, files = parse()
     df = concat_df(files)
     # df_to_gbq(df, table_name)
-    df.to_csv(sys.stdout)
+    df.to_csv(sys.stdout, index=False)
