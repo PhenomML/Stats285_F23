@@ -87,7 +87,7 @@ def build_params(size: int = 1, su_id: str = 'su_ID') -> dict:
     return exp
 
 
-def do_cluster_experiment(size: int = 1, su_id: str = 'su_ID', credentials = None):
+def do_cluster_experiment(size: int = 1, su_id: str = 'su_ID', credentials=None):
     exp = build_params(size=size, su_id=su_id)
     with SLURMCluster(cores=8, memory='4GiB', processes=1, walltime='00:15:00') as cluster:
         cluster.scale(8)
@@ -96,7 +96,7 @@ def do_cluster_experiment(size: int = 1, su_id: str = 'su_ID', credentials = Non
         cluster.scale(0)
 
 
-def do_local_experiment(size: int = 1, su_id: str = 'su_ID', credentials = None):
+def do_local_experiment(size: int = 1, su_id: str = 'su_ID', credentials=None):
     exp = build_params(size=size, su_id=su_id)
     with LocalCluster() as cluster:
         with Client(cluster) as client:
@@ -106,7 +106,8 @@ def do_local_experiment(size: int = 1, su_id: str = 'su_ID', credentials = None)
 if __name__ == "__main__":
     # experiment(nrow=1000, ncol=1000, seed=285)
     # do_local_experiment(size=1, su_id='su_ID_1')
-    do_local_experiment(size=1000, su_id='adonoho_slurm_wide_small')
-    # do_local_experiment(size=1000, su_id='adonoho_slurm_wide_small_2', credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
-    # do_cluster_experiment(size=1000, su_id='adonoho_slurm_wide_small_3', credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
-    # do_cluster_experiment(size=1000, su_id='su_ID_4', credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+    # do_local_experiment(size=1000, su_id='su_ID_slurm_large_node')
+    do_local_experiment(size=1000, su_id='su_ID_slurm_large_node_gbq',
+                        credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+    # do_cluster_experiment(size=1000, su_id='su_ID_slurm_cluster',
+    #                       credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
