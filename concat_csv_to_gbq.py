@@ -11,14 +11,14 @@ logging.basicConfig(level=logging.INFO)
 
 def parse() -> tuple:
     logging.info(f'{" ".join(sys.argv)}')
-    parser = argparse.ArgumentParser(prog='concat_df')
+    parser = argparse.ArgumentParser(prog='concat_csv_to_df')
     parser.add_argument('table_name', type=str)
     parser.add_argument('files', type=str, nargs='*')
     args = parser.parse_args()
     return args.table_name, args.files
 
 
-def concat_df(files: list) -> pd.DataFrame:
+def concat_csv_to_df(files: list) -> pd.DataFrame:
     dfs = []
     for f in files:
         dfs.append(pd.read_csv(f))
@@ -35,8 +35,13 @@ def df_to_gbq(df: pd.DataFrame, table_name: str):
               credentials=cred)
 
 
-if __name__ == "__main__":
+def concat_csv_to_gbq() -> pd.DataFrame:
     table_name, files = parse()
-    df = concat_df(files)
+    df = concat_csv_to_df(files)
     df_to_gbq(df, table_name)
+    return df
+
+
+if __name__ == "__main__":
+    _ = concat_csv_to_gbq()
     # df.to_csv(sys.stdout, index=False)

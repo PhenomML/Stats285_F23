@@ -80,13 +80,6 @@ def parse() -> tuple:
     return args.nrow, args.ncol, args.task_id, args.table_name
 
 
-def parse_reduction() -> tuple:
-    parser = argparse.ArgumentParser(prog='reduce_function')
-    parser.add_argument('table_name', type=str)
-    args = parser.parse_args()
-    return args.table_name
-
-
 def write_to_gbq(task_id: int, table_name: str, results: list, credentials: service_account.Credentials):
     if len(results) > 0:
         df = pd.concat(results)

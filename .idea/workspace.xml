@@ -7,6 +7,7 @@
     <list default="true" id="bcceca7f-a96c-42ce-9a55-ee0258d1e53c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/concat_df.py" beforeDir="false" afterPath="$PROJECT_DIR$/concat_df.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/map_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/map_function.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +78,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/concat_df.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/concat_csv_to_gbq.py" />
       <option name="PARAMETERS" value="su_id_hw5_000.csv su_id_hw5_100.csv su_id_hw5_200.csv" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -129,7 +130,7 @@
       <workItem from="1699137767045" duration="538000" />
       <workItem from="1699138372801" duration="2735000" />
       <workItem from="1699306993225" duration="5566000" />
-      <workItem from="1699372561882" duration="15456000" />
+      <workItem from="1699372561882" duration="17876000" />
     </task>
     <servers />
   </component>
