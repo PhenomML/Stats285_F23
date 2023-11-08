@@ -2,31 +2,42 @@
 
 import argparse
 import pandas as pd
+from EMS.manager import get_gbq_credentials
 import sys
 import logging
 
 logging.basicConfig(level=logging.INFO)
 
 
-def parse() -> list:
+def parse() -> tuple:
     logging.info(f'{" ".join(sys.argv)}')
     parser = argparse.ArgumentParser(prog='concat_df')
+    parser.add_argument('table_name', type=str)
     parser.add_argument('files', type=str, nargs='*')
     args = parser.parse_args()
-    return args.files
+    return args.table_name, args.files
 
 
-def concat_df():
-    files = parse()
+def concat_df(files: list) -> pd.DataFrame:
     dfs = []
     for f in files:
-        dfs.append(pd.read_csv(f, index_col=0))
+        dfs.append(pd.read_csv(f))
+        # dfs.append(pd.read_csv(f, index_col=0))
     df = pd.concat(dfs)
     df.reset_index(drop=True, inplace=True)
-    # df.drop(columns=['index'], inplace=True)
-    # logging.info(f'{df}')
-    df.to_csv(sys.stdout)
+    return df
+
+
+def df_to_gbq(df: pd.DataFrame, table_name: str):
+    cred = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
+    df.to_gbq(f'HW5.{table_name}',
+              if_exists='append',
+              progress_bar=False,
+              credentials=cred)
 
 
 if __name__ == "__main__":
-    concat_df()
+    table_name, files = parse()
+    df = concat_df(files)
+    # df_to_gbq(df, table_name)
+    df.to_csv(sys.stdout)

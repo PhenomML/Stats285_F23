@@ -92,7 +92,7 @@ def write_to_gbq(task_id: int, table_name: str, results: list, credentials: serv
         df = pd.concat(results)
         if task_id > 0:  # Delay every write except the first.
             time.sleep(np.random.randint(15, 30))
-        df.to_gbq(f'HW4.{table_name}',
+        df.to_gbq(f'HW5.{table_name}',
                   if_exists='append',
                   progress_bar=False,
                   credentials=credentials)
@@ -120,8 +120,10 @@ def do_sbatch_array_to_csv():
         results.append(experiment(nrow=nrow, ncol=ncol, seed=s))
     df = pd.concat(results)
     df.reset_index(drop=True, inplace=True)
-    logging.info(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
-    df.to_csv(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
+    logging.info(f'{os.getcwd()}/{table_name}_{task_id:0>3}.csv')
+    df.to_csv(f'{os.getcwd()}/{table_name}_{task_id:0>3}.csv', index=False)
+    # logging.info(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
+    # df.to_csv(f'{os.environ["HOME"]}/Stats285_F23/{table_name}_{task_id:0>3}.csv')
 
 
 if __name__ == "__main__":
