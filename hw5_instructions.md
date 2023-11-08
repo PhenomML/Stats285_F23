@@ -161,11 +161,11 @@ The end of the file:
 	1000 out of 1000 rows loaded.
 ```
 
-12. We also have written a new format `.csv` file, `hw2data.csv`. It shows some characteristics of `numpy`/`pandas` where scalars, the parameters in our case, are "broadcast" to match the "shape" of the observables.  
+13. 
 ```
-	index,nrow,ncol,seed,u_est,v_est,u_true,v_true
-	0,1000,1000,285,-0.03236102757929593,0.031223329570119786,0.03162277660168379,-0.03162277660168379
-	1,1000,1000,285,0.03139612247692286,-0.03127049843880714,-0.03162277660168379,0.03162277660168379
+(stats285) adonoho@rice03:~/Stats285_F23$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           2422892    normal hw5_larg  adonoho  R       1:28      1 wheat12
 ```
 
 #### Running code on your Laptop
