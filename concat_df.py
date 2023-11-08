@@ -38,5 +38,5 @@ def df_to_gbq(df: pd.DataFrame, table_name: str):
 if __name__ == "__main__":
     table_name, files = parse()
     df = concat_df(files)
-    # df_to_gbq(df, table_name)
-    df.to_csv(sys.stdout, index=False)
+    df_to_gbq(df, table_name)
+    # df.to_csv(sys.stdout, index=False)
