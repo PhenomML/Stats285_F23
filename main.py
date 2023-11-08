@@ -108,7 +108,7 @@ if __name__ == "__main__":
     # experiment(nrow=1000, ncol=1000, seed=285)
     # do_local_experiment(size=1, su_id='su_ID_1')
     # do_local_experiment(size=1000, su_id='su_ID_slurm_large_node')
-    do_local_experiment(size=1000, su_id='su_ID_slurm_large_node_gbq',
-                        credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
-    # do_cluster_experiment(size=1000, su_id='su_ID_slurm_cluster',
-    #                       credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+    # do_local_experiment(size=1000, su_id='su_ID_slurm_large_node_gbq',
+    #                     credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+    do_cluster_experiment(size=1000, su_id='su_ID_slurm_cluster',
+                          credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
