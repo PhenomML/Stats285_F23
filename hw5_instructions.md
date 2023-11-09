@@ -43,29 +43,29 @@ The computer activity is rounded out by loading your data into a notebook and th
 1. Clone the HW repository. (Note: It's name has changed.):  
 	`git clone https://github.com/adonoho/Stats285_F23`
 
-4. Change directory to  
+2. Change directory to  
 	`cd Stats285_F23/`
 
-5. Examine the contents; does it look modestly familiar?
+3. Examine the contents; does it look modestly familiar?
 
-6. Check if the `conda` environment `stats285` is still around?  
+4. Check if the `conda` environment `stats285` is still around?  
 ```
 	ml anaconda3/2023.07
 	conda env list
 ```
 
-7. If so, delete it:  
+5. If so, delete it:  
 	`conda env remove --name stats285`
 
-8. Create a new environment:  
+6. Create a new environment:  
 	`conda env create --name stats285 --file environment.yml`  
 	(This can take a few minutes.)
 
-9. Turn it on:  
+7. Turn it on:  
 	`source activate stats285`  
 	(Note, FarmShare is different from other Unix/Linux shells.)
 
-10. Execute `map_function.py` on an array of nodes:  
+8. Execute `map_function.py` on an array of nodes:  
 	`sbatch hw5_array.sh`  
 	`squeue -u $USER`
 ```
@@ -82,7 +82,7 @@ The computer activity is rounded out by loading your data into a notebook and th
 		   2422878_800    normal hw5_arra  adonoho  R       0:14      1 wheat08
 		   2422878_900    normal hw5_arra  adonoho  R       0:14      1 wheat08
 ```
-11. Upon completion, about 2 minutes, look inside `hw5_array.err`.  
+9. Upon completion, about 2 minutes, look inside `hw5_array.err`.  
 The beginning of the file:
 ```
 	INFO:root:./map_function.py 1000 1000 300 su_id_hw5
@@ -151,9 +151,9 @@ The end of the file:
 	INFO:root:Seed: 999; 0.9271728992462158 seconds.
 	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_900.csv
 ```
-12. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. You should change the `su_id` to your Stanford ID.):
+10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. You should change the `su_id` to your Stanford ID.):
 ```
-	(stats285) adonoho@rice03:~/Stats285_F23$ python3 gather_csv_to_gbq.py su_id_hw5 *.csv
+	python3 gather_csv_to_gbq.py su_id_hw5 *.csv
 ```
 `gather_csv_to_gbq.py` will log its command line arguments and will be followed by GBQ acknowledging the receipt of 1000 rows of data.
 ```
@@ -161,68 +161,100 @@ The end of the file:
 	1000 out of 1000 rows loaded.
 ```
 
-13. 
+11. While it is important to know how your local supercomputer works, it is more important to maintain a common workflow. The `sbatch array` is a very different kind of wrapping code and introduces its own complexity of distributed filesystem mediated communication. The EMS system, exploited in `main.py`, runs the same on your laptop and on a large node on FarmShare. This symmetry builds confidence that you are going to get the same answer only faster. As you will see, EMS also launches a cluster on FarmShare with very modest changes and no complex `sbatch` scripting. After editing in your Stanford ID into the code in place of `su_ID`, run the following command:  
+`sbatch hw5_large.sh`  
+`squeue -u $USER`  
+A line similar to the following should be displayed:
 ```
-(stats285) adonoho@rice03:~/Stats285_F23$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
            2422892    normal hw5_larg  adonoho  R       1:28      1 wheat12
 ```
 
-#### Running code on your Laptop
-
-1. Open a terminal window on your laptop. In the shell, run this command:  
-    `echo -n -e "\033]0;LAPTOP\007"`
-
-2. Issue the following command:  
-	`git clone https://github.com/adonoho/Stats285_F23`
-
-3. Change directory to:  
-	`cd Stats285_F23/`
-
-6. Check if the `conda` environment `stats285` is still around?  
-	`conda env list`
-
-7. If so, delete it:  
-	`conda env remove --name stats285`
-
-8. Create a new environment:  
-	`conda env create --name stats285 --file environment.yml`  
-	(This can take a few minutes.)
-
-5. Issue the following command:  
-	`conda activate stats285`
-
-6. Issue the following command:  
-	`python --version`  
-	You should see: `Python 3.11.6`.
-
-7. Issue the following command:  
-	`python main.py`
-
-	You should see something like:
+12. In `main.py`, comment out lines 110-111, `do_local_experiment()` and uncomment lines 112-113, `do_cluster_experiment()`. Run the following command:  
+`sbatch hw5_cluster.sh`  
+`squeue -u $USER`  
+Lines similar to the following should be displayed:
 ```
-(stats285) awd@Mazikeen Stats285_F23 % python main.py 
-INFO:EMS.manager:<Client: 'tcp://127.0.0.1:65285' processes=4 threads=12, memory=32.00 GiB>
-ERROR:EMS.manager:(sqlite3.OperationalError) no such table: stats285_adonoho_slurm_wide_small_hw4_1000_blocks
-[SQL: SELECT DISTINCT ncol,nrow,seed FROM stats285_adonoho_slurm_wide_small_hw4_1000_blocks]
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           2422900    normal dask-wor  adonoho  R       0:05      1 wheat12
+           2422901    normal dask-wor  adonoho  R       0:05      1 wheat12
+           2422902    normal dask-wor  adonoho  R       0:05      1 wheat13
+           2422903    normal dask-wor  adonoho  R       0:05      1 wheat13
+           2422904    normal dask-wor  adonoho  R       0:05      1 wheat14
+           2422897    normal dask-wor  adonoho  R       0:08      1 wheat08
+           2422898    normal dask-wor  adonoho  R       0:08      1 wheat10
+           2422899    normal dask-wor  adonoho  R       0:08      1 wheat11
+           2422896    normal hw5_clus  adonoho  R       0:22      1 wheat08
+```
+
+13. Both versions of the EMS code produce similar logs in `hw5_large.err` and `hw5_cluster.err`. Here's an example from the cluster:
+```
+INFO:root:#!/usr/bin/env bash
+
+#SBATCH -J dask-worker
+#SBATCH -n 1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=4G
+#SBATCH -t 00:15:00
+
+/home/adonoho/.conda/envs/stats285/bin/python3 -m distributed.cli.dask_worker tcp://171.67.51.68:44039 --nthreads 8 --memory-limit 4.00GiB --name dummy-name --nanny --death-timeout 60
+
+INFO:EMS.manager:<Client: 'tcp://171.67.51.68:44039' processes=0 threads=0, memory=0 B>
+ERROR:EMS.manager:Reason: 404 Not found: Table stanford-stats-285-donoho:EMS.stats285_su_ID_slurm_cluster_2_hw5_1000_blocks was not found in location US
+
+Location: US
+Job ID: 2b4f24b6-7361-4884-b160-58dc6877eea9
+
 INFO:EMS.manager:Number of Instances to calculate: 1000
-INFO:root:Seed: 778; 6.318756103515625 seconds.
-INFO:root:Seed: 563; 6.379151105880737 seconds.
-INFO:root:Seed: 329; 6.416765928268433 seconds.
-INFO:root:Seed: 659; 6.467713117599487 seconds.
-INFO:root:Seed: 947; 6.609302997589111 seconds.
-INFO:root:Seed: 635; 6.593518972396851 seconds.
-INFO:root:Seed: 629; 6.604357004165649 seconds.
-INFO:root:Seed: 461; 6.622162818908691 seconds.
-INFO:root:Seed: 364; 6.653280019760132 seconds.
-INFO:root:Seed: 522; 6.6136579513549805 seconds.
-INFO:root:Seed: 332; 6.716217041015625 seconds.
-INFO:root:Seed: 411; 6.6921021938323975 seconds.
-INFO:EMS.manager:Count: 10; Time: 8; Seconds/Instance: 0.7887; Remaining (s): 781; Remaining Count: 990
-INFO:EMS.manager:   nrow  ncol  seed  v_alignment     ve000     ve001     ve002  ...     ve993     ve994     ve995     ve996    ve997     ve998     ve999
-0  1000  1000   411    -0.999947  0.031999 -0.031529  0.031496  ... -0.031423  0.032273 -0.030896  0.031236 -0.03182  0.031309 -0.031774
+INFO:EMS.manager:Count: 10; Time: 12; Seconds/Instance: 1.2081; Remaining (s): 1196; Remaining Count: 990
+INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
+0  1000  1000   748    -0.999943  ...  0.031577 -0.031767  0.031941 -0.031332
+
+[1 rows x 1004 columns]
+INFO:EMS.manager:Count: 20; Time: 12; Seconds/Instance: 0.6092; Remaining (s): 597; Remaining Count: 980
+INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
+0  1000  1000   271    -0.999943  ...  0.032514 -0.031106  0.031448 -0.030869
+
+[1 rows x 1004 columns]
+INFO:EMS.manager:Count: 30; Time: 13; Seconds/Instance: 0.4340; Remaining (s): 421; Remaining Count: 970
+INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
+0  1000  1000    48    -0.999942  ...  0.031642 -0.031573  0.031408 -0.031282
+
+[1 rows x 1004 columns]
+INFO:EMS.manager:Count: 40; Time: 13; Seconds/Instance: 0.3375; Remaining (s): 324; Remaining Count: 960
+INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
+0  1000  1000   782    -0.999944  ...  0.032201 -0.031003  0.032151 -0.031873
+
+[1 rows x 1004 columns]
+INFO:EMS.manager:Count: 50; Time: 14; Seconds/Instance: 0.2756; Remaining (s): 262; Remaining Count: 950
+INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997    ve998    ve999
+0  1000  1000   433    -0.999945  ...  0.031583 -0.031511  0.03167 -0.03145
 
 [1 rows x 1004 columns]
 ```
+It starts by sharing the `sbatch` script it used to create the workers. Then, every ten calculations it posts some performance metrics, Seconds/Instance is of particular interest. It allows you to project how long each invocation of your experiment will likely take. In this case, it took about 77 seconds to calculate 1000 SVDs. Here is the end of the file:
+```
+WARNING:EMS.manager:batch_result(): Early Push: Length of DataFrames: 200
+WARNING:EMS.manager:_push_to_database(): Number of DataFrames: 200; Length of DataFrames: 200
+     nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
+0    1000  1000   690    -0.999945  ...  0.031443 -0.031443  0.031531 -0.031859
+1    1000  1000   654    -0.999947  ...  0.031676 -0.031047  0.031915 -0.031524
+2    1000  1000   954    -0.999946  ...  0.032172 -0.031818  0.031603 -0.030853
+3    1000  1000    65    -0.999943  ...  0.030796 -0.031628  0.031248 -0.031469
+4    1000  1000   178    -0.999945  ...  0.031113 -0.031387  0.031530 -0.031435
+..    ...   ...   ...          ...  ...       ...       ...       ...       ...
+195  1000  1000   161    -0.999945  ...  0.032281 -0.031565  0.031443 -0.031374
+196  1000  1000   505    -0.999943  ...  0.031187 -0.031334  0.031931 -0.031603
+197  1000  1000   268    -0.999943  ...  0.031281 -0.031061  0.031392 -0.031837
+198  1000  1000   142    -0.999939  ...  0.031596 -0.031979  0.030816 -0.031810
+199  1000  1000   921    -0.999947  ...  0.031462 -0.031619  0.031765 -0.031319
+
+[200 rows x 1004 columns]
+INFO:pandas_gbq.gbq:^M200 out of 200 rows loaded.
+INFO:EMS.manager:Performed experiment in 77.0673 seconds
+INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
+45.83user 2.99system 1:34.08elapsed 51%CPU (0avgtext+0avgdata 462232maxresident)k
+760408inputs+40288outputs (245major+500911minor)pagefaults 0swaps
+```
+#### Performing Analysis with Google Colab.
 
