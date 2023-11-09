@@ -52,7 +52,7 @@ Additionally, please answer the following question:
 
 * Have you used ggplot, matplotlib, or seaborn before (in R, Python, or MATLAB)? If so, how does Tableau compare to 
   these tools? If not, what tools have you used for plotting before? How does Tableau compare to these tools?
-* What is your preference for data visualization tool now for data visualization (it's okay if it's not Tableau)? Explain why.
+* What is your preference for data visualization tool now for data visualization? (It's okay if it's not Tableau.) Explain why.
 
 ### Submission Instructions
 

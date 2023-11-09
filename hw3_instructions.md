@@ -1,5 +1,7 @@
 # Homework 3. Easing the Pain with Version Control
 
+Due on **Friday 11/3** at 11:59PM.
+
 Modern use of computers generally involves distributing code to many different nodes on the internet. So far we were 
 logging in to each node and sending code by manual copying. This model doesn’t scale. Instead, we will introduce a 
 method of code distribution using an internet resource — [GitHub](https://github.com).  Getting introduced to `git` and GitHub will have other advantages for us, down the road. The model we will introduce is widely used. 
@@ -8,7 +10,7 @@ If you are new to Github, you might consult this [Quickstart](https://docs.githu
 
 ## Short Answer Questions
 
-On Canvas, navigate to Files -> Readings -> Github.
+On Canvas, navigate to Files -> Readings -> Github. Write your answers in a PDF document and submit them on Canvas.
 
 #### History of Git (Welcome to the Jungle article)
 
@@ -177,10 +179,10 @@ This assignment expects you to already have a free GitHub account.
 	(Note, FarmShare is different from other Unix/Linux shells.)
 
 10. Execute the same command from last week:  
-	`sbatch hw2.sh`  
+	`sbatch hw3.sh`  
 	`squeue`
 
-11. Unlike hw2, we now are using the logging tool in Python. FarmShare will place this data in the error stream, `hw2.err`. In that file, you should see a similar output to laptop step 7 above.  
+11. Unlike hw2, we now are using the logging tool in Python. FarmShare will place this data in the error stream, `hw3.err`. In that file, you should see a similar output to laptop step 7 above.  
 ```
 	INFO:root:Data Generated
 	INFO:root:nrow = 1000
@@ -193,10 +195,11 @@ This assignment expects you to already have a free GitHub account.
 	545112inputs+208outputs (108major+31186minor)pagefaults 0swaps
 ```
 
-12. We also have written a new format `.csv` file, `hw2data.csv`. It shows some characteristics of `numpy`/`pandas` where scalars, the parameters in our case, are "broadcast" to match the "shape" of the observables.  
+12. We also have written a new format `.csv` file, `hw3data.csv`. It shows some characteristics of `numpy`/`pandas` where scalars, the parameters in our case, are "broadcast" to match the "shape" of the observables.  
 ```
 	index,nrow,ncol,seed,u_est,v_est,u_true,v_true
 	0,1000,1000,285,-0.03236102757929593,0.031223329570119786,0.03162277660168379,-0.03162277660168379
 	1,1000,1000,285,0.03139612247692286,-0.03127049843880714,-0.03162277660168379,0.03162277660168379
 ```
 
+13. Submit `hw3.err`, `hw2.out`, and `hw3data.csv` on Canvas.
