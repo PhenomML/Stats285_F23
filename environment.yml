@@ -7,7 +7,17 @@ dependencies:
   - python=3.11
   - numpy
   - pandas
-  - google-auth
+  - sqlite>=3.40
   - sqlalchemy
-  - pg8000
-  - cloud-sql-python-connector
+  - google-auth
+  - google-cloud-sdk
+  - google-colab
+  - dask
+  - dask-jobqueue
+  - jupyter
+  - pip
+  - pip:
+    - git+https://github.com/adonoho/EMS.git@HW5
+variables:
+  MKL_NUM_THREADS: '1'
+  OPENBLAS_NUM_THREADS: '1'
