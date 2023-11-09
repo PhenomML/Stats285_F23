@@ -1,2 +1,2 @@
-# Stats285_hw3
-Homework 3 for Stanford Stats 285 Fall 2023.
+# Stats285_F23
+Homework repository Stanford Stats 285 Fall 2023.
