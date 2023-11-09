@@ -58,4 +58,3 @@ Additionally, please answer the following question:
 
 Submit the requested write-ups and short answer responses as a PDF on Canvas. Also, submit the Tableau Prep Flow and Tableau
 Desktop workbooks you created on Canvas.
-
