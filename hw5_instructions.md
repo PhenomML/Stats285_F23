@@ -263,7 +263,7 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
 ```
 #### Performing Analysis with Google Colab.
 
-1. Open the `HW5_analysis.ipynb` notebook.
+1. Open the `HW5_analysis.ipynb` notebook on the Github website.
 2. Click the 'Open in Colab' button.
 3. Run the code in the notebook. Remember to **replace `su_id` with your actual Stanford SUID**.
     * This code will read the data from the cloud database and perform the Tall & Skinny SVD to form
