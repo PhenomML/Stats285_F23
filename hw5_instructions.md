@@ -266,6 +266,10 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
 1. Open the `HW5_analysis.ipynb` notebook.
 2. Click the 'Open in Colab' button.
 3. Run the code in the notebook. Remember to **replace `su_id` with your actual Stanford SUID**.
+    * This code will read the data from the cloud database and perform the Tall & Skinny SVD to form
+      an approximation of `v_true` (defined in the `generate_data` function of `map_function.py`) 
+      using `vt` which is the top right singular vector of the data matrix formed by collecting
+      1000 different noisy measurements of the underlying $1000 \times 1000$ matrix.
 4. Compare the accuracy of using this `vt` (formed using 1000 different $1000 \times 1000$ matrices) to that obtained 
-   from using only one approximation formed using one 1000 x 1000 matrix.
+   from using only one approximation formed using one $1000 x 1000$ matrix.
 
