@@ -151,7 +151,7 @@ The end of the file:
 	INFO:root:Seed: 999; 0.9271728992462158 seconds.
 	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_900.csv
 ```
-10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. You should change the `su_id` to your Stanford ID.):
+10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. **Change the `su_id` to your Stanford ID**.):
 ```
 	python3 gather_csv_to_gbq.py su_id_hw5 *.csv
 ```
@@ -161,14 +161,19 @@ The end of the file:
 	1000 out of 1000 rows loaded.
 ```
 
-11. While it is important to know how your local supercomputer works, it is more important to maintain a common workflow. The `sbatch array` is a very different kind of wrapping code and introduces its own complexity of distributed filesystem mediated communication. The EMS system, exploited in `main.py`, runs the same on your laptop and on a large node on FarmShare. This symmetry builds confidence that you are going to get the same answer only faster. As you will see, EMS also launches a cluster on FarmShare with very modest changes and no complex `sbatch` scripting. After editing in your Stanford ID into the code in place of `su_ID`, run the following command:  
+11. While it is important to know how your local supercomputer works, it is more important to maintain a common workflow. The `sbatch array` is a very different kind of wrapping code and introduces its own complexity of distributed filesystem mediated communication. The EMS system, exploited in `main.py`, runs the same on your laptop and on a large node on FarmShare. This symmetry builds confidence that you are going to get the same answer only faster. As you will see, EMS also launches a cluster on FarmShare with very modest changes and no complex `sbatch` scripting. 
+    ####
+    **Edit your Stanford ID into the code 'hw5_larg.sh' in the places where `su_ID` appears**. 
+    ####
+    After, run the following command:  
 `sbatch hw5_large.sh`  
 `squeue -u $USER`  
-A line similar to the following should be displayed:
-```
+    ####
+    A line similar to the following should be displayed:
+    ```
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
            2422892    normal hw5_larg  adonoho  R       1:28      1 wheat12
-```
+    ```
 
 12. In `main.py`, comment out lines 110-111, `do_local_experiment()` and uncomment lines 112-113, `do_cluster_experiment()`. Run the following command:  
 `sbatch hw5_cluster.sh`  
@@ -257,4 +262,10 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
 760408inputs+40288outputs (245major+500911minor)pagefaults 0swaps
 ```
 #### Performing Analysis with Google Colab.
+
+1. Open the `HW5_analysis.ipynb` notebook.
+2. Click the 'Open in Colab' button.
+3. Run the code in the notebook. Remember to **replace `su_id` with your actual Stanford SUID**.
+4. Compare the accuracy of using this `vt` (formed using 1000 different $1000 \times 1000$ matrices) to that obtained 
+   from using only one approximation formed using one 1000 x 1000 matrix.
 
