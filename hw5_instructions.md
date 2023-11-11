@@ -270,6 +270,6 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
       an approximation of `v_true` (defined in the `generate_data` function of `map_function.py`) 
       using `vt` which is the top right singular vector of the data matrix formed by collecting
       1000 different noisy measurements of the underlying $1000 \times 1000$ matrix.
-4. Compare the accuracy of using this `vt` (formed using 1000 different $1000 \times 1000$ matrices) to that obtained 
+4. Compare the accuracy of using this `vt` to that obtained 
    from using only one approximation formed using one $1000 x 1000$ matrix.
 
