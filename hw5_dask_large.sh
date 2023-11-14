@@ -5,8 +5,8 @@
 #SBATCH --partition=normal
 #SBATCH --cpus-per-task=16
 #SBATCH --time=00:15:00
-#SBATCH --error=hw5_large.err
-#SBATCH --output=hw5_large.out
+#SBATCH --error=hw5_dask_large.err
+#SBATCH --output=hw5_dask_large.out
 
 
 ## Run the python script
