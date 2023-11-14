@@ -4,34 +4,54 @@ Our earlier homeworks were run on a single compute node. Today's computing activ
 
 ## Computing activity
 
-You will see that we now have 4 bash scripts: `hw5_large.sh` `hw5_cluster.sh` and `hw5_array.sh` `hw5_personalize.sh` and two python scripts: `main.py` and `map_function.py`; we also have a Jupyterlab notebook `reading_gbq.ipynb`.
+You will see that we now have 4 bash scripts: `hw5_large.sh` `hw5_cluster.sh` and `hw5_array.sh` `hw5_personalize.sh` and three python scripts: `main.py`, `map_function.py`; we also have a Jupyterlab notebook `reading_gbq.ipynb`. 
 
 So far, we introduced simple code that created the results of a **1000 x 1000** SVD of noisy data. We then repackaged it as a function that takes keyword arguments and returns a DataFrame. This code we ran on both your laptop and a server. 
 
-In this week's computer activity -- we are computing with a cluster to (approximately) do (part of) a **1,000,000 x 1,000** SVD, within the divide and recombine (map-reduce) paradigm. The same basic code we used before is re-used to make a mapper function, applied in 1,000 separate `map` instances, each of size 1000 x 1000. Each `map` instance saves relevant outputs to the cloud. Once the `map` outputs are in the cloud, we will eventually do the `reduce` step (though, not in this week's activity), using a Jupyterlab notebook. 
+In this week's computer activity -- we are computing with a cluster to (approximately) do (part of) a **1,000,000 x 1,000** SVD, within the divide and recombine (map-reduce) paradigm. The same basic code we used before is re-used to make a mapper function, applied in 1,000 separate `map` instances, each of size 1000 x 1000. Notionally, each `map` instance saves  results to the cloud. Once all the `map` results are in the cloud, we will eventually do the `reduce` step. 
 
-To do the `map` job distribution into 1000 instances, we follow one of several paths. First, `hw5_array.sh` heeds the advice of the Stanford Research Computing Center (SRCC) staff to use the `sbatch array` command on the command line. Like `sbatch`, `sbatch array` launches jobs; unlike simple `sbatch` which we have used before, this single command can launch many instances of `map_function.py` with one shell command. `hw5_array.sh` uses this approach to launch 10 instances of `map_function.py` as  in some sense meta instances which each iterate through 100 actual instances, thereby computing 1000 instances of total work. Each instance saves its results; ultimately to a remote database, hosted at Google BigQuery [GBQ]. 
+To do the `map` job distribution into 1000 instances, and get the results up to the cloud, we follow one of several *strategies*.
 
-We found that straightforward use of the `sbatch array` on sherlock created some issues when used with modern database centric cloud computing. To make the database accesses work reliably, the `map_function.py' functions first writes the data as scratch files and then later collects the scratch files into an amalgamated array written to the remote database. Hence, there are three functions involved: `map_function.py`, `gather_csv_to_gbq.py`, and `HW5_analysis.ipynb`. `map_function.py` creates a bunch of `.csv` files; those are later read by `gather_csv_to_gbq.py` and sent to Google BigQuery. This experiment is driven by the `sbatch` script `hw5_array.sh`. 
+### `hw5_array.sh`
 
-To replace your burden on gathering computational results, we are going to start using a simple system to run many independent tasks and write the results to the remote database. This system, [EMS or Experiment Management System](https://github.com/adonoho/EMS), takes a definition of your parameters as arrays and then calls your function with the combination of all parameter values. It then stores the result of each function in a database. 
+Our first strategy is implemented by `hw5_array.sh` and `map_function.py`. It heeds the advice of the Stanford Research Computing Center (SRCC) staff to use the `sbatch array` shell command to deploy many instances on its cluster. Like `sbatch`, `sbatch array` launches jobs; unlike simple `sbatch`, which we have used before, `sbatch array` can launch many instances of `map_function.py` with one shell command. `hw5_array.sh` uses this strategy to launch 10 instances of `map_function.py` as in some sense *meta* instances which each iterate through 100 actual instances, thereby computing 1000 instances of total work. Each instance saves its results; ultimately to be reduced. 
 
-Because modern laptops contain many processors, the one I am writing this on has 6 symmetric cores and can run 12 concurrent tasks, you can frequently run your code quite a bit faster than normal using EMS. EMS depends upon the Python system `Dask' which deploys jobs and can. As our tasks are embarrassingly parallel, we will not be exploiting Dask for other than processor/thread/worker management. But it is available for more advanced work. For example, there is an advanced way to use Dask to solve the [Tall & Skinny SVD problem](https://examples.dask.org/machine-learning/svd.html#Compute-SVD-of-Tall-and-Skinny-Matrix).
+We had hoped to follow the original notional model discussed above, to use the cloud database to save individual instance results immediately, as they were produced.  Unfortunately, we found that straightforward use of `sbatch array` on Sherlock/FarmShare was not compatible with instance by instance upload of results to GBQ (some network issues intervened). To find a way forward, we had to resort to an ugly Kluge -- fallback to files. Thus the delivered `hw5_array.sh` and `map_function.py` combination first writes the instance results as .csv files. These will later separately be amalgamated into a DataFrame and written to GBQ by a separate program: `gather_csv_to_gbq.py`.  Results are stored under the table_name <SUID>_hw5, where in place of <SUID> you would place the suid that you use for login to Stanford systems. (It is possible to use other table_names, for example for debugging purposes; but note that the script `hw5_personalize.sh` embeds your suid into actual code, and this would need to be overridden.)
 
-EMS always saves your data locally via SQLite in your `data/` directory. On Mac or Windows, you can examine this file using [SQLite Studio](https://sqlitestudio.pl). Hence, you can always use EMS without a cloud database. This is quite useful for debugging your code. You can easily compare your data between runs by just changing your table name. Then, when you are ready to start more formal experimentation, we can start telling EMS to additionally use a cloud database, Google Big Query in this class. If you insist, EMS also includes a Python script to copy a table from the local database to a `.csv` file.
+### `hw5_large.sh`
 
-To turn on saving your data to the cloud database, we need to do two things. First, we need to save credentials that tell the database to accept data from our task in a standard location and then tell EMS to use them. The class will provide you with these credentials and we will show you where to install them on FarmShare and your laptop. These credentials are focussed upon just Google Big Query operations. Nonetheless, you can hurt yourself and your classmates by misusing these permissions. Be nice.
+A different strategy involves using more cores; it is implemented by `hw5_large.sh`, it is invoked via SLURM using `sbatch` commands that at first glance looks identical to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different.
 
-We then have two kinds of servers to use -- a single large server and a cluster of smaller servers. On FarmShare, both are invoked via SLURM in a way that is almost identical to your earlier homework. Once the cluster server is running, it then asks SLURM to give it more processors. If they are available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. All it does is dole out parameters and save DataFrames locally and to the cloud.
+Modern laptops contain many cores; the one I am writing this on has 6 symmetric cores and can run 12 concurrent tasks. You can frequently run your code quite a bit faster on a laptop if you use all the available cores. 
 
-The computer activity is rounded out by loading your data into a notebook and then finishing the Tall & Skinny SVD. 
+To exploit multiple cores, we use the Python system `Dask' for processor/thread/worker management. We will not now be using all its capabilities.
+
+To access Dask, we use a homebrew system [EMS or Experiment Management System](https://github.com/adonoho/EMS). It assumes you have written a pure function for your computational task; it inputs an array of desired parameter values and calls your function one time for each distinct combination of parameter values. It stores the result of each function call in a database. 
+
+*Aside 1. EMS to Local DB.* EMS always saves your data locally via SQLite in your `data/` directory. On Mac or Windows, you can examine this file using [SQLite Studio](https://sqlitestudio.pl). Hence, you can always use EMS without a cloud database. 
+
+*Aside 2. Debugging option.* You can easily preserve data between runs by just changing your table_name. 
+
+*Aside 3. EMS to Cloud DB.* EMS can also use a cloud database, Google Big Query in this class. EMS also includes a Python script to copy a table from the local database to a `.csv` file. To turn on saving your data to the cloud database, we need to do two things. First, we need to save credentials that tell the database to accept data from our task in a standard location and then tell EMS to use them. The class will provide you with these credentials and we will show you where to install them on FarmShare and your laptop. These credentials are focused upon just Google Big Query operations. 
+
+*Aside 4. Warning/Request.* When using the Cloud DB option, you can erase your work or that of your classmates by misusing Cloud DB permissions. Be nice.
+
+### `hw5_cluster.sh` 
+
+We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a single large server with many cores; or it can ask for a cluster of smaller servers. `hw5_large.sh` used the first approach. `hw5_cluster.sh` uses the second approach. 
+
+`hw5_cluster.sh` is a bash script using `sbatch` commands which, again, at first glance looks similar to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different. Once the cluster server is running, it asks SLURM to give it more processors. If they are available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. All it does is dole out parameters and save DataFrames locally and to the cloud.
+
+### Reduce task
+
+The computer activity is rounded out by the reduce step. TBD. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD. 
 
 #### Getting Database Access Credentials onto your laptop and Farmshare account
 
 1. Open a terminal window on your laptop. In the shell, run this command:  
     `echo -n -e "\033]0;LAPTOP\007"`
 
-2. Login to FarmShare. [or Sherlock, if you have an account there]  
+2. Login to FarmShare. [or Sherlock, if you have an account there]  In the shell, run this command:
     `echo -n -e "\033]0;FARMSHARE\007"`
 
 3. Download the security credentials from the Canvas system. (On Mac, the file will end up in your `~/Downloads/` directory.)
@@ -46,7 +66,7 @@ The computer activity is rounded out by loading your data into a notebook and th
 
 #### Running code on a server
 
-1. Clone the HW repository. (Note: It's name has changed.):  
+1. Clone the HW repository. (Note: Its name has changed.):  
 	`git clone https://github.com/adonoho/Stats285_F23`
 
 2. Change directory to  
@@ -157,7 +177,7 @@ The end of the file:
 	INFO:root:Seed: 999; 0.9271728992462158 seconds.
 	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_900.csv
 ```
-10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. **Change the `su_id` to your Stanford ID**.):
+10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. **at the bash command line, run "bash hw5_personalize.sh" to substitute in place of the `su_id` string below to your Stanford ID**.):
 ```
 	python3 gather_csv_to_gbq.py su_id_hw5 *.csv
 ```
@@ -169,7 +189,7 @@ The end of the file:
 
 11. While it is important to know how your local supercomputer works, it is more important to maintain a common workflow. The `sbatch array` is a very different kind of wrapping code and introduces its own complexity of distributed filesystem mediated communication. The EMS system, exploited in `main.py`, runs the same on your laptop and on a large node on FarmShare. This symmetry builds confidence that you are going to get the same answer only faster. As you will see, EMS also launches a cluster on FarmShare with very modest changes and no complex `sbatch` scripting. 
     ####
-    **Edit your Stanford ID into the code 'hw5_larg.sh' in the places where `su_ID` appears**. 
+    **You should have already, at the bash command line, run "bash hw5_personalize.sh" to substitute in place of the `su_id` string your Stanford ID into the code 'hw5_large.sh' in the places where `su_ID` appears**. 
     ####
     After, run the following command:  
 `sbatch hw5_large.sh`  
