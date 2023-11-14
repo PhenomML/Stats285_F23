@@ -309,7 +309,7 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
 4. Compare the accuracy of using this `vt` to that obtained 
    from using only one approximation formed using one $1000 \times 1000$ matrix.
 
-#### Submitting on Canvas
+## Submitting on Canvas
 To get credit for this homework, you should submit the following on Canvas:
 
 1. **Short Answer:** Answer the following quests and submit them as a PDF file on Canvas.
