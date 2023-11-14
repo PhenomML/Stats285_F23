@@ -4,7 +4,7 @@ Our earlier homeworks were run on a single compute node. Today's computing activ
 
 ## Overview
 
-You will see that we now have 3 bash scripts: `hw5_dask_large.sh` `hw5_dask_cluster.sh` and `hw5_sbatch_array.sh`; three python scripts: `main.py` `map_function.py` `gather_csv_to_gbq.py'; we also have two Jupyterlab notebooks `reading_gbq.ipynb` and `hw5_reduce.ipynb`. 
+You will see that we now have 3 bash scripts: `hw5_dask_large.sh` `hw5_dask_cluster.sh` and `hw5_sbatch_array.sh`; three python scripts: `main.py` `map_function.py` `gather_csv_to_gbq.py`; we also have two Jupyterlab notebooks `reading_gbq.ipynb` and `hw5_reduce.ipynb`. 
 
 In HW3 `hw3.sh` `main.py`, we introduced simple code that created the results of one single task, a **1000 x 1000** SVD of noisy data. This code we ran on both your laptop and a server. 
 
@@ -34,13 +34,13 @@ To access Dask, we use a homebrew system [EMS or Experiment Management System](h
 
 *Aside 3. EMS to Cloud DB.* EMS can also use a cloud database, Google Big Query in this class. EMS also includes a Python script to copy a table from the local database to a `.csv` file. To turn on saving your data to the cloud database, we need to do two things. First, we need to save credentials that tell the database to accept data from our task in a standard location and then tell EMS to use them. The class will provide you with these credentials and we will show you where to install them on FarmShare and your laptop. These credentials are focused upon just Google Big Query operations. 
 
-*Aside 4. Warning/Request.* When using the Cloud DB option, you can erase your work or that of your classmates by misusing Cloud DB permissions. Be nice.
+*Aside 4. Warning/Request.* When using the Cloud DB option, you can erase your work or that of your classmates by misusing Cloud DB permissions. Be responsible.
 
 #### `hw5_dask_cluster.sh` 
 
 We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a single large server with many cores; or it can ask for a cluster of smaller servers. `hw5_dask_large.sh` used the first approach. `hw5_dask_cluster.sh` uses the second approach. 
 
-`hw5_dask_cluster.sh` is a bash script using `sbatch` commands which, again, at first glance looks similar to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different. Once the cluster server is running, it asks SLURM to give it more processors. If they are available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. All it does is dole out parameters and save DataFrames locally and to the cloud.
+`hw5_dask_cluster.sh` is a bash script using `sbatch` commands which, again, at first glance, looks similar to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different. Once the cluster server is running, it asks SLURM to give it more computational nodes. If available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. The job scheduling will sequentially dole out parameters and save DataFrames locally and to the cloud.
 
 #### `hw5_reduce.ipynb` Reduce task
 
@@ -69,7 +69,7 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 
 #### Running code on FarmShare/Sherlock
 
-*the following commands are all inside the [FARMSHARE terminal] window*
+*the following commands are all to be used inside the [FARMSHARE terminal] window*
 
 1. Clone the HW repository. (Note: Its name has changed.):  
 	`git clone https://github.com/adonoho/Stats285_F23`
@@ -303,7 +303,7 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
      clicking File -> Save a copy in Drive.
    * Make sure you are logged into your `suid@stanford.edu` Google account. Otherwise, you will not be able to read the
      from the GBQ database.
-     Edit the notebook changing the fragment 'su_ID_hw5' to be 'suid_hw5' where suid denotes your Stanford ID.
+     **Edit the notebook changing the fragment** 'HW5_SUID_hw5' to something like 'HW5_suid_hw5' where suid denotes your Stanford ID.
 3. Run the code in the notebook. 
     * This code will read the data from the cloud database and perform the Tall & Skinny SVD to form
       an approximation of `v_true` (defined in the `generate_data` function of `map_function.py`) 
@@ -322,7 +322,7 @@ To get credit for this homework, you should submit the following on Canvas:
    * Using the outputs found in `hw5_sbatch_array.err`, `hw5_dask_large.err`, and `hw5_dask_cluster.err`;
      estimate how long each of their corresponding scripts took to run? Which one(s) were the fastest? 
      Which one(s) were the slowest? Explain why.
-   * Compare the accuracy from using `vt` to estimate `v_true` in `hw5.ipynb` to that obtained from using only one 
+   * Compare the accuracy from using `vt` to estimate `v_true` in `hw5_reduce.ipynb` to that obtained from using only one 
      approximation formed using one $1000 \times 1000$ matrix in earlier homeworks.
    * Describe your experiences with this homework. What parts had the most "friction"? Which parts felt the most
      "frictionless"?
