@@ -328,5 +328,3 @@ To get credit for this homework, you should submit the following on Canvas:
    * Screenshots of your outputs in `hw5_reduce.ipynb`.
    * On Google Colab, click File -> Download -> Download .ipynb. Submit the downloaded notebook (which should contain
      your edits and outputs).
-
-
