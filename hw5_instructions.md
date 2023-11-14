@@ -301,3 +301,23 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
 4. Compare the accuracy of using this `vt` to that obtained 
    from using only one approximation formed using one $1000 x 1000$ matrix.
 
+#### Submitting on Canvas
+To get credit for this homework, you should submit the following on Canvas:
+
+1. **Short Answer:** Answer the following quests and submit them as a PDF file on Canvas.
+   * Read the `main.py` file. Explain what the `generate_data`, `experiment`, `build_params`, `do_cluster_experiment`,
+     and `do_local_experiment` functions do and how they interact with one another.
+   * Compare the output files from running `do_local_experiment` and `do_cluster_experiment`. How much time did each
+     each take?
+   * Compare the accuracy from using `vt` to estimate `v_true` in `hw5.ipynb` to that obtained from using only one 
+     approximation formed using one $1000 \times 1000$ matrix in earlier homeworks.
+   * Describe your experiences with this homework. What parts had the most "friction"? Which parts felt the most
+     "frictionless"?
+2. **Submitting Files:** Submit the following files on Canvas:
+   * `hw5_large.err` (You can either `scp` it from the cluster or copy-and-paste its contents from terminal)
+   * `hw5_cluster.err` (You can either `scp` it from the cluster or copy-and-paste its contents from terminal)
+   * Screenshots of your outputs in `hw5_reduce.ipynb`.
+   * On Google Colab, click File -> Download -> Download .ipynb. Submit the downloaded notebook (which should contain
+     your edits and outputs) on Canvas as well.
+
+
