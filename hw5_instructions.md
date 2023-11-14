@@ -1,4 +1,4 @@
-# Homework 5. Driving Parameters while Growing into a Cluster.
+# Homework 5. Deploying Many Jobs, Served Three Ways. Hot.
 
 Our earlier homeworks were run on a single compute node. Today's computing activity will introduce the beginnings of using a cluster -- first on a larger node and then on an array of nodes.
 
