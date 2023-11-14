@@ -42,7 +42,7 @@ We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a s
 
 `hw5_cluster.sh` is a bash script using `sbatch` commands which, again, at first glance looks similar to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different. Once the cluster server is running, it asks SLURM to give it more processors. If they are available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. All it does is dole out parameters and save DataFrames locally and to the cloud.
 
-### `hw5_analysis.ipynb` Reduce task
+### `hw5_reduce.ipynb` Reduce task
 
 The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD. 
 
@@ -54,7 +54,7 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 2. Open another terminal window. Login to FarmShare. [or Sherlock, if you have an account there]  In the shell, run this command:
     `echo -n -e "\033]0;FARMSHARE\007"`
 
-3. [LAPTOP WEB BROWSER] Download the security credentials from Canvas > Files > Howmework. (On Mac, the file will end up in your `~/Downloads/` directory.)
+3. [LAPTOP WEB BROWSER] Download the security credentials from Canvas > Files > Homework. (On Mac, the file will end up in your `~/Downloads/` directory.)
 
 4. [LAPTOP terminal] On your laptop at your login directory:  
 	`mkdir .config/gcloud`  
