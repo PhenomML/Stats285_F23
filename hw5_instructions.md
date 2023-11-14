@@ -1,4 +1,4 @@
-# Homework 5. Driving Parameters while Growing into a Cluster.
+# Homework 5. Deploying Many Jobs, Served Three Ways. Hot.
 
 Our earlier homeworks were run on a single compute node. Today's computing activity will introduce the beginnings of using a cluster -- first on a larger node and then on an array of nodes.
 
@@ -42,7 +42,7 @@ We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a s
 
 `hw5_cluster.sh` is a bash script using `sbatch` commands which, again, at first glance looks similar to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different. Once the cluster server is running, it asks SLURM to give it more processors. If they are available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. All it does is dole out parameters and save DataFrames locally and to the cloud.
 
-### `hw5_analysis.ipynb` Reduce task
+### `hw5_reduce.ipynb` Reduce task
 
 The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD. 
 
@@ -54,7 +54,7 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 2. Open another terminal window. Login to FarmShare. [or Sherlock, if you have an account there]  In the shell, run this command:
     `echo -n -e "\033]0;FARMSHARE\007"`
 
-3. [LAPTOP WEB BROWSER] Download the security credentials from Canvas > Files > Howmework. (On Mac, the file will end up in your `~/Downloads/` directory.)
+3. [LAPTOP WEB BROWSER] Download the security credentials from Canvas > Files > Homework. (On Mac, the file will end up in your `~/Downloads/` directory.)
 
 4. [LAPTOP terminal] On your laptop at your login directory:  
 	`mkdir .config/gcloud`  
@@ -75,8 +75,10 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 	`cd Stats285_F23/`
 
 3. Examine the contents; does it look modestly familiar?
+4.  Personalize the environment for your Stanford ID (Replace `SU_ID` with your actual Stanford ID.):  
+	`export TABLE_NAME=SU_ID_hw5`
 
-4. Check if the `conda` environment `stats285` is still around?  
+5. Check if the `conda` environment `stats285` is still around?  
 ```
 	ml anaconda3/2023.07
 	conda env list
@@ -179,9 +181,9 @@ The end of the file:
 	INFO:root:Seed: 999; 0.9271728992462158 seconds.
 	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_900.csv
 ```
-10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. **at the bash command line, run "bash hw5_personalize.sh" to substitute in place of the `su_id` string below your Stanford ID**.):
+10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below.):
 ```
-	python3 gather_csv_to_gbq.py su_id_hw5 *.csv
+	python3 gather_csv_to_gbq.py ${TABLE_NAME} *.csv
 ```
 `gather_csv_to_gbq.py` will log its command line arguments and will be followed by GBQ acknowledging the receipt of 1000 rows of data.
 ```
@@ -190,8 +192,7 @@ The end of the file:
 ```
 
 11. While it is important to know how your local supercomputer works, it is more important to maintain a common workflow. The `sbatch array` is a very different kind of wrapping code and introduces its own complexity of distributed filesystem mediated communication. The EMS system, exploited in `main.py`, runs the same on your laptop and on a large node on FarmShare. This symmetry builds confidence that you are going to get the same answer only faster. As you will see, EMS also launches a cluster on FarmShare with very modest changes and no complex `sbatch` scripting. 
-    ####
-    **You should have already, at the bash command line, run "bash hw5_personalize.sh" to substitute in place of the `su_id` string your Stanford ID into the code 'hw5_large.sh' in the places where `su_ID` appears**. 
+   
     ####
     After, run the following command:  
 `sbatch hw5_large.sh`  
