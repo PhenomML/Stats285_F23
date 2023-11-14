@@ -351,6 +351,8 @@
       <workItem from="1699810832388" duration="7000" />
       <workItem from="1699979099864" duration="42000" />
       <workItem from="1699979176620" duration="3505000" />
+      <workItem from="1699987210850" duration="942000" />
+      <workItem from="1699991391517" duration="1064000" />
     </task>
     <servers />
   </component>
@@ -358,10 +360,10 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Stats285_hw3$map_function.coverage" NAME="map_function Coverage Results" MODIFIED="1698956851337" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/Stats285_hw3$main.coverage" NAME="main Coverage Results" MODIFIED="1699211374967" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Stats285_hw3$Doctests_in_generic.coverage" NAME="Doctests in generic Coverage Results" MODIFIED="1699137719618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/miniforge3/envs/stats285/lib/python3.11/site-packages/pandas/core" />
-    <SUITE FILE_PATH="coverage/Stats285_F23$concat_df.coverage" NAME="concat_df Coverage Results" MODIFIED="1699398311309" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/Stats285_hw3$manager.coverage" NAME="manager Coverage Results" MODIFIED="1699137800505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/miniforge3/envs/stats285/lib/python3.11/site-packages/EMS" />
+    <SUITE FILE_PATH="coverage/Stats285_hw3$Doctests_in_generic.coverage" NAME="Doctests in generic Coverage Results" MODIFIED="1699137719618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/miniforge3/envs/stats285/lib/python3.11/site-packages/pandas/core" />
+    <SUITE FILE_PATH="coverage/Stats285_hw3$map_function.coverage" NAME="map_function Coverage Results" MODIFIED="1698956851337" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/Stats285_F23$concat_df.coverage" NAME="concat_df Coverage Results" MODIFIED="1699398311309" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
