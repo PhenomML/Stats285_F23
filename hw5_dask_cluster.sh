@@ -5,8 +5,8 @@
 #SBATCH --partition=normal
 #SBATCH --cpus-per-task=4
 #SBATCH --time=00:30:00
-#SBATCH --error=hw5_cluster.err
-#SBATCH --output=hw5_cluster.out
+#SBATCH --error=hw5_dask_cluster.err
+#SBATCH --output=hw5_dask_cluster.out
 
 ## Run the python script
 time python3 ./main.py
