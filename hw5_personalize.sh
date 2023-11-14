@@ -4,5 +4,5 @@ read -p "Your entry was '$SUID' : Correct SU Id? (Y/N): " confirm && [[ $confirm
 for file in gather_csv_to_gbq.py reading_gbq.ipynb hw5_cluster.sh ; do
   sed --in-place=${file}.bak -e "s|su_ID|$SUID|g" $file
   echo "Personalization changes made to $file:"
-  diff $file.bak $file
+  diff ${file}.bak $file
 done
