@@ -67,7 +67,7 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 	`mkdir .config/gcloud`  
 	`scp  ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.config/gcloud/`
 
-#### Running code on a FarmShare/Sherlock
+#### Running code on FarmShare/Sherlock
 
 *the following commands are all inside the [FARMSHARE terminal] window*
 
