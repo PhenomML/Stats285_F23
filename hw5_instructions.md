@@ -2,7 +2,7 @@
 
 Our earlier homeworks were run on a single compute node. Today's computing activity will introduce the beginnings of using a cluster -- first on a larger node and then on an array of nodes.
 
-## Computing activity
+## Overview
 
 You will see that we now have 4 bash scripts: `hw5_large.sh` `hw5_cluster.sh` and `hw5_array.sh` `hw5_personalize.sh` and three python scripts: `main.py`, `map_function.py`; we also have two Jupyterlab notebooks `reading_gbq.ipynb` and `hw5_reduce.ipynb`. 
 
@@ -12,13 +12,13 @@ In this week's computer activity -- we are computing with a cluster to (approxim
 
 To do the `map` job distribution into 1000 instances, and get the results up to the cloud, we follow one of several *strategies*.
 
-### `hw5_array.sh`
+#### `hw5_array.sh`
 
 Our first strategy is implemented by `hw5_array.sh` and `map_function.py`. It heeds the advice of the Stanford Research Computing Center (SRCC) staff to use the `sbatch array` shell command to deploy many instances on its cluster. Like `sbatch`, `sbatch array` launches jobs; unlike simple `sbatch`, which we have used before, `sbatch array` can launch many instances of `map_function.py` as a result of this one one shell command. `hw5_array.sh` uses this strategy to launch 10 instances of `map_function.py` as in some sense *meta instances*, which each iterate through 100 actual instances, thereby computing 1000 instances of total work. Each instance saves its results; ultimately to be reduced. 
 
 We had hoped to follow the original notional model discussed above, to use the cloud database to save individual instance results immediately, as they were produced.  Unfortunately, we found that straightforward use of `sbatch array` on Sherlock/FarmShare was not compatible with instance-by-instance upload of results to GBQ (some network issues intervened). To find a way forward, we had to resort to an ugly Kluge -- fallback to files. Thus the delivered `hw5_array.sh` and `map_function.py` combination first writes the instance results as .csv files. These will later separately be amalgamated into a DataFrame and written to GBQ by a separate program: `gather_csv_to_gbq.py`.  Results are stored under the table_name <SUID>_hw5, where in place of <SUID> would be the suid that you use for login to Stanford systems. (It is possible to use other table_names, for example for debugging purposes; but note that the script `hw5_personalize.sh` embeds your suid into actual code, and this would need to be overridden.)
 
-### `hw5_large.sh`
+#### `hw5_large.sh`
 
 A different strategy involves using more cores; it is implemented by `hw5_large.sh`, it is invoked via SLURM using `sbatch` commands that at first glance looks identical to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different.
 
@@ -36,15 +36,17 @@ To access Dask, we use a homebrew system [EMS or Experiment Management System](h
 
 *Aside 4. Warning/Request.* When using the Cloud DB option, you can erase your work or that of your classmates by misusing Cloud DB permissions. Be nice.
 
-### `hw5_cluster.sh` 
+#### `hw5_cluster.sh` 
 
 We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a single large server with many cores; or it can ask for a cluster of smaller servers. `hw5_large.sh` used the first approach. `hw5_cluster.sh` uses the second approach. 
 
 `hw5_cluster.sh` is a bash script using `sbatch` commands which, again, at first glance looks similar to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different. Once the cluster server is running, it asks SLURM to give it more processors. If they are available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. All it does is dole out parameters and save DataFrames locally and to the cloud.
 
-### `hw5_reduce.ipynb` Reduce task
+#### `hw5_reduce.ipynb` Reduce task
 
 The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD. 
+
+## Instructions
 
 #### Getting Database Access Credentials onto your laptop and Farmshare account
 
@@ -320,6 +322,7 @@ To get credit for this homework, you should submit the following on Canvas:
    * Describe your experiences with this homework. What parts had the most "friction"? Which parts felt the most
      "frictionless"?
 2. **Files:** Submit the following files on Canvas:
+   * `hw5_array.err` (You can either `scp` it from the cluster or copy-and-paste its contents from terminal)
    * `hw5_large.err` (You can either `scp` it from the cluster or copy-and-paste its contents from terminal)
    * `hw5_cluster.err` (You can either `scp` it from the cluster or copy-and-paste its contents from terminal)
    * Screenshots of your outputs in `hw5_reduce.ipynb`.
