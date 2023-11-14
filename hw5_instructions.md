@@ -1,6 +1,6 @@
 # Homework 5. Deploying Many Jobs, Served Three Ways. Hot.
 
-Our earlier homeworks were run on a single compute node. Today's computing activity will introduce the beginnings of using a cluster -- first on a larger node and then on an array of nodes.
+Our earlier homeworks were run on a single compute node. Today's computing activity will introduce the beginnings of using a cluster -- first Three ways: one using `sbatch array` and two using Dask.
 
 ## Overview
 
@@ -44,7 +44,7 @@ We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a s
 
 #### `hw5_reduce.ipynb` Reduce task
 
-The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD. 
+The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD by performing another svd to recomnine them. 
 
 ## Instructions
 
@@ -53,16 +53,17 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 1. Open a terminal window on your laptop. In the shell, run this command:  
     `echo -n -e "\033]0;LAPTOP\007"`
 
-2. Open another terminal window. Login to FarmShare. [or Sherlock, if you have an account there]  In the shell, run this command:
+2. Open another terminal window.  In the shell, run this command:
     `echo -n -e "\033]0;FARMSHARE\007"`
+   Login to FarmShare. [or Sherlock, if you have an account there] 
 
-3. [LAPTOP WEB BROWSER] Download the security credentials (it is a `.json` file) from Canvas > Files > Homework. (On Mac, the file will end up in your `~/Downloads/` directory.)
+4. [LAPTOP WEB BROWSER] Download the security credentials (it is a `.json` file) from Canvas > Files > Homework. (On Mac, the file will end up in your `~/Downloads/` directory.)
 
-4. [LAPTOP terminal] On your laptop at your login directory:  
+5. [LAPTOP terminal] On your laptop at your login directory:  
 	`mkdir .config/gcloud`  
 	`cp ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json ~/.config/gcloud/`
 
-5. [FARMSHARE terminal] On FarmShare at your login directory:  
+6. [FARMSHARE terminal] On FarmShare at your login directory:  
 	`mkdir .config/gcloud`  
 	`scp  ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.config/gcloud/`
 
@@ -77,6 +78,7 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 	`cd Stats285_F23/`
 
 3. Examine the contents; does it look modestly familiar?
+   
 4.  Personalize the environment for your Stanford ID (Replace `SU_ID` with your actual Stanford ID.):  
 	`export TABLE_NAME=SU_ID_hw5`
 
@@ -86,7 +88,7 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 	conda env list
 ```
 
-5. If so, delete it:  
+If so, delete it:  
 	`conda env remove --name stats285`
 
 6. Create a new environment:  
