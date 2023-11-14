@@ -181,9 +181,9 @@ The end of the file:
 	INFO:root:Seed: 999; 0.9271728992462158 seconds.
 	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_900.csv
 ```
-10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. **at the bash command line, run "bash hw5_personalize.sh" to substitute in place of the `su_id` string below your Stanford ID**.):
+10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below.):
 ```
-	python3 gather_csv_to_gbq.py su_id_hw5 *.csv
+	python3 gather_csv_to_gbq.py ${TABLE_NAME} *.csv
 ```
 `gather_csv_to_gbq.py` will log its command line arguments and will be followed by GBQ acknowledging the receipt of 1000 rows of data.
 ```
@@ -192,8 +192,7 @@ The end of the file:
 ```
 
 11. While it is important to know how your local supercomputer works, it is more important to maintain a common workflow. The `sbatch array` is a very different kind of wrapping code and introduces its own complexity of distributed filesystem mediated communication. The EMS system, exploited in `main.py`, runs the same on your laptop and on a large node on FarmShare. This symmetry builds confidence that you are going to get the same answer only faster. As you will see, EMS also launches a cluster on FarmShare with very modest changes and no complex `sbatch` scripting. 
-    ####
-    **You should have already, at the bash command line, run "bash hw5_personalize.sh" to substitute in place of the `su_id` string your Stanford ID into the code 'hw5_large.sh' in the places where `su_ID` appears**. 
+   
     ####
     After, run the following command:  
 `sbatch hw5_large.sh`  
