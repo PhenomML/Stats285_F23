@@ -302,7 +302,7 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
       using `vt` which is the top right singular vector of the data matrix formed by collecting
       1000 different noisy measurements of the underlying $1000 \times 1000$ matrix.
 4. Compare the accuracy of using this `vt` to that obtained 
-   from using only one approximation formed using one $1000 x 1000$ matrix.
+   from using only one approximation formed using one $1000 \times 1000$ matrix.
 
 #### Submitting on Canvas
 To get credit for this homework, you should submit the following on Canvas:
