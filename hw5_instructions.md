@@ -315,7 +315,7 @@ To get credit for this homework, you should submit the following on Canvas:
 1. **Short Answer:** Answer the following quests and submit them as a PDF file on Canvas.
    * Read the `main.py` file. Explain what the `generate_data`, `experiment`, `build_params`, `do_cluster_experiment`,
      and `do_local_experiment` functions do and how they interact with one another.
-   * Compare the reported runtimes in `hw5_array.err`, `hw5_large.err`, and `hw5_cluster.err`. How much time did each
+   * Compare the reported runtimes reported in `hw5_array.err`, `hw5_large.err`, and `hw5_cluster.err`. How much time did each
      one take? Which one(s) were the fastest? Which one(s) were the slowest? Explain why.
    * Compare the accuracy from using `vt` to estimate `v_true` in `hw5.ipynb` to that obtained from using only one 
      approximation formed using one $1000 \times 1000$ matrix in earlier homeworks.
