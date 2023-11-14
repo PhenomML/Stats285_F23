@@ -1,26 +1,26 @@
 # Homework 5. Deploying Many Jobs, Served Three Ways. Hot.
 
-Our earlier homeworks were run on a single compute node. Today's computing activity will introduce the beginnings of using a cluster -- first Three ways: one using `sbatch array` and two using Dask.
+Our earlier homeworks were run on a single compute node. Today's computing activity will introduce the beginnings of using a cluster -- Three ways: one using `sbatch array` and two using Dask.
 
 ## Overview
 
-You will see that we now have 4 bash scripts: `hw5_large.sh` `hw5_cluster.sh` and `hw5_array.sh` `hw5_personalize.sh` and three python scripts: `main.py`, `map_function.py`; we also have two Jupyterlab notebooks `reading_gbq.ipynb` and `hw5_reduce.ipynb`. 
+You will see that we now have 3 bash scripts: `hw5_dask_large.sh` `hw5_dask_cluster.sh` and `hw5_sbatch_array.sh`; three python scripts: `main.py` `map_function.py` `gather_csv_to_gbq.py'; we also have two Jupyterlab notebooks `reading_gbq.ipynb` and `hw5_reduce.ipynb`. 
 
-So far, we introduced simple code that created the results of a **1000 x 1000** SVD of noisy data. We then repackaged it as a function that takes keyword arguments and returns a DataFrame. This code we ran on both your laptop and a server. 
+In HW3 `hw3.sh` `main.py`, we introduced simple code that created the results of one single task, a **1000 x 1000** SVD of noisy data. This code we ran on both your laptop and a server. 
 
-In this week's computer activity -- we are computing with a cluster to (approximately) do (part of) a **1,000,000 x 1,000** SVD, within the divide and recombine (map-reduce) paradigm. The same basic code we used before is re-used to make a mapper function, applied in 1,000 separate `map` instances, each of size 1000 x 1000. Notionally, each `map` instance saves  results to the cloud. Once all the `map` results are in the cloud, we will eventually do the `reduce` step. 
+This week's computer activity performs 1000 tasks on the FarmShare/Sherlock cluster to (approximately) do (part of) a **1,000,000 x 1,000** SVD, employing the divide and recombine (map-reduce) paradigm. As we explained in lecture, notionally, the code we used before in `main.py` is re-factored to make a mapper function, applied in 1,000 separate `map` instances, each of size 1000 x 1000. Notionally, each `map` instance saves results to the cloud. Once all the `map` results are in the cloud, we will eventually do the `reduce` step, combining results from each of the 1,000 instances into a single global result. 
 
-To do the `map` job distribution into 1000 instances, and get the results up to the cloud, we follow one of several *strategies*.
+To do the `map` task deployment into 1000 instances, and get the results up to the cloud, we follow one of several *strategies*.
 
-#### `hw5_array.sh`
+#### `hw5_sbatch_array.sh`
 
-Our first strategy is implemented by `hw5_array.sh` and `map_function.py`. It heeds the advice of the Stanford Research Computing Center (SRCC) staff to use the `sbatch array` shell command to deploy many instances on its cluster. Like `sbatch`, `sbatch array` launches jobs; unlike simple `sbatch`, which we have used before, `sbatch array` can launch many instances of `map_function.py` as a result of this one one shell command. `hw5_array.sh` uses this strategy to launch 10 instances of `map_function.py` as in some sense *meta instances*, which each iterate through 100 actual instances, thereby computing 1000 instances of total work. Each instance saves its results; ultimately to be reduced. 
+Our first strategy is implemented by `hw5_sbatch_array.sh` and `map_function.py`. It heeds the advice of the Stanford Research Computing Center (SRCC) staff to use the `sbatch array` shell command to deploy many instances on its cluster. Like `sbatch`, `sbatch array` launches jobs; unlike simple `sbatch`, which we have used before, `sbatch array` can launch many instances of `map_function.py` as a result of this one one shell command. `hw5_sbatch_array.sh` uses this strategy to launch 10 instances of `map_function.py` as in some sense *meta instances*, which each iterate through 100 actual instances, thereby computing 1000 instances of total work. Each instance saves its results; ultimately to be reduced. 
 
-We had hoped to follow the original notional model discussed above, to use the cloud database to save individual instance results immediately, as they were produced.  Unfortunately, we found that straightforward use of `sbatch array` on Sherlock/FarmShare was not compatible with instance-by-instance upload of results to GBQ (some network issues intervened). To find a way forward, we had to resort to an ugly Kluge -- fallback to files. Thus the delivered `hw5_array.sh` and `map_function.py` combination first writes the instance results as .csv files. These will later separately be amalgamated into a DataFrame and written to GBQ by a separate program: `gather_csv_to_gbq.py`.  Results are stored under the table_name <SUID>_hw5, where in place of <SUID> would be the suid that you use for login to Stanford systems. (It is possible to use other table_names, for example for debugging purposes; but note that the script `hw5_personalize.sh` embeds your suid into actual code, and this would need to be overridden.)
+We had hoped to follow the original notional model discussed above, to use the cloud database to save individual instance results immediately, as they were produced.  Unfortunately, we found that straightforward use of `sbatch array` on Sherlock/FarmShare was not compatible with instance-by-instance upload of results to GBQ (some network issues intervened). To find a way forward, we had to resort to an ugly Kluge -- fallback to files. Thus the delivered `hw5_sbatch_array.sh` and `map_function.py` combination first writes the instance results as .csv files. These will later separately be amalgamated into a DataFrame and written to GBQ by a separate program: `gather_csv_to_gbq.py`.  Results are stored under the table_name <SUID>_hw5, where in place of <SUID> would be the suid that you use for login to Stanford systems. (It is possible to use other table_names, for example for debugging purposes; but note that the script `hw5_personalize.sh` embeds your suid into actual code, and this would need to be overridden.)
 
-#### `hw5_large.sh`
+#### `hw5_dask_large.sh`
 
-A different strategy involves using more cores; it is implemented by `hw5_large.sh`, it is invoked via SLURM using `sbatch` commands that at first glance looks identical to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different.
+A different strategy involves using more cores; it is implemented by `hw5_dasj_large.sh`, it is invoked via SLURM using `sbatch` commands that at first glance looks identical to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different.
 
 Modern laptops contain many cores; the one I am writing this on has 6 symmetric cores and can run 12 concurrent tasks. You can frequently run your code quite a bit faster on a laptop if you use all the available cores. 
 
@@ -36,11 +36,11 @@ To access Dask, we use a homebrew system [EMS or Experiment Management System](h
 
 *Aside 4. Warning/Request.* When using the Cloud DB option, you can erase your work or that of your classmates by misusing Cloud DB permissions. Be nice.
 
-#### `hw5_cluster.sh` 
+#### `hw5_dask_cluster.sh` 
 
-We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a single large server with many cores; or it can ask for a cluster of smaller servers. `hw5_large.sh` used the first approach. `hw5_cluster.sh` uses the second approach. 
+We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a single large server with many cores; or it can ask for a cluster of smaller servers. `hw5_dask_large.sh` used the first approach. `hw5_dask_cluster.sh` uses the second approach. 
 
-`hw5_cluster.sh` is a bash script using `sbatch` commands which, again, at first glance looks similar to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different. Once the cluster server is running, it asks SLURM to give it more processors. If they are available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. All it does is dole out parameters and save DataFrames locally and to the cloud.
+`hw5_dask_cluster.sh` is a bash script using `sbatch` commands which, again, at first glance looks similar to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different. Once the cluster server is running, it asks SLURM to give it more processors. If they are available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. All it does is dole out parameters and save DataFrames locally and to the cloud.
 
 #### `hw5_reduce.ipynb` Reduce task
 
@@ -100,7 +100,7 @@ If so, delete it:
 	(Note, FarmShare is different from other Unix/Linux shells.)
 
 8. Execute `map_function.py` on an array of nodes:  
-	`sbatch hw5_array.sh`  
+	`sbatch hw5_sbatch_array.sh`  
 	`squeue -u $USER`
 ```
 	(stats285) adonoho@rice03:~/Stats285_F23$ squeue -u $USER
@@ -199,7 +199,7 @@ The end of the file:
    
     ####
     After, run the following command:  
-`sbatch hw5_large.sh`  
+`sbatch hw5_dask_large.sh`  
 `squeue -u $USER`  
     ####
     A line similar to the following should be displayed:
@@ -209,7 +209,7 @@ The end of the file:
     ```
 
 12. In `main.py`, comment out lines 110-111, `do_local_experiment()` and uncomment lines 112-113, `do_cluster_experiment()`. Run the following command:  
-`sbatch hw5_cluster.sh`  
+`sbatch hw5_dask_cluster.sh`  
 `squeue -u $USER`  
 Lines similar to the following should be displayed:
 ```
@@ -225,7 +225,7 @@ Lines similar to the following should be displayed:
            2422896    normal hw5_clus  adonoho  R       0:22      1 wheat08
 ```
 
-13. Both versions of the EMS code produce similar logs in `hw5_large.err` and `hw5_cluster.err`. Here's an example from the cluster:
+13. Both versions of the EMS code produce similar logs in `hw5_dask_large.err` and `hw5_dask_cluster.err`. Here's an example from the cluster:
 ```
 INFO:root:#!/usr/bin/env bash
 
@@ -303,6 +303,7 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
      clicking File -> Save a copy in Drive.
    * Make sure you are logged into your `suid@stanford.edu` Google account. Otherwise, you will not be able to read the
      from the GBQ database.
+     Edit the notebook changing the fragment 'su_ID_hw5' to be 'suid_hw5' where suid denotes your Stanford ID.
 3. Run the code in the notebook. 
     * This code will read the data from the cloud database and perform the Tall & Skinny SVD to form
       an approximation of `v_true` (defined in the `generate_data` function of `map_function.py`) 
