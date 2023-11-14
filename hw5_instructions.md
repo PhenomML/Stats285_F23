@@ -44,7 +44,7 @@ We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a s
 
 ### Reduce task
 
-The computer activity is rounded out by the reduce step. TBD. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD. 
+The computer activity is rounded out by the reduce step done in Google Colab. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD. 
 
 #### Getting Database Access Credentials onto your laptop and Farmshare account
 
@@ -64,7 +64,7 @@ The computer activity is rounded out by the reduce step. TBD. This involves load
 	`mkdir .config/gcloud`  
 	`scp  ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.config/gcloud/`
 
-#### Running code on a server
+#### Running code on FarmShare Array/Node/Cluster
 
 1. Clone the HW repository. (Note: Its name has changed.):  
 	`git clone https://github.com/adonoho/Stats285_F23`
@@ -73,6 +73,9 @@ The computer activity is rounded out by the reduce step. TBD. This involves load
 	`cd Stats285_F23/`
 
 3. Examine the contents; does it look modestly familiar?
+
+4. Personalize the environment for your Stanford ID (Replace `su_ID` with your actual Stanford ID.):  
+	`export TABLE_NAME=su_ID_hw5`
 
 4. Check if the `conda` environment `stats285` is still around?  
 ```
@@ -290,12 +293,8 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
 #### Performing Analysis with Google Colab.
 
 1. Open the `HW5_analysis.ipynb` notebook on the Github website.
-2. Click the 'Open in Colab' button.
+2. Click the `Open in Colab` button.
 3. Run the code in the notebook. Remember to **replace `su_id` with your actual Stanford SUID**.
-    * This code will read the data from the cloud database and perform the Tall & Skinny SVD to form
-      an approximation of `v_true` (defined in the `generate_data` function of `map_function.py`) 
-      using `vt` which is the top right singular vector of the data matrix formed by collecting
-      1000 different noisy measurements of the underlying $1000 \times 1000$ matrix.
-4. Compare the accuracy of using this `vt` to that obtained 
-   from using only one approximation formed using one $1000 x 1000$ matrix.
+    * This code will read the data from the cloud database and perform the Tall & Skinny SVD to form an approximation of `v_true` (defined in the `generate_data` function of `map_function.py`) using `vt` which is the top right singular vector of the data matrix formed by collecting 1000 different noisy measurements of the underlying $1000 \times 1000$ matrix.
+4. Compare the accuracy of using this `vt` to that obtained from using only one approximation formed using one $1000 x 1000$ matrix.
 
