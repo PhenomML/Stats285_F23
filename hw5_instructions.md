@@ -4,7 +4,7 @@ Our earlier homeworks were run on a single compute node. Today's computing activ
 
 ## Computing activity
 
-You will see that we now have 4 bash scripts: `hw5_large.sh` `hw5_cluster.sh` and `hw5_array.sh` `hw5_personalize.sh` and three python scripts: `main.py`, `map_function.py`; we also have a Jupyterlab notebook `reading_gbq.ipynb`. 
+You will see that we now have 4 bash scripts: `hw5_large.sh` `hw5_cluster.sh` and `hw5_array.sh` `hw5_personalize.sh` and three python scripts: `main.py`, `map_function.py`; we also have two Jupyterlab notebooks `reading_gbq.ipynb` and `hw5_reduce.ipynb`. 
 
 So far, we introduced simple code that created the results of a **1000 x 1000** SVD of noisy data. We then repackaged it as a function that takes keyword arguments and returns a DataFrame. This code we ran on both your laptop and a server. 
 
@@ -14,9 +14,9 @@ To do the `map` job distribution into 1000 instances, and get the results up to 
 
 ### `hw5_array.sh`
 
-Our first strategy is implemented by `hw5_array.sh` and `map_function.py`. It heeds the advice of the Stanford Research Computing Center (SRCC) staff to use the `sbatch array` shell command to deploy many instances on its cluster. Like `sbatch`, `sbatch array` launches jobs; unlike simple `sbatch`, which we have used before, `sbatch array` can launch many instances of `map_function.py` with one shell command. `hw5_array.sh` uses this strategy to launch 10 instances of `map_function.py` as in some sense *meta* instances which each iterate through 100 actual instances, thereby computing 1000 instances of total work. Each instance saves its results; ultimately to be reduced. 
+Our first strategy is implemented by `hw5_array.sh` and `map_function.py`. It heeds the advice of the Stanford Research Computing Center (SRCC) staff to use the `sbatch array` shell command to deploy many instances on its cluster. Like `sbatch`, `sbatch array` launches jobs; unlike simple `sbatch`, which we have used before, `sbatch array` can launch many instances of `map_function.py` as a result of this one one shell command. `hw5_array.sh` uses this strategy to launch 10 instances of `map_function.py` as in some sense *meta instances*, which each iterate through 100 actual instances, thereby computing 1000 instances of total work. Each instance saves its results; ultimately to be reduced. 
 
-We had hoped to follow the original notional model discussed above, to use the cloud database to save individual instance results immediately, as they were produced.  Unfortunately, we found that straightforward use of `sbatch array` on Sherlock/FarmShare was not compatible with instance by instance upload of results to GBQ (some network issues intervened). To find a way forward, we had to resort to an ugly Kluge -- fallback to files. Thus the delivered `hw5_array.sh` and `map_function.py` combination first writes the instance results as .csv files. These will later separately be amalgamated into a DataFrame and written to GBQ by a separate program: `gather_csv_to_gbq.py`.  Results are stored under the table_name <SUID>_hw5, where in place of <SUID> you would place the suid that you use for login to Stanford systems. (It is possible to use other table_names, for example for debugging purposes; but note that the script `hw5_personalize.sh` embeds your suid into actual code, and this would need to be overridden.)
+We had hoped to follow the original notional model discussed above, to use the cloud database to save individual instance results immediately, as they were produced.  Unfortunately, we found that straightforward use of `sbatch array` on Sherlock/FarmShare was not compatible with instance-by-instance upload of results to GBQ (some network issues intervened). To find a way forward, we had to resort to an ugly Kluge -- fallback to files. Thus the delivered `hw5_array.sh` and `map_function.py` combination first writes the instance results as .csv files. These will later separately be amalgamated into a DataFrame and written to GBQ by a separate program: `gather_csv_to_gbq.py`.  Results are stored under the table_name <SUID>_hw5, where in place of <SUID> would be the suid that you use for login to Stanford systems. (It is possible to use other table_names, for example for debugging purposes; but note that the script `hw5_personalize.sh` embeds your suid into actual code, and this would need to be overridden.)
 
 ### `hw5_large.sh`
 
@@ -42,29 +42,31 @@ We actually can use DASK in two ways on Sherlock/FarmShare -- it can request a s
 
 `hw5_cluster.sh` is a bash script using `sbatch` commands which, again, at first glance looks similar to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different. Once the cluster server is running, it asks SLURM to give it more processors. If they are available, SLURM complies. The cluster server can actually be smaller than the nodes it requests to calculate its answers. All it does is dole out parameters and save DataFrames locally and to the cloud.
 
-### Reduce task
+### `hw5_analysis.ipynb` Reduce task
 
-The computer activity is rounded out by the reduce step. TBD. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD. 
+The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your data into a notebook and then finishing the Tall & Skinny SVD. 
 
 #### Getting Database Access Credentials onto your laptop and Farmshare account
 
 1. Open a terminal window on your laptop. In the shell, run this command:  
     `echo -n -e "\033]0;LAPTOP\007"`
 
-2. Login to FarmShare. [or Sherlock, if you have an account there]  In the shell, run this command:
+2. Open another terminal window. Login to FarmShare. [or Sherlock, if you have an account there]  In the shell, run this command:
     `echo -n -e "\033]0;FARMSHARE\007"`
 
-3. Download the security credentials from the Canvas system. (On Mac, the file will end up in your `~/Downloads/` directory.)
+3. [LAPTOP WEB BROWSER] Download the security credentials from Canvas > Files > Howmework. (On Mac, the file will end up in your `~/Downloads/` directory.)
 
-4. On your laptop at your login directory:  
+4. [LAPTOP terminal] On your laptop at your login directory:  
 	`mkdir .config/gcloud`  
 	`cp ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json ~/.config/gcloud/`
 
-5. On FarmShare at your login directory:  
+5. [FARMSHARE terminal] On FarmShare at your login directory:  
 	`mkdir .config/gcloud`  
 	`scp  ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.config/gcloud/`
 
-#### Running code on a server
+#### Running code on a FarmShare/Sherlock
+
+*the following commands are all inside the [FARMSHARE terminal] window*
 
 1. Clone the HW repository. (Note: Its name has changed.):  
 	`git clone https://github.com/adonoho/Stats285_F23`
@@ -177,7 +179,7 @@ The end of the file:
 	INFO:root:Seed: 999; 0.9271728992462158 seconds.
 	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_900.csv
 ```
-10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. **at the bash command line, run "bash hw5_personalize.sh" to substitute in place of the `su_id` string below to your Stanford ID**.):
+10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below. **at the bash command line, run "bash hw5_personalize.sh" to substitute in place of the `su_id` string below your Stanford ID**.):
 ```
 	python3 gather_csv_to_gbq.py su_id_hw5 *.csv
 ```
@@ -289,9 +291,9 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
 ```
 #### Performing Analysis with Google Colab.
 
-1. Open the `HW5_analysis.ipynb` notebook on the Github website.
+1. Open the `hw5_reduce.ipynb` notebook on the Github website.
 2. Click the 'Open in Colab' button.
-3. Run the code in the notebook. Remember to **replace `su_id` with your actual Stanford SUID**.
+3. Run the code in the notebook. 
     * This code will read the data from the cloud database and perform the Tall & Skinny SVD to form
       an approximation of `v_true` (defined in the `generate_data` function of `map_function.py`) 
       using `vt` which is the top right singular vector of the data matrix formed by collecting
