@@ -75,8 +75,10 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 	`cd Stats285_F23/`
 
 3. Examine the contents; does it look modestly familiar?
+4.  Personalize the environment for your Stanford ID (Replace `SU_ID` with your actual Stanford ID.):  
+	`export TABLE_NAME=SU_ID_hw5`
 
-4. Check if the `conda` environment `stats285` is still around?  
+5. Check if the `conda` environment `stats285` is still around?  
 ```
 	ml anaconda3/2023.07
 	conda env list
