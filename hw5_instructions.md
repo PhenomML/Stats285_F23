@@ -54,7 +54,7 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 2. Open another terminal window. Login to FarmShare. [or Sherlock, if you have an account there]  In the shell, run this command:
     `echo -n -e "\033]0;FARMSHARE\007"`
 
-3. [LAPTOP WEB BROWSER] Download the security credentials from Canvas > Files > Homework. (On Mac, the file will end up in your `~/Downloads/` directory.)
+3. [LAPTOP WEB BROWSER] Download the security credentials (it is a `.json` file) from Canvas > Files > Homework. (On Mac, the file will end up in your `~/Downloads/` directory.)
 
 4. [LAPTOP terminal] On your laptop at your login directory:  
 	`mkdir .config/gcloud`  
