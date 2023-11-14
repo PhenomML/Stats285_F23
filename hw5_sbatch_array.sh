@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#SBATCH --job-name=hw5_array
+#SBATCH --job-name=hw5_sbatch_array
 #SBATCH --partition=normal
 #SBATCH --cpus-per-task=1
 #SBATCH --time=00:15:00
