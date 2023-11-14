@@ -294,7 +294,7 @@ INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
 
 1. Open the `hw5_reduce.ipynb` notebook on the Github website.
 2. Click the 'Open in Colab' button. (Alternatively, you can go directly to [this link](https://colab.research.google.com/github/adonoho/Stats285_F23/blob/main/hw5_reduce.ipynb)).
-   * **CAUTION:** By default, you will not be able to save changes to this notebook.
+   * **CAUTION:** By default, you will not be able to save changes (which we will ask you to make in next steps) to this notebook.
    * To save changes, you will need to make a copy of the notebook in your Google Drive by clicking File -> Save a copy in Drive.
 3. Run the code in the notebook. 
     * This code will read the data from the cloud database and perform the Tall & Skinny SVD to form
