@@ -314,11 +314,11 @@ To get credit for this homework, you should submit the following on Canvas:
      approximation formed using one $1000 \times 1000$ matrix in earlier homeworks.
    * Describe your experiences with this homework. What parts had the most "friction"? Which parts felt the most
      "frictionless"?
-2. **Submitting Files:** Submit the following files on Canvas:
+2. **Files:** Submit the following files on Canvas:
    * `hw5_large.err` (You can either `scp` it from the cluster or copy-and-paste its contents from terminal)
    * `hw5_cluster.err` (You can either `scp` it from the cluster or copy-and-paste its contents from terminal)
    * Screenshots of your outputs in `hw5_reduce.ipynb`.
    * On Google Colab, click File -> Download -> Download .ipynb. Submit the downloaded notebook (which should contain
-     your edits and outputs) on Canvas as well.
+     your edits and outputs).
 
 
