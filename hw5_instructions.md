@@ -319,14 +319,14 @@ To get credit for this homework, you should submit the following on Canvas:
    * Read the `main.py` file. For each function inside (`generate_data`, `experiment`, `build_params`, `do_cluster_experiment`,
      and `do_local_experiment`), describe what it does.
    * How do the functions in `main.py` interact with each other?
-   * Compare the reported runtimes reported in `hw5_array.err`, `hw5_large.err`, and `hw5_cluster.err`. How much time did each
+   * Compare the reported runtimes reported in `hw5_array.err`, `hw5_dask_large.err`, and `hw5_dask_cluster.err`. How much time did each
      one take? Which one(s) were the fastest? Which one(s) were the slowest? Explain why.
    * Compare the accuracy from using `vt` to estimate `v_true` in `hw5.ipynb` to that obtained from using only one 
      approximation formed using one $1000 \times 1000$ matrix in earlier homeworks.
    * Describe your experiences with this homework. What parts had the most "friction"? Which parts felt the most
      "frictionless"?
 2. **Files:** Submit the following files on Canvas:
-   * `hw5_array.err`, `hw5_large.err`, and `hw5_cluster.err` (You can either `scp` them from the cluster or 
+   * `hw5_array.err`, `hw5_dask_large.err`, and `hw5_dask_cluster.err` (You can either `scp` them from the cluster or 
      copy-and-paste their contents from terminal)
    * Screenshots of your outputs in `hw5_reduce.ipynb`.
    * On Google Colab, click File -> Download -> Download .ipynb. Submit the downloaded notebook (which should contain
