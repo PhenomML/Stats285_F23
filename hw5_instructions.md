@@ -106,7 +106,7 @@ If so, delete it:
 	`conda env create --name stats285 --file environment.yml`  
 	(This can take a few minutes.)
 
-7. Turn it on:  
+7. Turn on the environment:  
 	`source activate stats285`  
 	(Note, FarmShare is different from other Unix/Linux shells.)
 
