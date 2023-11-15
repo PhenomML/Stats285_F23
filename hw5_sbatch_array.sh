@@ -12,6 +12,9 @@
 #ml anaconda3/2023.07
 #source activate stats285
 
+# Record the start time
+start_time=$(date +%s)
+
 #while [ $SLURM_ARRAY_TASK_ID -le $SLURM_ARRAY_TASK_MAX ]
 for i in {0..9}
 do
@@ -19,3 +22,11 @@ do
 done
 
 wait # important to make sure the job doesn't exit before the background tasks are done
+
+
+# Record the end time
+end_time=$(date +%s)
+
+# Calculate and print the runtime
+runtime=$((end_time - start_time))
+echo "Total Runtime: $runtime seconds" >&2
