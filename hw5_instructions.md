@@ -76,13 +76,15 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 
 *The following commands are all to be used inside the **[FARMSHARE terminal]** window*
 
-1. Clone the HW repository. (Note: Its name has changed.):  
+1. Clone the class repository that contains hw5. (Its name changed from previous homeworks.)
 	`git clone https://github.com/adonoho/Stats285_F23`
 
-2. Change directory to  
+2. Navigate to the directory using the following command:
 	`cd Stats285_F23/`
 
-3. Examine the contents; does it look modestly familiar?
+3. Examine the contents using the
+    `ls` 
+   command or looking at [this website](https://github.com/adonoho/Stats285_F23). Does it look modestly familiar?
    
 4.  Personalize the environment for your Stanford ID (Replace `SU_ID` with your actual Stanford ID.):  
 	`export TABLE_NAME=SU_ID_hw5`
