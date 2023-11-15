@@ -104,7 +104,7 @@ If so, delete it:
 
 6. Create a new environment using the provided `environment.yml` file:
 	`conda env create --name stats285 --file environment.yml`  
-	(This can take a few minutes.)
+	(This can take a few minutes to an hour.)
 
 7. Turn on the environment:  
 	`source activate stats285`  
