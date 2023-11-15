@@ -18,7 +18,7 @@ start_time=$(date +%s)
 #while [ $SLURM_ARRAY_TASK_ID -le $SLURM_ARRAY_TASK_MAX ]
 for i in {0..9}
 do
-  srun -n 1 python3 ./map_function.py 1000 1000 $SLURM_ARRAY_TASK_ID ${USER}"_hw5" &
+  srun -n 1 python3 ./map_function.py 1000 1000 $SLURM_ARRAY_TASK_ID $TABLE_NAME &
 done
 
 wait # important to make sure the job doesn't exit before the background tasks are done
