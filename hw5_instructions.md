@@ -210,7 +210,7 @@ The end of the file:
 11. While it is important to know how your local supercomputer works, it is more important to maintain a common workflow. The `sbatch array` is a very different kind of wrapping code and introduces its own complexity of distributed filesystem mediated communication. The EMS system, exploited in `main.py`, runs the same on your laptop and on a large node on FarmShare. This symmetry builds confidence that you are going to get the same answer only faster. As you will see, EMS also launches a cluster on FarmShare with very modest changes and no complex `sbatch` scripting. 
    
     ####
-    After, run the following command:  
+    Run the following command:  
 `sbatch hw5_dask_large.sh`  
 `squeue -u $USER`  
     ####
