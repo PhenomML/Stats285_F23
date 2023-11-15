@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import time
 import os
+import time
+import argparse
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
@@ -106,5 +107,14 @@ def do_local_experiment(size: int = 1, su_id: str = 'su_ID', credentials=None):
 
 
 if __name__ == "__main__":
-    do_local_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_large_node_gbq_2', credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
-    # do_cluster_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_cluster_2',  credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+    # Parse the first strong argument passed to this function that is either "local" or "cluster"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("type", help="type", type=str)
+    type = parser.parse_args().type
+
+    if type == "local":
+        do_local_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_large_node_gbq_2',
+                            credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+    elif type == "cluster":
+        do_cluster_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_cluster_2',  credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+
