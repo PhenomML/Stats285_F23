@@ -101,9 +101,10 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
     ```
 	conda env list
     ```
-
-If so, delete it:  
-	`conda env remove --name stats285`
+    If so, delete it:  
+	```
+    conda env remove --name stats285
+    ```
 
 6. Create a new environment using the provided `environment.yml` file:
 	`conda env create --name stats285 --file environment.yml`  
