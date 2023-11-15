@@ -89,16 +89,20 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 4.  Personalize the environment by runing the command below (Replace `SU_ID` with your actual Stanford ID.):
 	`export TABLE_NAME=SU_ID_hw5`
 
-5. Check if the `conda` environment `stats285` is still around?  
+5. Load the anaconda module on Farmshare:
 ```
 	ml anaconda3/2023.07
+```
+
+5. Check if the `conda` environment `stats285` is still around.
+```
 	conda env list
 ```
 
 If so, delete it:  
 	`conda env remove --name stats285`
 
-6. Create a new environment:  
+6. Create a new environment using the provided `environment.yml` file:
 	`conda env create --name stats285 --file environment.yml`  
 	(This can take a few minutes.)
 
