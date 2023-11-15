@@ -20,7 +20,7 @@ We had hoped to follow the original notional model discussed above, to use the c
 
 #### `hw5_dask_large.sh`
 
-A different strategy involves using more cores; it is implemented by `hw5_dasj_large.sh`, it is invoked via SLURM using `sbatch` commands that at first glance looks identical to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different.
+A different strategy involves using more cores; it is implemented by `hw5_dask_large.sh`, it is invoked via SLURM using `sbatch` commands that at first glance looks identical to your earlier single-instance homework. In fact, some of the `#SBATCH` directives are different.
 
 Modern laptops contain many cores; the one I am writing this on has 6 symmetric cores and can run 12 concurrent tasks. You can frequently run your code quite a bit faster on a laptop if you use all the available cores. 
 
@@ -196,7 +196,8 @@ The end of the file:
 	INFO:root:Seed: 999; 0.9271728992462158 seconds.
 	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_900.csv
 ```
-10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below.):
+10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`.
+    It is automatically filled in by `${TABLE_NAME}` below.):
 ```
 	python3 gather_csv_to_gbq.py ${TABLE_NAME} *.csv
 ```
