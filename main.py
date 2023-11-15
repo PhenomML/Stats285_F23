@@ -109,7 +109,7 @@ def do_local_experiment(size: int = 1, su_id: str = 'su_ID', credentials=None):
 if __name__ == "__main__":
     # Parse the first strong argument passed to this function that is either "local" or "cluster"
     parser = argparse.ArgumentParser()
-    parser.add_argument("type", help="type", type=str)
+    parser.add_argument("--type", help="type", type=str, default="local")
     type = parser.parse_args().type
 
     if type == "local":

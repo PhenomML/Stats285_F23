@@ -10,4 +10,4 @@
 
 
 ## Run the python script
-time python3 ./main.py "local"
+time python3 ./main.py --type "local"
