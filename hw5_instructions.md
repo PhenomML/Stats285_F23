@@ -87,7 +87,9 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
    command or looking at [this website](https://github.com/adonoho/Stats285_F23). Does it look modestly familiar?
    
 4.  Personalize the environment by runing the command below:
+    
 	`export TABLE_NAME=${USER}"_hw5"`
+    
     This creates a `$TABLE_NAME` environment variable of the form `<your_suid>_hw5`.
 
 5. Load the anaconda module on Farmshare:
