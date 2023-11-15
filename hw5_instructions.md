@@ -329,7 +329,8 @@ To get credit for this homework, you should submit the following on Canvas:
 
 1. **Short Answer:** Answer the following quests and submit them as a PDF file on Canvas.
    * Read the `main.py` file. For each function inside (`generate_data`, `experiment`, `build_params`, `do_cluster_experiment`,
-     and `do_local_experiment`), describe what it does.
+     and `do_local_experiment`), describe what it does. ([This resource](https://mom6-analysiscookbook.readthedocs.io/en/latest/notebooks/setting_up_dask_jobqueue.html)
+     may be helpful in understanding the code.)
    * How do the functions in `main.py` interact with each other?
    * Using the outputs found in `hw5_sbatch_array.err`, `hw5_dask_large.err`, and `hw5_dask_cluster.err`;
      estimate how long each of their corresponding scripts took to run? Which one(s) were the fastest? 
