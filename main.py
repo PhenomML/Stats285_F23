@@ -116,5 +116,6 @@ if __name__ == "__main__":
         do_local_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_large_node_gbq_2',
                             credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
     elif type == "cluster":
-        do_cluster_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_cluster_2',  credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+        do_cluster_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_cluster_2',
+                              credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
 
