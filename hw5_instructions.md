@@ -69,8 +69,8 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 	`mkdir .config/gcloud`  
 
 7. [LAPTOP terminal] Use the following command to copy the credentials to FarmShare:
-   [Replace the `su_id` part with your actual SUID.]
-	`scp  ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.config/gcloud/`
+   [Replace the `<su_id>` part with your actual SUID.]
+	`scp  ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json <su_id>@rice.stanford.edu:~/.config/gcloud/`
 
 #### Running code on FarmShare/Sherlock
 
