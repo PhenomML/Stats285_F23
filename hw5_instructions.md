@@ -221,7 +221,7 @@ The end of the file:
            2422892    normal hw5_larg  adonoho  R       1:28      1 wheat12
     ```
 
-12. In `main.py`, comment out lines 110-111, `do_local_experiment()` and uncomment lines 112-113, `do_cluster_experiment()`. Run the following command:  
+12. In `main.py`, comment out lines 109, `do_local_experiment()` and uncomment lines 110, `do_cluster_experiment()`. Run the following command:  
 `sbatch hw5_dask_cluster.sh`  
 `squeue -u $USER`  
 Lines similar to the following should be displayed:
