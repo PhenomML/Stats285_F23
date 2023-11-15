@@ -74,7 +74,7 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 
 #### Running code on FarmShare/Sherlock
 
-*the following commands are all to be used inside the [FARMSHARE terminal] window*
+*The following commands are all to be used inside the **[FARMSHARE terminal]** window*
 
 1. Clone the HW repository. (Note: Its name has changed.):  
 	`git clone https://github.com/adonoho/Stats285_F23`
