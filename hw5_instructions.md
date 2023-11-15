@@ -55,7 +55,9 @@ The reduce step is implemented by `hw5_reduce.ipynb`. This involves loading your
 
 2. Open another terminal window.  In the shell, run this command:
     `echo -n -e "\033]0;FARMSHARE\007"`
-   Login to FarmShare. [or Sherlock, if you have an account there] 
+
+3. [FARMSHARE TERMINAL] In the FarmShare terminal, log into Farmshare as you did in the previous homeworks.4 
+   [or Sherlock, if you have an account there] 
 
 4. [LAPTOP WEB BROWSER] Download the security credentials (it is a `.json` file) from Canvas > Files > Homework. (On Mac, the file will end up in your `~/Downloads/` directory.)
 
