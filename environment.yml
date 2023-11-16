@@ -7,17 +7,18 @@ dependencies:
   - python=3.11
   - numpy
   - pandas
-  - sqlite>=3.40
   - sqlalchemy
   - google-auth
   - google-cloud-sdk
+  - google-cloud-aiplatform
   - google-colab
   - dask
   - dask-jobqueue
   - jupyter
   - pip
   - pip:
-    - git+https://github.com/adonoho/EMS.git@HW5
+    - git+https://github.com/adonoho/EMS.git@v0.0.16
+    - google-vizier[jax]
 variables:
   MKL_NUM_THREADS: '1'
   OPENBLAS_NUM_THREADS: '1'
