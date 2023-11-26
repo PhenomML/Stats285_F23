@@ -70,12 +70,16 @@ Colaboratory Notebook and log the results to weights and biases.
    project="stats-285-catboost"
    ```
    
-4. Follow the instructions in the **XYZ Experiment** and **Submit** sections above, 
-   but this time using the CatBoost library instead of XGBoost.
+   4. Follow the instructions in the **XYZ Experiment** and **Submit** sections above, 
+      but this time using the CatBoost library instead of XGBoost.
 
-   (You may use any parameters now.)
-
-   CatBoost documentation: [https://catboost.ai/docs/concepts/python-reference_parameters-list.html](https://catboost.ai/docs/concepts/python-reference_parameters-list.html)
+      (You may use any parameters now.)
+      ####
+      Look at the "CatBoost:Simple Demo" boxes at the end 
+      and CatBoost documentation ([https://catboost.ai/docs/concepts/python-reference_parameters-list.html](https://catboost.ai/docs/concepts/python-reference_parameters-list.html))
+      to get started.
+      ####
+      **Clarification:** You are still required to log these CatBoost results to Weights and Biases in the manner that XGBoost was. 
 
 ## XYZ Experiment: LightGBM
 1. Click "File" -> "Save a copy in Drive" to save a copy of the notebook to your Google Drive.
@@ -92,5 +96,7 @@ Colaboratory Notebook and log the results to weights and biases.
    but this time using the LightGBM library instead of XGBoost.
 
    (You may use any parameters now.)
-
+   ####
    LightGBM documentation: [https://lightgbm.readthedocs.io/en/latest/Parameters.html](https://lightgbm.readthedocs.io/en/latest/Parameters.html)
+   ####
+   **Clarification:** You are still required to log these LightGBM results to Weights and Biases in the manner that XGBoost was.
