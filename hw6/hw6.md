@@ -21,7 +21,7 @@ Colaboratory Notebook and log the results to weights and biases.
 
    (Otherwise, you will not be allowed to save changes.)
 
-## XYZ Experiment: XGBoost
+## XGBoost
 
 1. Click "File" -> "Save a copy in Drive" to save a copy of the notebook to your Google Drive.
 
@@ -50,14 +50,14 @@ Colaboratory Notebook and log the results to weights and biases.
 
 3. **Submit:** For this part, you will need to submit the following:
    * A screenshot of the Weights and Biases dashboard showing this experiment.
-   * The colab notebook you created. (Use "File" -> "Download .ipynb").
+   * A copy of the colab notebook you created as a `.ipynb` file. (Use "File" -> "Download .ipynb").
    * A *write up* analyzing the results of your experiment. 
      * Across what settings did you choose to conduct your XYZ experiment? Why?
      * What did you learn from your experiment? 
      * What settings gave the best test accuracy? the best train accuracy?
        Interpret these results.
 
-## XYZ Experiment: CatBoost
+## CatBoost
 1. Click "File" -> "Save a copy in Drive" to save a copy of the notebook to your Google Drive.
 
    (Otherwise, you will not be allowed to save changes.)
@@ -81,7 +81,7 @@ Colaboratory Notebook and log the results to weights and biases.
       ####
       **Clarification:** You are still required to log these CatBoost results to Weights and Biases in the manner that XGBoost was. 
 
-## XYZ Experiment: LightGBM
+## LightGBM
 1. Click "File" -> "Save a copy in Drive" to save a copy of the notebook to your Google Drive.
 
    (Otherwise, you will not be allowed to save changes.)
@@ -100,3 +100,15 @@ Colaboratory Notebook and log the results to weights and biases.
    LightGBM documentation: [https://lightgbm.readthedocs.io/en/latest/Parameters.html](https://lightgbm.readthedocs.io/en/latest/Parameters.html)
    ####
    **Clarification:** You are still required to log these LightGBM results to Weights and Biases in the manner that XGBoost was.
+
+# Submission on Canvas
+
+On Canvas, submit the following:
+* All the screenshots, ipynb-files, write-ups requested in the previous sections.
+* Answers to the following short-answer questions:
+  * Which library performed the best?
+  * Did you notice any differences in the training time?
+  * Did you notice any differences in the average and best performance metrics?
+  * Which one would you prefer if you were to use it in a real-world application? Why?
+
+All the write-ups and short answers should be combined into a single PDF file.
