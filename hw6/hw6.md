@@ -1,4 +1,4 @@
-# Homework 6: XGBoost and Weights & Biases
+# Homework 6: Tabular Classification and Weights & Biases
 
 In this homework, you will perform an XYZ experiment in a 
 Colaboratory Notebook and log the results to weights and biases.
@@ -104,7 +104,7 @@ Colaboratory Notebook and log the results to weights and biases.
 # Submission on Canvas
 
 On Canvas, submit the following:
-* All the screenshots, ipynb-files, write-ups requested in the previous sections.
+* All the screenshots, `ipynb`-files, write-ups requested in the previous sections.
 * Answers to the following short-answer questions:
   * Which library performed the best?
   * Did you notice any differences in the training time?
