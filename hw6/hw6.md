@@ -10,7 +10,7 @@ Colaboratory Notebook and log the results to weights and biases.
 
    (If you don't already have one.)
 
-2. Go to the `XGBoost_demo.ipynb` notebook in this folder and click the 
+2. Go to the `XGBoost_demo.ipynb` notebook ([here](https://github.com/adonoho/Stats285_F23/blob/main/hw6/XGBoost_demo.ipynb)) in this folder and click the 
    "Open in Colab" button.
 
    (This is the demo we did in class.)
