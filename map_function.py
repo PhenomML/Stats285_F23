@@ -120,6 +120,6 @@ def do_sbatch_array_to_csv():
 
 
 if __name__ == "__main__":
-    # experiment(nrow=1000, ncol=1000, seed=285)
+    # experiment_1(nrow=1000, ncol=1000, seed=285)
     # do_sbatch_array_to_gbq()
     do_sbatch_array_to_csv()

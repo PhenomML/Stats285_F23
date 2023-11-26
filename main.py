@@ -106,7 +106,7 @@ def do_local_experiment(size: int = 1, su_id: str = 'su_ID', credentials=None):
 
 
 if __name__ == "__main__":
-    # experiment(nrow=1000, ncol=1000, seed=285)
+    # experiment_1(nrow=1000, ncol=1000, seed=285)
     # do_local_experiment(size=1, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_1')
     # do_local_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_large_node')
     do_local_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_large_node_gbq_2',

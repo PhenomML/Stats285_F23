@@ -58,12 +58,12 @@ class EvalOnCluster(object):
 
 
 # Objective function to maximize.
-def experiment(*, w: float, x: int, y: float, z: str) -> DataFrame:
+def experiment_1(*, w: float, x: int, y: float, z: str) -> DataFrame:
     objective = w**2 - y**2 + x * ord(z)
     return DataFrame(data={'w': w, 'x': x, 'y': y, 'z': z, 'objective': objective}, index=[0])
 
 
-def get_vizier_study(owner: str = 'my_name', study_id: str = 'example') -> clients.Study:
+def get_vizier_study_1(owner: str = 'my_name', study_id: str = 'example') -> clients.Study:
     # Algorithm, search space, and metrics.
     study_config = vz.StudyConfig(algorithm='GAUSSIAN_PROCESS_BANDIT')
 
@@ -77,18 +77,18 @@ def get_vizier_study(owner: str = 'my_name', study_id: str = 'example') -> clien
 
 
 def setup_vizier():
-    study = get_vizier_study('adonoho', 'test_01')
+    study = get_vizier_study_1('adonoho', 'test_01')
 
     for i in range(100):
         suggestions = study.suggest(count=1)
         for suggestion in suggestions:
             params = suggestion.parameters
-            df = experiment(**params)
+            df = experiment_1(**params)
             suggestion.complete(vz.Measurement({'metric_name': df.iloc[0]['objective']}))
 
 
-def setup_vizier_on_local_cluster():
-    study = get_vizier_study('adonoho', 'test_cluster_01')
+def setup_vizier_on_local_cluster_1():
+    study = get_vizier_study_1('adonoho', 'test_cluster_01')
 
     with LocalCluster() as cluster:
         with Client(cluster) as client:
@@ -97,7 +97,26 @@ def setup_vizier_on_local_cluster():
             in_cluster = {}
             for suggestion in study.suggest(count=1):
                 params = suggestion.parameters
-                key = ec.eval_params(experiment, dict(params))
+                key = ec.eval_params(experiment_1, dict(params))
+                in_cluster[key] = suggestion
+            for df, key in ec.result():
+                suggestion = in_cluster[key]
+                suggestion.complete(vz.Measurement({'metric_name': df.iloc[0]['objective']}))
+                del in_cluster[key]
+            ec.final_push()
+
+
+def setup_vizier_on_local_cluster_2():
+    study = get_vizier_study_1('adonoho', 'test_cluster_01')
+
+    with LocalCluster() as cluster:
+        with Client(cluster) as client:
+            ec = EvalOnCluster(client, None)
+            # ec = EvalOnCluster(client, 'test_cluster_01')
+            in_cluster = {}
+            for suggestion in study.suggest(count=1):
+                params = suggestion.parameters
+                key = ec.eval_params(experiment_1, dict(params))
                 in_cluster[key] = suggestion
             for df, key in ec.result():
                 suggestion = in_cluster[key]
@@ -108,4 +127,4 @@ def setup_vizier_on_local_cluster():
 
 if __name__ == "__main__":
     # setup_vizier()
-    setup_vizier_on_local_cluster()
+    setup_vizier_on_local_cluster_1()

@@ -18,7 +18,9 @@ dependencies:
   - pip
   - pip:
     - git+https://github.com/adonoho/EMS.git@v0.0.16
-    - google-vizier[jax]
+    - google-vizier
+#    - google-vizier[jax]
+    - ucimlrepo
 variables:
   MKL_NUM_THREADS: '1'
   OPENBLAS_NUM_THREADS: '1'
