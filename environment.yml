@@ -7,14 +7,18 @@ dependencies:
   - python=3.11
   - numpy
   - pandas
+  - scikit-learn
+  - xgboost
+  - catboost
+  - lightgbm
   - sqlalchemy
   - google-auth
   - google-cloud-sdk
   - google-cloud-aiplatform
-  - google-colab
+#  - google-colab
   - dask
   - dask-jobqueue
-  - jupyter
+#  - jupyter
   - pip
   - pip:
     - git+https://github.com/adonoho/EMS.git@v0.0.16
