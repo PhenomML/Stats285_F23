@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
+from pathlib import Path
 import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import LabelEncoder
@@ -67,6 +68,23 @@ def push_tables_to_cluster(tables: dict, c: Client, credentials: service_account
         df = get_df_from_gbq(table, credentials)
         c.publish_dataset(df, name=key)
         logger.info(f'{key}\n{df}')
+
+
+def push_tables_to_filesystem(tables: dict, path: Path, credentials: service_account.credentials = None):
+    for key, table in tables.items():
+        df = get_df_from_gbq(table, credentials)
+        p = path / table + '.parquet'
+        df.to_parquet(path=p)
+        logger.info(f'{key}\n{df}')
+
+
+DATASETS = {}
+def get_local_dataset(key: str) -> DataFrame:
+    df = DATASETS.get(key, None)
+    if df is None:
+        df = get_dataset(key)
+        DATASETS[key] = df
+    return df.copy(deep=True)  # Defend against mutating common data.
 
 
 # Objective functions to maximize.
@@ -165,7 +183,7 @@ def normalize_dataset(url: str, df: DataFrame) -> (DataFrame, DataFrame):
 
 
 def experiment(*, url: str, boost: str, depth: int, reg_lambda: float, learning_rate: float, num_rounds: int) -> DataFrame:
-    df = get_dataset(url)
+    df = get_local_dataset(url)
     df, y_df = normalize_dataset(url, df)
     return experiment_local(url=url, X_df=df, y_df=y_df, boost=boost,
                             depth=depth, reg_lambda=reg_lambda, learning_rate=learning_rate, num_rounds=num_rounds)
