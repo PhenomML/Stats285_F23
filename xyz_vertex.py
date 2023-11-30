@@ -14,13 +14,14 @@ from pandas import DataFrame
 from dask.distributed import LocalCluster, Client
 from google.cloud import bigquery
 from google.oauth2 import service_account
-from EMS.manager import EvalOnCluster, get_gbq_credentials, get_dataset
+from EMS.manager import EvalOnCluster, get_gbq_credentials, get_dataset, do_on_cluster
 
 from google.cloud import aiplatform
 from google.cloud.aiplatform.vizier import pyvizier as vz
 from google.cloud.aiplatform.vizier import Study
 
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
 
 
 """
@@ -79,20 +80,31 @@ def experiment_local(*, url: str, X_df: DataFrame, y_df: DataFrame, boost: str, 
     # Create target vector
     if np.issubdtype(y_array.dtype, np.number):
         y = y_array
+        num_classes = 1
+        obj_type = 'reg'
     else:
         # If y is categorical (including strings), use LabelEncoder for encoding
         encoder = LabelEncoder()
         y = encoder.fit_transform(y_array)
+        num_classes = len(encoder.classes_)
+        obj_type = 'bin' if num_classes == 2 else 'mult'
 
     # Split into train and test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-    num_rounds = 100  # Number of boosting rounds
+    # num_rounds = 100  # Number of boosting rounds
     match boost:
         case StudyBOOST.XGBOOST:
-            model = xgb.XGBClassifier(learning_rate=learning_rate,
-                                      reg_lambda=reg_lambda,
-                                      max_depth=depth)
+            xgb_params = {'learning_rate': learning_rate, 'reg_lambda': reg_lambda, 'max_depth': depth}
+            match obj_type:
+                case 'reg':
+                    xgb_params['objective'] = 'reg:squarederror'
+                case 'bin':
+                    xgb_params['objective'] = 'binary:logistic'
+                case 'mult':
+                    xgb_params['objective'] = 'multi:softprob'
+                    xgb_params['num_classes'] = num_classes
+            model = xgb.XGBRegressor(**xgb_params) if obj_type == 'reg' else xgb.XGBClassifier(**xgb_params)
         case StudyBOOST.CATBOOST:
             model = catboost.CatBoostClassifier(learning_rate=learning_rate,
                                                 l2_leaf_reg=reg_lambda,
@@ -142,7 +154,7 @@ def normalize_dataset(url: str, df: DataFrame) -> (DataFrame, DataFrame):
             X_df = df.drop('Cover_Type', axis=1)
         case StudyURL.KAGGLE_HIGGS_BOSON_TRAINING | StudyURL.KAGGLE_HIGGS_BOSON_TEST:
             y_df = df[['Label']]
-            X_df = df.drop('Label', axis = 1)
+            X_df = df.drop('Label', axis=1)
         case _:
             raise Exception("Invalid Dataset Name!")
     X_df = category_encode(X_df)
@@ -216,7 +228,7 @@ def setup_xyz_vertex_on_local_cluster(credentials: service_account.Credentials):
     logger.info(f'{optimal_trials}')
 
 
-def create_config() -> dict:
+def create_config(su_id: str = 'su_id') -> dict:
     ems_spec = {
         'params': [{
             'depth': [6, 8, 10],
@@ -237,7 +249,7 @@ def create_config() -> dict:
             'url': 'str',
             'learning_rate': 'float'
         },
-        'table_name': 'EMS.su_id_XYZ',
+        'table_name': f'EMS.XYZ_{su_id}',
         'GCP_project_id': 'stanford-stats-285-donoho',
         'description': 'Describe what this experiment does for future reference.'
     }
@@ -252,18 +264,26 @@ def setup_experiment(url: str, boost: str, depth: int, reg_lambda: float, learni
     logger.info(f'{url} by {boost}\n{df_result}')
 
 
+def do_local_experiment(su_id: str = 'su_ID', credentials=None):
+    exp = create_config(su_id=su_id)
+    with LocalCluster() as lc, Client(lc) as client:
+        push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
+        do_on_cluster(exp, experiment, client, credentials=credentials)
+
+
 if __name__ == "__main__":
     credentials = get_gbq_credentials('stanford-stats-285-donoho-vizier-b8a57b59c6d6.json')
     # setup_xyz_vertex_on_local_cluster(credentials=credentials)
-    setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.LIGHTGBM, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.KAGGLE_CALIFORNIA_HOUSING_PRICES, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.KAGGLE_CALIFORNIA_HOUSING_PRICES, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.KAGGLE_CALIFORNIA_HOUSING_PRICES, StudyBOOST.LIGHTGBM, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.UCIML_FOREST_COVERTYPE, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.UCIML_FOREST_COVERTYPE, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.UCIML_FOREST_COVERTYPE, StudyBOOST.LIGHTGBM, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.KAGGLE_HIGGS_BOSON_TRAINING, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.KAGGLE_HIGGS_BOSON_TRAINING, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
-    setup_experiment(StudyURL.KAGGLE_HIGGS_BOSON_TRAINING, StudyBOOST.LIGHTGBM, 6, 0.25, 0.1, credentials=credentials)
+    do_local_experiment('adonoho_test_01', credentials=credentials)
+    # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.LIGHTGBM, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.KAGGLE_CALIFORNIA_HOUSING_PRICES, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.KAGGLE_CALIFORNIA_HOUSING_PRICES, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.KAGGLE_CALIFORNIA_HOUSING_PRICES, StudyBOOST.LIGHTGBM, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.UCIML_FOREST_COVERTYPE, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.UCIML_FOREST_COVERTYPE, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.UCIML_FOREST_COVERTYPE, StudyBOOST.LIGHTGBM, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.KAGGLE_HIGGS_BOSON_TRAINING, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.KAGGLE_HIGGS_BOSON_TRAINING, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
+    # setup_experiment(StudyURL.KAGGLE_HIGGS_BOSON_TRAINING, StudyBOOST.LIGHTGBM, 6, 0.25, 0.1, credentials=credentials)
