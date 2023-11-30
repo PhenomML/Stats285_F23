@@ -70,12 +70,13 @@ def push_tables_to_cluster(tables: dict, c: Client, credentials: service_account
 
 
 # Objective functions to maximize.
-def experiment_local(*, url: str, X_df: DataFrame, y_df: DataFrame, boost: str, depth: int, reg_lambda: float, learning_rate: float) -> DataFrame:
+def experiment_local(*, url: str, X_df: DataFrame, y_df: DataFrame, boost: str,
+                     depth: int, reg_lambda: float, learning_rate: float, num_rounds: int) -> DataFrame:
     # Create data array
     X = X_df.values
 
     # Convert y into target array
-    y_array = y_df.iloc[:, 0].to_numpy()  # Changed
+    y_array = y_df.iloc[:, 0].to_numpy()
 
     # Create target vector
     if np.issubdtype(y_array.dtype, np.number):
@@ -92,10 +93,10 @@ def experiment_local(*, url: str, X_df: DataFrame, y_df: DataFrame, boost: str, 
     # Split into train and test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-    # num_rounds = 100  # Number of boosting rounds
     match boost:
         case StudyBOOST.XGBOOST:
-            xgb_params = {'learning_rate': learning_rate, 'reg_lambda': reg_lambda, 'max_depth': depth}
+            xgb_params = {'learning_rate': learning_rate, 'reg_lambda': reg_lambda,
+                          'max_depth': depth, 'n_estimators': num_rounds}
             match obj_type:
                 case 'reg':
                     xgb_params['objective'] = 'reg:squarederror'
@@ -108,11 +109,13 @@ def experiment_local(*, url: str, X_df: DataFrame, y_df: DataFrame, boost: str, 
         case StudyBOOST.CATBOOST:
             model = catboost.CatBoostClassifier(learning_rate=learning_rate,
                                                 l2_leaf_reg=reg_lambda,
-                                                depth=depth)
+                                                depth=depth,
+                                                iterations=num_rounds)
         case StudyBOOST.LIGHTGBM:
             model = lgb.LGBMClassifier(learning_rate=learning_rate,
                                        lambda_l2=reg_lambda,
-                                       max_depth=depth)
+                                       max_depth=depth,
+                                       n_estimators=num_rounds)
         case _:
             raise Exception("Invalid Method Name!")
     model.fit(X_train, y_train)
@@ -123,7 +126,7 @@ def experiment_local(*, url: str, X_df: DataFrame, y_df: DataFrame, boost: str, 
     test_accuracy = accuracy_score(y_test, test_predictions)
 
     return DataFrame(data={'url': url, 'boost': boost, 'depth': depth,
-                           'reg_lambda': reg_lambda, 'learning_rate': learning_rate,
+                           'reg_lambda': reg_lambda, 'learning_rate': learning_rate, 'num_rounds': num_rounds,
                            'test_accuracy': test_accuracy},
                      index=[0])
 
@@ -161,11 +164,11 @@ def normalize_dataset(url: str, df: DataFrame) -> (DataFrame, DataFrame):
     return X_df, y_df
 
 
-def experiment(*, url: str, boost: str, depth: int, reg_lambda: float, learning_rate: float) -> DataFrame:
+def experiment(*, url: str, boost: str, depth: int, reg_lambda: float, learning_rate: float, num_rounds: int) -> DataFrame:
     df = get_dataset(url)
     df, y_df = normalize_dataset(url, df)
     return experiment_local(url=url, X_df=df, y_df=y_df, boost=boost,
-                            depth=depth, reg_lambda=reg_lambda, learning_rate=learning_rate)
+                            depth=depth, reg_lambda=reg_lambda, learning_rate=learning_rate, num_rounds=num_rounds)
 
 
 # def experiment_1(*, w: float, x: int, y: float, z: str) -> DataFrame:
@@ -240,14 +243,16 @@ def create_config(su_id: str = 'su_id') -> dict:
                 StudyURL.UCIML_FOREST_COVERTYPE,
                 StudyURL.KAGGLE_HIGGS_BOSON_TRAINING
             ],
-            'learning_rate': [0.1, 5.]
+            'learning_rate': [0.1, 5.],
+            'num_rounds': [50]
         }],
         'param_types': {
             'depth': 'int',
             'reg_lambda': 'float',
             'boost': 'str',
             'url': 'str',
-            'learning_rate': 'float'
+            'learning_rate': 'float',
+            'num_rounds': 'int'
         },
         'table_name': f'EMS.XYZ_{su_id}',
         'GCP_project_id': 'stanford-stats-285-donoho',
@@ -256,11 +261,11 @@ def create_config(su_id: str = 'su_id') -> dict:
     return ems_spec
 
 
-def setup_experiment(url: str, boost: str, depth: int, reg_lambda: float, learning_rate: float, credentials: service_account.Credentials):
+def setup_experiment(url: str, boost: str, depth: int, reg_lambda: float, learning_rate: float, num_rounds: int, credentials: service_account.Credentials):
     df = get_df_from_gbq(TABLE_NAMES[url], credentials=credentials)
     df, y_df = normalize_dataset(url, df)
     df_result = experiment_local(url=url, X_df=df, y_df=y_df, boost=boost,
-                                 depth=depth, reg_lambda=reg_lambda, learning_rate=learning_rate)
+                                 depth=depth, reg_lambda=reg_lambda, learning_rate=learning_rate, num_rounds=num_rounds)
     logger.info(f'{url} by {boost}\n{df_result}')
 
 
