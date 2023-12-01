@@ -22,6 +22,8 @@ from google.cloud.aiplatform.vizier import pyvizier as vz
 from google.cloud.aiplatform.vizier import Study
 
 logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.WARNING)
+logging.getLogger('LightGBM').setLevel(logging.WARNING)
 logger = logging.getLogger()
 
 
@@ -73,12 +75,15 @@ def push_tables_to_cluster(tables: dict, c: Client, credentials: service_account
 def push_tables_to_filesystem(tables: dict, path: Path, credentials: service_account.credentials = None):
     for key, table in tables.items():
         df = get_df_from_gbq(table, credentials)
-        p = path / table + '.parquet'
+        filename = table + '.parquet'
+        p = path / filename
         df.to_parquet(path=p)
         logger.info(f'{key}\n{df}')
 
 
 DATASETS = {}
+
+
 def get_local_dataset(key: str) -> DataFrame:
     df = DATASETS.get(key, None)
     if df is None:
@@ -90,6 +95,7 @@ def get_local_dataset(key: str) -> DataFrame:
 # Objective functions to maximize.
 def experiment_local(*, url: str, X_df: DataFrame, y_df: DataFrame, boost: str,
                      depth: int, reg_lambda: float, learning_rate: float, num_rounds: int) -> DataFrame:
+    logger.warning(f'url: {url}; boost: {boost}\n{depth}, {reg_lambda}, {learning_rate}, {num_rounds}')
     # Create data array
     X = X_df.values
 
@@ -128,12 +134,14 @@ def experiment_local(*, url: str, X_df: DataFrame, y_df: DataFrame, boost: str,
             model = catboost.CatBoostClassifier(learning_rate=learning_rate,
                                                 l2_leaf_reg=reg_lambda,
                                                 depth=depth,
-                                                iterations=num_rounds)
+                                                iterations=num_rounds,
+                                                silent=True)
         case StudyBOOST.LIGHTGBM:
             model = lgb.LGBMClassifier(learning_rate=learning_rate,
                                        lambda_l2=reg_lambda,
                                        max_depth=depth,
-                                       n_estimators=num_rounds)
+                                       n_estimators=num_rounds,
+                                       verbose=-1)
         case _:
             raise Exception("Invalid Method Name!")
     model.fit(X_train, y_train)
@@ -201,10 +209,10 @@ def get_vertex_study(study_id: str = 'xyz_example',
     study_config = vz.StudyConfig(algorithm=vz.Algorithm.RANDOM_SEARCH)  # Free on Vertex AI.
     # study_config = vz.StudyConfig(algorithm=vz.Algorithm.GAUSSIAN_PROCESS_BANDIT)
 
-    study_config.search_space.root.add_float_param('reg_lambda', 0.0, 5.0)
-    study_config.search_space.root.add_float_param('learning_rate', 0.0, 5.0)
-    study_config.search_space.root.add_int_param('depth', -2, 2)
-    # study_config.search_space.root.add_discrete_param('y', [0.3, 7.2])
+    study_config.search_space.root.add_float_param('reg_lambda', 0.25, 4.0)
+    study_config.search_space.root.add_float_param('learning_rate', 0.1, 1.0)
+    study_config.search_space.root.add_discrete_param('depth', [6, 8, 10])
+    study_config.search_space.root.add_discrete_param('num_rounds', [50])
     study_config.search_space.root.add_categorical_param('url', [
         StudyURL.UCIML_ADULT_INCOME,
         StudyURL.KAGGLE_CALIFORNIA_HOUSING_PRICES,
@@ -213,7 +221,7 @@ def get_vertex_study(study_id: str = 'xyz_example',
     ])
     study_config.search_space.root.add_categorical_param('boost', [
         StudyBOOST.XGBOOST,
-        StudyBOOST.CATBOOST,
+        # StudyBOOST.CATBOOST,
         StudyBOOST.LIGHTGBM
     ])
     study_config.metric_information.append(vz.MetricInformation('metric_name', goal=vz.ObjectiveMetricGoal.MAXIMIZE))
@@ -254,14 +262,15 @@ def create_config(su_id: str = 'su_id') -> dict:
         'params': [{
             'depth': [6, 8, 10],
             'reg_lambda': [0.25, 0.5, 1., 2., 4.],
-            'boost': [StudyBOOST.XGBOOST, StudyBOOST.CATBOOST, StudyBOOST.LIGHTGBM],
+            'boost': [StudyBOOST.XGBOOST, StudyBOOST.LIGHTGBM],
+            # 'boost': [StudyBOOST.XGBOOST, StudyBOOST.CATBOOST, StudyBOOST.LIGHTGBM],
             'url': [
                 StudyURL.UCIML_ADULT_INCOME,
                 StudyURL.KAGGLE_CALIFORNIA_HOUSING_PRICES,
                 StudyURL.UCIML_FOREST_COVERTYPE,
                 StudyURL.KAGGLE_HIGGS_BOSON_TRAINING
             ],
-            'learning_rate': [0.1, 5.],
+            'learning_rate': [0.1, 0.5, 1.],
             'num_rounds': [50]
         }],
         'param_types': {
