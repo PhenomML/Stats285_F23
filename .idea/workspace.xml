@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bcceca7f-a96c-42ce-9a55-ee0258d1e53c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/environment-EMS.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xyz_vertex.py" beforeDir="false" afterPath="$PROJECT_DIR$/xyz_vertex.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,7 +51,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Markdown",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -383,6 +381,7 @@
       <workItem from="1700138735853" duration="5519000" />
       <workItem from="1700505360351" duration="267000" />
       <workItem from="1700505730532" duration="64671000" />
+      <workItem from="1701451233280" duration="128000" />
     </task>
     <servers />
   </component>
