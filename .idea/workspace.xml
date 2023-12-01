@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bcceca7f-a96c-42ce-9a55-ee0258d1e53c" name="Changes" comment="" />
+    <list default="true" id="bcceca7f-a96c-42ce-9a55-ee0258d1e53c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/xyz_ems.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/xyz_ems.sbatch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -380,6 +384,7 @@
       <workItem from="1700505360351" duration="267000" />
       <workItem from="1700505730532" duration="64671000" />
       <workItem from="1701451233280" duration="128000" />
+      <workItem from="1701461882190" duration="1406000" />
     </task>
     <servers />
   </component>
