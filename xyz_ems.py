@@ -57,7 +57,7 @@ TABLE_NAMES = {  # URL to GBQ table name map.
 
 def get_df_from_gbq(table_name, credentials: service_account.Credentials = None):
     client = bigquery.Client(credentials=credentials)
-    query = f'SELECT * FROM `{table_name}`'
+    query = f"SELECT * FROM `{table_name}`"
     df = client.query(query).to_dataframe()
     return df
 
