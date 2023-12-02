@@ -236,9 +236,9 @@ def setup_experiment(url: str, boost: str, depth: int, reg_lambda: float, learni
 
 def do_cluster_experiment(su_id: str = 'su_ID', credentials=None):
     exp = create_config(su_id=su_id)
-    cores = 16
-    with SLURMCluster(cores=cores, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
-        cluster.scale(jobs=cores)
+    nodes = 64
+    with SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
+        cluster.scale(jobs=nodes)
         logging.info(cluster.job_script())
         with Client(cluster) as client:
             push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
