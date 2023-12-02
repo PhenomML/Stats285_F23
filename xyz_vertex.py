@@ -281,7 +281,7 @@ def create_config(su_id: str = 'su_id') -> dict:
             'learning_rate': 'float',
             'num_rounds': 'int'
         },
-        # 'table_name': f'EMS.XYZ_{su_id}',
+        'table_name': f'XYZ_{su_id}',
         'GCP_project_id': 'stanford-stats-285-donoho',
         'description': 'Describe what this experiment does for future reference.'
     }
