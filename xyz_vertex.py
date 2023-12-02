@@ -58,21 +58,21 @@ TABLE_NAMES = {  # URL to GBQ table name map.
 }
 
 
-def get_df_from_gbq(table_name, credentials: service_account.credentials = None):
+def get_df_from_gbq(table_name, credentials: service_account.Credentials = None):
     client = bigquery.Client(credentials=credentials)
     query = f"SELECT * FROM `{table_name}`"
     df = client.query(query).to_dataframe()
     return df
 
 
-def push_tables_to_cluster(tables: dict, c: Client, credentials: service_account.credentials = None):
+def push_tables_to_cluster(tables: dict, c: Client, credentials: service_account.Credentials = None):
     for key, table in tables.items():
         df = get_df_from_gbq(table, credentials)
         c.publish_dataset(df, name=key)
         logger.info(f'{key}\n{df}')
 
 
-def push_tables_to_filesystem(tables: dict, path: Path, credentials: service_account.credentials = None):
+def push_tables_to_filesystem(tables: dict, path: Path, credentials: service_account.Credentials = None):
     for key, table in tables.items():
         df = get_df_from_gbq(table, credentials)
         filename = table + '.parquet'
@@ -288,7 +288,8 @@ def create_config(su_id: str = 'su_id') -> dict:
     return ems_spec
 
 
-def setup_experiment(url: str, boost: str, depth: int, reg_lambda: float, learning_rate: float, num_rounds: int, credentials: service_account.Credentials):
+def setup_experiment(url: str, boost: str, depth: int, reg_lambda: float, learning_rate: float, num_rounds: int,
+                     credentials: service_account.Credentials):
     df = get_df_from_gbq(TABLE_NAMES[url], credentials=credentials)
     df, y_df = normalize_dataset(url, df)
     df_result = experiment_local(url=url, X_df=df, y_df=y_df, boost=boost,
