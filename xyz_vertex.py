@@ -232,7 +232,7 @@ def get_vertex_study(study_id: str = 'xyz_example',
     return study
 
 
-def setup_xyz_vertex_on_local_cluster(credentials: service_account.Credentials):
+def setup_xyz_vertex_on_local_node(credentials: service_account.Credentials):
     study = get_vertex_study(study_id='test_cluster_01', credentials=credentials)
 
     with LocalCluster() as lc, Client(lc) as client:
@@ -349,7 +349,7 @@ def do_local_experiment(su_id: str = 'su_ID', credentials=None):
 
 if __name__ == "__main__":
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
-    # setup_xyz_vertex_on_local_cluster(credentials=credentials)
+    # setup_xyz_vertex_on_local_node(credentials=credentials)
     setup_xyz_vertex_on_cluster(credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
