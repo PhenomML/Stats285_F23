@@ -13,6 +13,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from dask.distributed import LocalCluster, Client
+from dask_jobqueue import SLURMCluster
 from google.cloud import bigquery
 from google.oauth2 import service_account
 from EMS.manager import EvalOnCluster, get_gbq_credentials, get_dataset, do_on_cluster
@@ -257,6 +258,36 @@ def setup_xyz_vertex_on_local_cluster(credentials: service_account.Credentials):
     logger.info(f'{optimal_trials}')
 
 
+def setup_xyz_vertex_on_cluster(credentials: service_account.Credentials):
+    study = get_vertex_study(study_id='test_cluster_01', credentials=credentials)
+    nodes = 64
+    with SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
+        cluster.scale(jobs=nodes)
+        logging.info(cluster.job_script())
+        with Client(cluster) as client:
+            push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
+            ec = EvalOnCluster(client, None)
+            # ec = EvalOnCluster(client, 'test_cluster_01')
+            in_cluster = {}
+            for _ in range(20):
+                for suggestion in study.suggest(count=100):
+                    params = suggestion.materialize().parameters.as_dict()
+                    params['x'] = round(params['x'])
+                    key = ec.eval_params(experiment, params)
+                    in_cluster[key] = suggestion
+                for df, key in ec.result():
+                    measurement = vz.Measurement()
+                    measurement.metrics['metric_name'] = df.iloc[0]['objective']
+                    suggestion = in_cluster[key]
+                    suggestion.add_measurement(measurement=measurement)
+                    suggestion.complete(measurement=measurement)
+                    del in_cluster[key]
+            ec.final_push()
+            cluster.scale(0)
+    optimal_trials = study.optimal_trials()
+    logger.info(f'{optimal_trials}')
+
+
 def create_config(su_id: str = 'su_id') -> dict:
     ems_spec = {
         'params': [{
@@ -297,6 +328,18 @@ def setup_experiment(url: str, boost: str, depth: int, reg_lambda: float, learni
     logger.info(f'{url} by {boost}\n{df_result}')
 
 
+def do_cluster_experiment(su_id: str = 'su_ID', credentials=None):
+    exp = create_config(su_id=su_id)
+    nodes = 64
+    with SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
+        cluster.scale(jobs=nodes)
+        logging.info(cluster.job_script())
+        with Client(cluster) as client:
+            push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
+            do_on_cluster(exp, experiment, client, credentials=credentials)
+        cluster.scale(0)
+
+
 def do_local_experiment(su_id: str = 'su_ID', credentials=None):
     exp = create_config(su_id=su_id)
     with LocalCluster() as lc, Client(lc) as client:
@@ -307,7 +350,8 @@ def do_local_experiment(su_id: str = 'su_ID', credentials=None):
 if __name__ == "__main__":
     credentials = get_gbq_credentials('stanford-stats-285-donoho-vizier-b8a57b59c6d6.json')
     # setup_xyz_vertex_on_local_cluster(credentials=credentials)
-    do_local_experiment('adonoho_test_01', credentials=credentials)
+    setup_xyz_vertex_on_cluster(credentials=credentials)
+    # do_local_experiment('adonoho_test_01', credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.LIGHTGBM, 6, 0.25, 0.1, credentials=credentials)

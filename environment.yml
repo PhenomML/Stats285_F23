@@ -11,19 +11,13 @@ dependencies:
   - xgboost
   - catboost
   - lightgbm
-  - sqlalchemy
   - google-auth
   - google-cloud-sdk
-  - google-cloud-aiplatform
-#  - google-colab
   - dask
   - dask-jobqueue
-#  - jupyter
   - pip
   - pip:
     - git+https://github.com/adonoho/EMS.git@v0.0.16
-    - google-vizier
-#    - google-vizier[jax]
     - ucimlrepo
 variables:
   MKL_NUM_THREADS: '1'
