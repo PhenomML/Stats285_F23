@@ -348,7 +348,7 @@ def do_local_experiment(su_id: str = 'su_ID', credentials=None):
 
 
 if __name__ == "__main__":
-    credentials = get_gbq_credentials('stanford-stats-285-donoho-vizier-b8a57b59c6d6.json')
+    credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
     # setup_xyz_vertex_on_local_cluster(credentials=credentials)
     setup_xyz_vertex_on_cluster(credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
