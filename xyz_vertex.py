@@ -232,60 +232,55 @@ def get_vertex_study(study_id: str = 'xyz_example',
     return study
 
 
-def setup_xyz_vertex_on_local_node(credentials: service_account.Credentials):
-    study = get_vertex_study(study_id='test_cluster_01', credentials=credentials)
+def calc_xyz_vertex_on_cluster(study: Study, client: Client, nodes: int, credentials: service_account.Credentials):
+    push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
+    ec = EvalOnCluster(client, None)
+    # ec = EvalOnCluster(client, 'test_cluster_01')
+    in_cluster = {}
+    # Prime the cluster.
+    for suggestion in study.suggest(count=2 * nodes):
+        params = suggestion.materialize().parameters.as_dict()
+        params['x'] = round(params['x'])
+        key = ec.eval_params(experiment, params)
+        in_cluster[key] = suggestion
+    # Start retiring trials.
+    for df, key in ec.result():
+        measurement = vz.Measurement()
+        measurement.metrics['metric_name'] = df.iloc[0]['test_accuracy']
+        suggestion = in_cluster[key]
+        suggestion.add_measurement(measurement=measurement)
+        suggestion.complete(measurement=measurement)
+        del in_cluster[key]
+        # Add more trials/search points.
+        suggestions = study.suggest(count=1)
+        if len(suggestions) > 0:
+            params = suggestions[0].materialize().parameters.as_dict()
+            params['x'] = round(params['x'])
+            key = ec.eval_params(experiment, params)
+            in_cluster[key] = suggestions[0]
+        # Put an optimality test here.
+    ec.final_push()
 
+
+def setup_xyz_vertex_on_local_node(credentials: service_account.Credentials):
     with LocalCluster() as lc, Client(lc) as client:
-        push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
-        ec = EvalOnCluster(client, None)
-        # ec = EvalOnCluster(client, 'test_cluster_01')
-        in_cluster = {}
-        for _ in range(20):
-            for suggestion in study.suggest(count=100):
-                params = suggestion.materialize().parameters.as_dict()
-                params['x'] = round(params['x'])
-                key = ec.eval_params(experiment, params)
-                in_cluster[key] = suggestion
-            for df, key in ec.result():
-                measurement = vz.Measurement()
-                measurement.metrics['metric_name'] = df.iloc[0]['objective']
-                suggestion = in_cluster[key]
-                suggestion.add_measurement(measurement=measurement)
-                suggestion.complete(measurement=measurement)
-                del in_cluster[key]
-        ec.final_push()
-    optimal_trials = study.optimal_trials()
-    logger.info(f'{optimal_trials}')
+        study = get_vertex_study(study_id='test_cluster_01', credentials=credentials)
+        calc_xyz_vertex_on_cluster(study, client, lc.n_workers * client.nthreads, credentials)
+        optimal_trials = study.optimal_trials()
+        logger.info(f'{optimal_trials}')
 
 
 def setup_xyz_vertex_on_cluster(credentials: service_account.Credentials):
-    study = get_vertex_study(study_id='test_cluster_01', credentials=credentials)
-    nodes = 64
+    nodes = 32
     with SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
         cluster.scale(jobs=nodes)
         logging.info(cluster.job_script())
         with Client(cluster) as client:
-            push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
-            ec = EvalOnCluster(client, None)
-            # ec = EvalOnCluster(client, 'test_cluster_01')
-            in_cluster = {}
-            for _ in range(20):
-                for suggestion in study.suggest(count=100):
-                    params = suggestion.materialize().parameters.as_dict()
-                    params['x'] = round(params['x'])
-                    key = ec.eval_params(experiment, params)
-                    in_cluster[key] = suggestion
-                for df, key in ec.result():
-                    measurement = vz.Measurement()
-                    measurement.metrics['metric_name'] = df.iloc[0]['objective']
-                    suggestion = in_cluster[key]
-                    suggestion.add_measurement(measurement=measurement)
-                    suggestion.complete(measurement=measurement)
-                    del in_cluster[key]
-            ec.final_push()
-            cluster.scale(0)
-    optimal_trials = study.optimal_trials()
-    logger.info(f'{optimal_trials}')
+            study = get_vertex_study(study_id='test_cluster_01', credentials=credentials)
+            calc_xyz_vertex_on_cluster(study, client, nodes, credentials)
+            optimal_trials = study.optimal_trials()
+            logger.info(f'{optimal_trials}')
+        cluster.scale(0)
 
 
 def create_config(su_id: str = 'su_id') -> dict:
