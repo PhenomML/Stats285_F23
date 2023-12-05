@@ -198,11 +198,6 @@ def experiment(*, url: str, boost: str, depth: int, reg_lambda: float, learning_
                             depth=depth, reg_lambda=reg_lambda, learning_rate=learning_rate, num_rounds=num_rounds)
 
 
-# def experiment_1(*, w: float, x: int, y: float, z: str) -> DataFrame:
-#     objective = w**2 - y**2 + x * ord(z)
-#     return DataFrame(data={'w': w, 'x': x, 'y': y, 'z': z, 'objective': objective}, index=[0])
-
-
 def get_vertex_study(study_id: str = 'xyz_example',
                      project: str = 'stanford-stats-285-donoho',
                      credentials: service_account.Credentials = None) -> Study:
@@ -225,61 +220,59 @@ def get_vertex_study(study_id: str = 'xyz_example',
         # StudyBOOST.CATBOOST,
         StudyBOOST.LIGHTGBM
     ])
-    study_config.metric_information.append(vz.MetricInformation('metric_name', goal=vz.ObjectiveMetricGoal.MAXIMIZE))
+    study_config.metric_information.append(vz.MetricInformation('test_accuracy', goal=vz.ObjectiveMetricGoal.MAXIMIZE))
 
     aiplatform.init(project=project, location='us-central1', credentials=credentials)
     study = Study.create_or_load(display_name=study_id, problem=study_config)
     return study
 
 
-def calc_xyz_vertex_on_cluster(study: Study, client: Client, nodes: int, credentials: service_account.Credentials):
-    push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
-    ec = EvalOnCluster(client, None)
-    # ec = EvalOnCluster(client, 'test_cluster_01')
+def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, credentials: service_account.Credentials):
+    study = get_vertex_study(study_id=table_name, credentials=credentials)
+    ec = EvalOnCluster(client, table_name)
     in_cluster = {}
     # Prime the cluster.
     for suggestion in study.suggest(count=2 * nodes):
         params = suggestion.materialize().parameters.as_dict()
-        params['x'] = round(params['x'])
+        params['depth'] = round(params['depth'])
+        params['num_rounds'] = round(params['num_rounds'])
         key = ec.eval_params(experiment, params)
         in_cluster[key] = suggestion
     # Start retiring trials.
     for df, key in ec.result():
         measurement = vz.Measurement()
-        measurement.metrics['metric_name'] = df.iloc[0]['test_accuracy']
+        measurement.metrics['test_accuracy'] = df.iloc[0]['test_accuracy']
         suggestion = in_cluster[key]
         suggestion.add_measurement(measurement=measurement)
         suggestion.complete(measurement=measurement)
         del in_cluster[key]
         # Add more trials/search points.
-        suggestions = study.suggest(count=1)
-        if len(suggestions) > 0:
-            params = suggestions[0].materialize().parameters.as_dict()
-            params['x'] = round(params['x'])
+        for suggestion in study.suggest(count=1):
+            params = suggestion.materialize().parameters.as_dict()
+            params['depth'] = round(params['depth'])
+            params['num_rounds'] = round(params['num_rounds'])
             key = ec.eval_params(experiment, params)
-            in_cluster[key] = suggestions[0]
+            in_cluster[key] = suggestion
         # Put an optimality test here.
     ec.final_push()
+    optimal_trials = study.optimal_trials()
+    logger.info(f'{optimal_trials}')
 
 
-def setup_xyz_vertex_on_local_node(credentials: service_account.Credentials):
+def setup_xyz_vertex_on_local_node(table_name: str, credentials: service_account.Credentials):
     with LocalCluster() as lc, Client(lc) as client:
-        study = get_vertex_study(study_id='test_cluster_01', credentials=credentials)
-        calc_xyz_vertex_on_cluster(study, client, lc.n_workers * client.nthreads, credentials)
-        optimal_trials = study.optimal_trials()
-        logger.info(f'{optimal_trials}')
+        push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
+        calc_xyz_vertex_on_cluster(table_name, client, lc.n_workers * client.nthreads, credentials)
 
 
-def setup_xyz_vertex_on_cluster(credentials: service_account.Credentials):
+def setup_xyz_vertex_on_cluster(table_name: str, credentials: service_account.Credentials):
     nodes = 32
     with SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
         cluster.scale(jobs=nodes)
         logging.info(cluster.job_script())
         with Client(cluster) as client:
-            study = get_vertex_study(study_id='test_cluster_01', credentials=credentials)
-            calc_xyz_vertex_on_cluster(study, client, nodes, credentials)
-            optimal_trials = study.optimal_trials()
-            logger.info(f'{optimal_trials}')
+            push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
+            calc_xyz_vertex_on_cluster(table_name, client, nodes, credentials)
         cluster.scale(0)
 
 
@@ -343,9 +336,10 @@ def do_local_experiment(su_id: str = 'su_ID', credentials=None):
 
 
 if __name__ == "__main__":
+    su_id = 'adonoho'
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
-    # setup_xyz_vertex_on_local_node(credentials=credentials)
-    setup_xyz_vertex_on_cluster(credentials=credentials)
+    # setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_01', credentials=credentials)
+    setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_test_01', credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
