@@ -340,7 +340,7 @@ if __name__ == "__main__":
     su_id = 'adonoho'
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
     # setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_01', credentials=credentials)
-    setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_test_01', credentials=credentials)
+    setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_test_02', credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
