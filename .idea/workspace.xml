@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bcceca7f-a96c-42ce-9a55-ee0258d1e53c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/environment-vizier.yml" beforeDir="false" afterPath="$PROJECT_DIR$/environment-vizier.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/environment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/environment.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/xyz_vertex.py" beforeDir="false" afterPath="$PROJECT_DIR$/xyz_vertex.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -392,7 +389,7 @@
       <workItem from="1700505730532" duration="64671000" />
       <workItem from="1701451233280" duration="128000" />
       <workItem from="1701461882190" duration="14004000" />
-      <workItem from="1701792215199" duration="9368000" />
+      <workItem from="1701792215199" duration="9426000" />
     </task>
     <servers />
   </component>

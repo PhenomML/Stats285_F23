@@ -267,7 +267,7 @@ def setup_xyz_vertex_on_local_node(table_name: str, credentials: service_account
 
 
 def setup_xyz_vertex_on_cluster(table_name: str, credentials: service_account.Credentials):
-    nodes = 32
+    nodes = 16
     with SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
         cluster.scale(jobs=nodes)
         logging.info(cluster.job_script())
