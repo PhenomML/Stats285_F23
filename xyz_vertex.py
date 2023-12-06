@@ -205,17 +205,18 @@ def get_vertex_study(study_id: str = 'xyz_example',
     study_config = vz.StudyConfig(algorithm=vz.Algorithm.RANDOM_SEARCH)  # Free on Vertex AI.
     # study_config = vz.StudyConfig(algorithm=vz.Algorithm.GAUSSIAN_PROCESS_BANDIT)
 
-    study_config.search_space.root.add_float_param('reg_lambda', 0.25, 4.0)
-    study_config.search_space.root.add_float_param('learning_rate', 0.1, 1.0)
-    study_config.search_space.root.add_discrete_param('depth', [6, 8, 10])
-    study_config.search_space.root.add_discrete_param('num_rounds', [50])
-    study_config.search_space.root.add_categorical_param('url', [
+    root = study_config.search_space.select_root()
+    root.add_float_param('reg_lambda', 0.25, 4.0)
+    root.add_float_param('learning_rate', 0.1, 1.0)
+    root.add_discrete_param('depth', [6, 8, 10])
+    root.add_discrete_param('num_rounds', [50])
+    root.add_categorical_param('url', [
         StudyURL.UCIML_ADULT_INCOME,
         StudyURL.KAGGLE_CALIFORNIA_HOUSING_PRICES,
         StudyURL.UCIML_FOREST_COVERTYPE,
         StudyURL.KAGGLE_HIGGS_BOSON_TRAINING
     ])
-    study_config.search_space.root.add_categorical_param('boost', [
+    root.add_categorical_param('boost', [
         StudyBOOST.XGBOOST,
         # StudyBOOST.CATBOOST,
         StudyBOOST.LIGHTGBM
@@ -229,6 +230,7 @@ def get_vertex_study(study_id: str = 'xyz_example',
 
 def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, credentials: service_account.Credentials):
 
+    MAX_NUM_ITERATIONS = 360  # Same number as the EMS version.
     study = get_vertex_study(study_id=table_name, credentials=credentials)
     ec = EvalOnCluster(client, table_name)
     in_cluster = {}
@@ -240,6 +242,7 @@ def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, cred
             params['num_rounds'] = round(params['num_rounds'])
             key = ec.eval_params(experiment, params)
             in_cluster[key] = suggestion
+        logger.info(f'Pending computations: {len(in_cluster)}.')
 
     def push_result_to_vertex(df: DataFrame, key: tuple):
         measurement = vz.Measurement()
@@ -250,11 +253,14 @@ def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, cred
         del in_cluster[key]
 
     # Prime the cluster.
-    push_suggestions_to_cluster(2 * nodes)
+    push_suggestions_to_cluster(3 * nodes)  # Each node has 2 threads, keeps cluster busy.
+    i = 0
     for df, key in ec.result():  # Start retiring trials.
         push_result_to_vertex(df, key)
-        push_suggestions_to_cluster(1)
-        # Put an optimality test here.
+        i += 1
+        logger.info(f'Completed computations: {i}; Pending: {len(in_cluster)}.')
+        if i + len(in_cluster) <= MAX_NUM_ITERATIONS:
+            push_suggestions_to_cluster(1)
     ec.final_push()
     optimal_trials = study.optimal_trials()
     logger.info(f'{optimal_trials}')
