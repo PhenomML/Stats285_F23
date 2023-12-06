@@ -13,11 +13,13 @@ dependencies:
   - lightgbm
   - google-auth
   - google-cloud-sdk
+  - google-cloud-aiplatform
   - dask
   - dask-jobqueue
   - pip
   - pip:
     - git+https://github.com/adonoho/EMS.git@v0.0.16
+    - google-vizier
     - ucimlrepo
 variables:
   MKL_NUM_THREADS: '1'

@@ -228,31 +228,32 @@ def get_vertex_study(study_id: str = 'xyz_example',
 
 
 def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, credentials: service_account.Credentials):
+
     study = get_vertex_study(study_id=table_name, credentials=credentials)
     ec = EvalOnCluster(client, table_name)
     in_cluster = {}
-    # Prime the cluster.
-    for suggestion in study.suggest(count=2 * nodes):
-        params = suggestion.materialize().parameters.as_dict()
-        params['depth'] = round(params['depth'])
-        params['num_rounds'] = round(params['num_rounds'])
-        key = ec.eval_params(experiment, params)
-        in_cluster[key] = suggestion
-    # Start retiring trials.
-    for df, key in ec.result():
+
+    def push_suggestions_to_cluster(count):
+        for suggestion in study.suggest(count=count):
+            params = suggestion.materialize().parameters.as_dict()
+            params['depth'] = round(params['depth'])
+            params['num_rounds'] = round(params['num_rounds'])
+            key = ec.eval_params(experiment, params)
+            in_cluster[key] = suggestion
+
+    def push_result_to_vertex(df: DataFrame, key: tuple):
         measurement = vz.Measurement()
         measurement.metrics['test_accuracy'] = df.iloc[0]['test_accuracy']
         suggestion = in_cluster[key]
         suggestion.add_measurement(measurement=measurement)
         suggestion.complete(measurement=measurement)
         del in_cluster[key]
-        # Add more trials/search points.
-        for suggestion in study.suggest(count=1):
-            params = suggestion.materialize().parameters.as_dict()
-            params['depth'] = round(params['depth'])
-            params['num_rounds'] = round(params['num_rounds'])
-            key = ec.eval_params(experiment, params)
-            in_cluster[key] = suggestion
+
+    # Prime the cluster.
+    push_suggestions_to_cluster(2 * nodes)
+    for df, key in ec.result():  # Start retiring trials.
+        push_result_to_vertex(df, key)
+        push_suggestions_to_cluster(1)
         # Put an optimality test here.
     ec.final_push()
     optimal_trials = study.optimal_trials()
