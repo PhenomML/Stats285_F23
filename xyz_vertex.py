@@ -314,6 +314,9 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
         if i + active_nodes <= MAX_NUM_ITERATIONS:
             # push_suggestions_to_cluster(nodes - active_nodes)
             await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes - active_nodes)
+        elif i >= MAX_NUM_ITERATIONS:
+            logger.info(f'Unclaimed suggestions:\n{in_cluster}')
+            break
     logger.info('Finishing')
     ec.final_push()
     optimal_trials = study.optimal_trials()
