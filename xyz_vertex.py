@@ -282,9 +282,11 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
         for suggestion in study.suggest(count=count):
             logger.info(f'Suggestion: {suggestion}')
             params = suggestion.materialize().parameters.as_dict()
+            logger.info(f'Suggestion params: {params}')
             params['depth'] = round(params['depth'])
             params['num_rounds'] = round(params['num_rounds'])
             key = ec.eval_params(experiment, params)
+            logger.info(f'EC Key: {key}\nParams: {params}')
             in_cluster[key] = suggestion
         logger.info(f'Pending computations: {len(in_cluster)}.')
 
