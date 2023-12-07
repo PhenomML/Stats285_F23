@@ -311,7 +311,7 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
         i += 1
         active_nodes = len(in_cluster)
         logger.info(f'Completed computations: {i}; Pending: {active_nodes}.')
-        if i + active_nodes <= MAX_NUM_ITERATIONS and nodes - active_nodes > 0:
+        if i + active_nodes <= MAX_NUM_ITERATIONS:
             # push_suggestions_to_cluster(nodes - active_nodes)
             await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes - active_nodes)
     logger.info('Finishing')
