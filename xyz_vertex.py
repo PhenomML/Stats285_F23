@@ -204,7 +204,7 @@ def get_vertex_study(study_id: str = 'xyz_example',
                      credentials: service_account.Credentials = None) -> Study:
     # Algorithm, search space, and metrics.
     # study_config = vz.StudyConfig(algorithm=vz.Algorithm.RANDOM_SEARCH)  # Free on Vertex AI.
-    study_config = vz.StudyConfig(algorithm=vz.Algorithm.GAUSSIAN_PROCESS_BANDIT)
+    study_config = vz.StudyConfig(algorithm=vz.Algorithm.ALGORITHM_UNSPECIFIED)
 
     root = study_config.search_space.select_root()
     root.add_float_param('reg_lambda', 0.25, 4.0)
@@ -328,15 +328,15 @@ def setup_xyz_vertex_on_local_node(table_name: str, credentials: service_account
 
 
 async def setup_xyz_vertex_on_local_node_async(table_name: str, credentials: service_account.Credentials):
-    lc = LocalCluster(n_workers=32)
+    lc = LocalCluster(n_workers=16, threads_per_worker=1)
     # lc = LocalCluster(n_workers=1, threads_per_worker=2)
     client = await Client(lc, asynchronous=True)
     logger.info(f'Local cluster: {lc}, Client: {client}')
     push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
     nthreads = sum(w.nthreads for w in lc.workers.values())
     await calc_xyz_vertex_on_cluster_async(table_name, client, nthreads, credentials)
-    client.close()
-    lc.close()
+    await client.close()
+    await lc.close()
 
 
 def setup_xyz_vertex_on_cluster(table_name: str, credentials: service_account.Credentials):
