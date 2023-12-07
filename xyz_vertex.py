@@ -217,9 +217,10 @@ def get_vertex_study(study_id: str = 'xyz_example',
         StudyURL.KAGGLE_HIGGS_BOSON_TRAINING
     ])
     root.add_categorical_param('boost', [
-        StudyBOOST.XGBOOST,
+        StudyBOOST.XGBOOST
+        # StudyBOOST.XGBOOST,
         # StudyBOOST.CATBOOST,
-        StudyBOOST.LIGHTGBM
+        # StudyBOOST.LIGHTGBM
     ])
     study_config.metric_information.append(vz.MetricInformation('test_accuracy', goal=vz.ObjectiveMetricGoal.MAXIMIZE))
 
@@ -253,9 +254,11 @@ def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, cred
         del in_cluster[key]
 
     # Prime the cluster.
-    push_suggestions_to_cluster(3 * nodes)  # Each node has 2 threads, keeps cluster busy.
+    push_suggestions_to_cluster(2)  # Each node has 2 threads, keeps cluster busy.
+    # push_suggestions_to_cluster(3 * nodes)  # Each node has 2 threads, keeps cluster busy.
     i = 0
     for df, key in ec.result():  # Start retiring trials.
+        logger.info(f'Result: {df}.')
         push_result_to_vertex(df, key)
         i += 1
         logger.info(f'Completed computations: {i}; Pending: {len(in_cluster)}.')
@@ -268,8 +271,10 @@ def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, cred
 
 def setup_xyz_vertex_on_local_node(table_name: str, credentials: service_account.Credentials):
     with LocalCluster() as lc, Client(lc) as client:
+        logger.info(f'Local cluster: {lc}, Client: {client}')
         push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
-        calc_xyz_vertex_on_cluster(table_name, client, lc.n_workers * client.nthreads, credentials)
+        nthreads = sum(w.nthreads for w in lc.workers.values())
+        calc_xyz_vertex_on_cluster(table_name, client, nthreads, credentials)
 
 
 def setup_xyz_vertex_on_cluster(table_name: str, credentials: service_account.Credentials):
@@ -345,8 +350,8 @@ def do_local_experiment(su_id: str = 'su_ID', credentials=None):
 if __name__ == "__main__":
     su_id = 'adonoho'
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
-    # setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_01', credentials=credentials)
-    setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_vertex_test_01', credentials=credentials)
+    setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_02', credentials=credentials)
+    # setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_vertex_test_01', credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)
