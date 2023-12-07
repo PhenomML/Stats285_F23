@@ -275,9 +275,8 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
     MAX_NUM_ITERATIONS = 6 * 10  # Sagi Perel suggestion. Less than the 360 used in EMS example.
     study = get_vertex_study(study_id=table_name, credentials=credentials)
     ec = EvalOnCluster(client, table_name)
-    in_cluster = {}
 
-    def push_suggestions_to_cluster(count):
+    def push_suggestions_to_cluster(count, in_cluster) -> dict:
         logger.info(f'Call Vizier.')
         for suggestion in study.suggest(count=count):
             logger.info(f'Suggestion: {suggestion}')
@@ -289,9 +288,10 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
             logger.info(f'EC Key: {key}\nParams: {params}')
             in_cluster[key] = suggestion
         logger.info(f'Pending computations: {len(in_cluster)}.')
+        return in_cluster
 
-    def push_result_to_vertex(df: DataFrame, key: tuple):
-        logger.info(f'Push result Vizier.')
+    def push_result_to_vertex(df: DataFrame, key: tuple, in_cluster: dict) -> dict:
+        logger.info(f'Push result Vizier, EC Key: {key}')
         measurement = vz.Measurement()
         measurement.metrics['test_accuracy'] = df.iloc[0]['test_accuracy']
         suggestion = in_cluster.get(key, None)
@@ -302,20 +302,22 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
         else:
             logger.info(f'Key problem: {key}\n{in_cluster}')
         logger.info(f'End Push.')
+        return in_cluster
 
     # Prime the cluster.
-    push_suggestions_to_cluster(nodes)
+    in_cluster = {}
+    in_cluster = push_suggestions_to_cluster(nodes, in_cluster)
     i = 0
     for df, key in ec:  # Start retiring trials.
         logger.info(f'Result: {df}.')
         # push_result_to_vertex(df, key)
-        await IOLoop.current().run_in_executor(None, push_result_to_vertex, df, key)
+        in_cluster = await IOLoop.current().run_in_executor(None, push_result_to_vertex, df, key, in_cluster)
         i += 1
         active_nodes = len(in_cluster)
         logger.info(f'Completed computations: {i}; Pending: {active_nodes}.')
         if i + active_nodes <= MAX_NUM_ITERATIONS:
             # push_suggestions_to_cluster(nodes - active_nodes)
-            await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes - active_nodes)
+            in_cluster = await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes - active_nodes, in_cluster)
         elif i >= MAX_NUM_ITERATIONS:
             logger.info(f'Unclaimed suggestions:\n{in_cluster}')
             break
