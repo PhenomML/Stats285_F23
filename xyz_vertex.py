@@ -297,22 +297,23 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
             suggestion.add_measurement(measurement=measurement)
             suggestion.complete(measurement=measurement)
             del in_cluster[key]
+        else:
+            logger.info(f'Key problem: {key}\n{in_cluster}')
         logger.info(f'End Push.')
 
     # Prime the cluster.
-    push_suggestions_to_cluster(nodes)  # Each node has 2 threads, keeps cluster busy.
-    # push_suggestions_to_cluster(3 * nodes)  # Each node has 2 threads, keeps cluster busy.
+    push_suggestions_to_cluster(nodes)
     i = 0
     for df, key in ec:  # Start retiring trials.
         logger.info(f'Result: {df}.')
-        await IOLoop.current().run_in_executor(None, push_result_to_vertex, df, key)
         # push_result_to_vertex(df, key)
+        await IOLoop.current().run_in_executor(None, push_result_to_vertex, df, key)
         i += 1
         active_nodes = len(in_cluster)
         logger.info(f'Completed computations: {i}; Pending: {active_nodes}.')
         if i + active_nodes <= MAX_NUM_ITERATIONS and nodes - active_nodes > 0:
+            # push_suggestions_to_cluster(nodes - active_nodes)
             await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes - active_nodes)
-            # push_suggestions_to_cluster(1)
     logger.info('Finishing')
     ec.final_push()
     optimal_trials = study.optimal_trials()
@@ -340,7 +341,7 @@ async def setup_xyz_vertex_on_local_node_async(table_name: str, credentials: ser
 
 
 def setup_xyz_vertex_on_cluster(table_name: str, credentials: service_account.Credentials):
-    nodes = 16
+    nodes = 8
     with SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
         cluster.scale(jobs=nodes)
         logging.info(cluster.job_script())
@@ -348,6 +349,19 @@ def setup_xyz_vertex_on_cluster(table_name: str, credentials: service_account.Cr
             push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
             calc_xyz_vertex_on_cluster(table_name, client, nodes, credentials)
         cluster.scale(0)
+
+
+async def setup_xyz_vertex_on_cluster_async(table_name: str, credentials: service_account.Credentials):
+    nodes = 8
+    cluster = SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00')
+    cluster.scale(jobs=nodes)
+    logging.info(cluster.job_script())
+    client = await Client(cluster, asynchronous=True)
+    push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
+    await calc_xyz_vertex_on_cluster_async(table_name, client, nodes, credentials)
+    await client.close()
+    cluster.scale(0)
+    await cluster.close()
 
 
 def create_config(su_id: str = 'su_id') -> dict:
@@ -392,7 +406,7 @@ def setup_experiment(url: str, boost: str, depth: int, reg_lambda: float, learni
 
 def do_cluster_experiment(su_id: str = 'su_ID', credentials=None):
     exp = create_config(su_id=su_id)
-    nodes = 64
+    nodes = 8
     with SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
         cluster.scale(jobs=nodes)
         logging.info(cluster.job_script())
@@ -416,10 +430,18 @@ def do_vertex_on_local_async(table_name: str, credentials=None):
     IOLoop().run_sync(run_it)
 
 
+def do_vertex_on_cluster_async(table_name: str, credentials=None):
+    async def run_it():
+        await setup_xyz_vertex_on_cluster_async(table_name, credentials=credentials)
+
+    IOLoop().run_sync(run_it)
+
+
 if __name__ == "__main__":
     su_id = 'adonoho'
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
     do_vertex_on_local_async(f'XYZ_{su_id}_test_04', credentials=credentials)
+    do_vertex_on_cluster_async(f'XYZ_{su_id}_test_05', credentials=credentials)
     # setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_03', credentials=credentials)
     # setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_vertex_test_01', credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
