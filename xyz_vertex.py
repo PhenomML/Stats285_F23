@@ -328,7 +328,8 @@ def setup_xyz_vertex_on_local_node(table_name: str, credentials: service_account
 
 
 async def setup_xyz_vertex_on_local_node_async(table_name: str, credentials: service_account.Credentials):
-    lc = LocalCluster(n_workers=1, threads_per_worker=2)
+    lc = LocalCluster(n_workers=32)
+    # lc = LocalCluster(n_workers=1, threads_per_worker=2)
     client = await Client(lc, asynchronous=True)
     logger.info(f'Local cluster: {lc}, Client: {client}')
     push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
