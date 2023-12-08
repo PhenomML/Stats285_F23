@@ -29,13 +29,6 @@ logging.getLogger('LightGBM').setLevel(logging.WARNING)
 logger = logging.getLogger()
 
 
-"""
-Let’s do these four datasets:
-1) Adult Income: https://archive.ics.uci.edu/dataset/2/adult
-2) California housing: https://www.kaggle.com/datasets/camnugent/california-housing-prices
-3) Forest Covertype: https://archive.ics.uci.edu/dataset/31/covertype
-4) Higgs: https://www.kaggle.com/c/higgs-boson
-"""
 class StudyBOOST:
     XGBOOST = 'xgboost'
     CATBOOST = 'catboost'
@@ -43,6 +36,13 @@ class StudyBOOST:
 
 
 class StudyURL:
+    """
+    Let’s do these four datasets:
+    1) Adult Income: https://archive.ics.uci.edu/dataset/2/adult
+    2) California housing: https://www.kaggle.com/datasets/camnugent/california-housing-prices
+    3) Forest Covertype: https://archive.ics.uci.edu/dataset/31/covertype
+    4) Higgs: https://www.kaggle.com/c/higgs-boson
+    """
     UCIML_ADULT_INCOME = 'https://archive.ics.uci.edu/dataset/2/adult'
     KAGGLE_CALIFORNIA_HOUSING_PRICES = 'https://www.kaggle.com/datasets/camnugent/california-housing-prices'
     UCIML_FOREST_COVERTYPE = 'https://archive.ics.uci.edu/dataset/31/covertype'
@@ -192,7 +192,8 @@ def normalize_dataset(url: str, df: DataFrame) -> (DataFrame, DataFrame):
     return X_df, y_df
 
 
-def experiment(*, url: str, boost: str, depth: int, reg_lambda: float, learning_rate: float, num_rounds: int) -> DataFrame:
+def experiment(*, url: str, boost: str,
+               depth: int, reg_lambda: float, learning_rate: float, num_rounds: int) -> DataFrame:
     df = get_local_dataset(url)
     df, y_df = normalize_dataset(url, df)
     return experiment_local(url=url, X_df=df, y_df=y_df, boost=boost,
@@ -270,7 +271,8 @@ def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, cred
     logger.info(f'{optimal_trials}')
 
 
-async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, nodes: int, credentials: service_account.Credentials):
+async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
+                                           nodes: int, credentials: service_account.Credentials):
 
     MAX_NUM_ITERATIONS = 6 * 10  # Sagi Perel suggestion. Less than the 360 used in EMS example.
     study = get_vertex_study(study_id=table_name, credentials=credentials)
@@ -279,14 +281,15 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
     def push_suggestions_to_cluster(count, in_cluster) -> dict:
         logger.info(f'Call Vizier.')
         for suggestion in study.suggest(count=count):
-            logger.info(f'Suggestion: {suggestion}')
             params = suggestion.materialize().parameters.as_dict()
-            logger.info(f'Suggestion params: {params}')
+            logger.info(f'Suggestion: {suggestion}\nSuggestion params: {params}')
             params['depth'] = round(params['depth'])
             params['num_rounds'] = round(params['num_rounds'])
-            key = ec.eval_params(experiment, params)
+            key = ec.key_from_params(params)
             logger.info(f'EC Key: {key}\nParams: {params}')
-            in_cluster[key] = suggestion
+            if not in_cluster.get(key, None):  # Defend against duplicate computation.
+                key = ec.eval_params(experiment, params)
+                in_cluster[key] = suggestion
         logger.info(f'Pending computations: {len(in_cluster)}.')
         return in_cluster
 
@@ -305,19 +308,20 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
         return in_cluster
 
     # Prime the cluster.
-    in_cluster = {}
-    in_cluster = push_suggestions_to_cluster(nodes, in_cluster)
+    in_cluster = push_suggestions_to_cluster(nodes, {})
     i = 0
     for df, key in ec:  # Start retiring trials.
         logger.info(f'Result: {df}.')
         # in_cluster = push_result_to_vertex(df, key, in_cluster)
-        in_cluster = await IOLoop.current().run_in_executor(None, push_result_to_vertex, df, key, in_cluster)
+        in_cluster = await IOLoop.current().run_in_executor(None,
+                                                            push_result_to_vertex, df, key, in_cluster)
         i += 1
         active_nodes = len(in_cluster)
         logger.info(f'Completed computations: {i}; Pending: {active_nodes}.')
         if i + active_nodes <= MAX_NUM_ITERATIONS:
             # in_cluster = push_suggestions_to_cluster(nodes - active_nodes, in_cluster)
-            in_cluster = await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes - active_nodes, in_cluster)
+            in_cluster = await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster,
+                                                                nodes - active_nodes, in_cluster)
         elif i >= MAX_NUM_ITERATIONS:
             logger.info(f'Unclaimed suggestions:\n{in_cluster}')
             break
@@ -343,7 +347,7 @@ async def setup_xyz_vertex_on_local_node_async(table_name: str, credentials: ser
     push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
     nthreads = sum(w.nthreads for w in lc.workers.values())
     await calc_xyz_vertex_on_cluster_async(table_name, client, nthreads, credentials)
-    await client.close()
+    client.close()
     await lc.close()
 
 
@@ -366,7 +370,7 @@ async def setup_xyz_vertex_on_cluster_async(table_name: str, credentials: servic
     client = await Client(cluster, asynchronous=True)
     push_tables_to_cluster(TABLE_NAMES, client, credentials=credentials)
     await calc_xyz_vertex_on_cluster_async(table_name, client, nodes, credentials)
-    await client.close()
+    client.close()
     cluster.scale(0)
     await cluster.close()
 
@@ -447,8 +451,8 @@ def do_vertex_on_cluster_async(table_name: str, credentials=None):
 if __name__ == "__main__":
     su_id = 'adonoho'
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
-    do_vertex_on_local_async(f'XYZ_{su_id}_test_04', credentials=credentials)
-    do_vertex_on_cluster_async(f'XYZ_{su_id}_test_05', credentials=credentials)
+    do_vertex_on_local_async(f'XYZ_{su_id}_test_05', credentials=credentials)
+    # do_vertex_on_cluster_async(f'XYZ_{su_id}_test_05', credentials=credentials)
     # setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_03', credentials=credentials)
     # setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_vertex_test_01', credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
