@@ -276,24 +276,23 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
 
     MAX_NUM_ITERATIONS = 6 * 10  # Sagi Perel suggestion. Less than the 360 used in EMS example.
     study = get_vertex_study(study_id=table_name, credentials=credentials)
-    ec = EvalOnCluster(client, table_name)
+    ec = EvalOnCluster(client, table_name, credentials=credentials)
+    in_cluster = {}
 
-    def push_suggestions_to_cluster(count, in_cluster) -> dict:
+    def push_suggestions_to_cluster(count):
         logger.info(f'Call Vizier.')
         for suggestion in study.suggest(count=count):
             params = suggestion.materialize().parameters.as_dict()
-            logger.info(f'Suggestion: {suggestion}\nSuggestion params: {params}')
             params['depth'] = round(params['depth'])
             params['num_rounds'] = round(params['num_rounds'])
             key = ec.key_from_params(params)
-            logger.info(f'EC Key: {key}\nParams: {params}')
             if not in_cluster.get(key, None):  # Defend against duplicate computation.
+                logger.info(f'EC Key: {key}\nParams: {params}')
                 key = ec.eval_params(experiment, params)
                 in_cluster[key] = suggestion
         logger.info(f'Pending computations: {len(in_cluster)}.')
-        return in_cluster
 
-    def push_result_to_vertex(df: DataFrame, key: tuple, in_cluster: dict) -> dict:
+    def push_result_to_vertex(df: DataFrame, key: tuple):
         logger.info(f'Push result to Vizier, EC Key: {key}')
         measurement = vz.Measurement()
         measurement.metrics['test_accuracy'] = df.iloc[0]['test_accuracy']
@@ -305,23 +304,20 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
         else:
             logger.info(f'Key problem: {key}\n{in_cluster}')
         logger.info(f'End Push.')
-        return in_cluster
 
     # Prime the cluster.
-    in_cluster = push_suggestions_to_cluster(nodes, {})
+    push_suggestions_to_cluster(2 * nodes)
     i = 0
     for df, key in ec:  # Start retiring trials.
         logger.info(f'Result: {df}.')
-        # in_cluster = push_result_to_vertex(df, key, in_cluster)
-        in_cluster = await IOLoop.current().run_in_executor(None,
-                                                            push_result_to_vertex, df, key, in_cluster)
+        # push_result_to_vertex(df, key)
+        await IOLoop.current().run_in_executor(None, push_result_to_vertex, df, key)
         i += 1
-        active_nodes = len(in_cluster)
-        logger.info(f'Completed computations: {i}; Pending: {active_nodes}.')
-        if i + active_nodes <= MAX_NUM_ITERATIONS:
-            # in_cluster = push_suggestions_to_cluster(nodes - active_nodes, in_cluster)
-            in_cluster = await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster,
-                                                                nodes - active_nodes, in_cluster)
+        active_suggestions = len(in_cluster)
+        logger.info(f'Completed computations: {i}; Pending: {active_suggestions}.')
+        if i <= MAX_NUM_ITERATIONS:
+            # push_suggestions_to_cluster(2 * nodes)
+            await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, 2 * nodes)
         elif i >= MAX_NUM_ITERATIONS:
             logger.info(f'Unclaimed suggestions:\n{in_cluster}')
             break
@@ -451,7 +447,7 @@ def do_vertex_on_cluster_async(table_name: str, credentials=None):
 if __name__ == "__main__":
     su_id = 'adonoho'
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
-    do_vertex_on_local_async(f'XYZ_{su_id}_test_05', credentials=credentials)
+    do_vertex_on_local_async(f'XYZ_{su_id}_test_06', credentials=credentials)
     # do_vertex_on_cluster_async(f'XYZ_{su_id}_test_05', credentials=credentials)
     # setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_03', credentials=credentials)
     # setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_vertex_test_01', credentials=credentials)
