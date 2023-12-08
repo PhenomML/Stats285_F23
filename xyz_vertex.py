@@ -315,10 +315,10 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
         i += 1
         active_suggestions = len(in_cluster)
         logger.info(f'Completed computations: {i}; Pending: {active_suggestions}.')
-        if i <= MAX_NUM_ITERATIONS:
-            # push_suggestions_to_cluster(2 * nodes)
+        if i < MAX_NUM_ITERATIONS:
+            # push_suggestions_to_cluster(nodes)
             await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes)
-        elif i >= MAX_NUM_ITERATIONS:
+        if i >= MAX_NUM_ITERATIONS and active_suggestions > 0:
             logger.info(f'Unclaimed suggestions:\n{in_cluster}')
             break
     logger.info('Finishing')
@@ -359,7 +359,7 @@ def setup_xyz_vertex_on_cluster(table_name: str, credentials: service_account.Cr
 
 
 async def setup_xyz_vertex_on_cluster_async(table_name: str, credentials: service_account.Credentials):
-    nodes = 8
+    nodes = 16
     cluster = SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00')
     cluster.scale(jobs=nodes)
     logging.info(cluster.job_script())
@@ -447,8 +447,8 @@ def do_vertex_on_cluster_async(table_name: str, credentials=None):
 if __name__ == "__main__":
     su_id = 'adonoho'
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
-    do_vertex_on_local_async(f'XYZ_{su_id}_test_07', credentials=credentials)
-    # do_vertex_on_cluster_async(f'XYZ_{su_id}_test_05', credentials=credentials)
+    # do_vertex_on_local_async(f'XYZ_{su_id}_test_07', credentials=credentials)
+    do_vertex_on_cluster_async(f'XYZ_{su_id}_test_08_cluster', credentials=credentials)
     # setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_03', credentials=credentials)
     # setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_vertex_test_01', credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
