@@ -274,7 +274,7 @@ def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, cred
 async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
                                            nodes: int, credentials: service_account.Credentials):
 
-    MAX_NUM_ITERATIONS = 6 * 10  # Sagi Perel suggestion. Less than the 360 used in EMS example.
+    MAX_NUM_ITERATIONS = 6 * 10 + 2 * nodes  # Sagi Perel suggestion. Less than the 360 used in EMS example.
     study = get_vertex_study(study_id=table_name, credentials=credentials)
     ec = EvalOnCluster(client, table_name, credentials=credentials)
     in_cluster = {}
@@ -317,7 +317,7 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
         logger.info(f'Completed computations: {i}; Pending: {active_suggestions}.')
         if i <= MAX_NUM_ITERATIONS:
             # push_suggestions_to_cluster(2 * nodes)
-            await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, 2 * nodes)
+            await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes)
         elif i >= MAX_NUM_ITERATIONS:
             logger.info(f'Unclaimed suggestions:\n{in_cluster}')
             break
@@ -344,7 +344,7 @@ async def setup_xyz_vertex_on_local_node_async(table_name: str, credentials: ser
     nthreads = sum(w.nthreads for w in lc.workers.values())
     await calc_xyz_vertex_on_cluster_async(table_name, client, nthreads, credentials)
     client.close()
-    await lc.close()
+    lc.close()
 
 
 def setup_xyz_vertex_on_cluster(table_name: str, credentials: service_account.Credentials):
@@ -368,7 +368,7 @@ async def setup_xyz_vertex_on_cluster_async(table_name: str, credentials: servic
     await calc_xyz_vertex_on_cluster_async(table_name, client, nodes, credentials)
     client.close()
     cluster.scale(0)
-    await cluster.close()
+    cluster.close()
 
 
 def create_config(su_id: str = 'su_id') -> dict:
@@ -447,7 +447,7 @@ def do_vertex_on_cluster_async(table_name: str, credentials=None):
 if __name__ == "__main__":
     su_id = 'adonoho'
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
-    do_vertex_on_local_async(f'XYZ_{su_id}_test_06', credentials=credentials)
+    do_vertex_on_local_async(f'XYZ_{su_id}_test_07', credentials=credentials)
     # do_vertex_on_cluster_async(f'XYZ_{su_id}_test_05', credentials=credentials)
     # setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_03', credentials=credentials)
     # setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_vertex_test_01', credentials=credentials)
