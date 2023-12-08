@@ -291,7 +291,7 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
         return in_cluster
 
     def push_result_to_vertex(df: DataFrame, key: tuple, in_cluster: dict) -> dict:
-        logger.info(f'Push result Vizier, EC Key: {key}')
+        logger.info(f'Push result to Vizier, EC Key: {key}')
         measurement = vz.Measurement()
         measurement.metrics['test_accuracy'] = df.iloc[0]['test_accuracy']
         suggestion = in_cluster.get(key, None)
@@ -310,13 +310,13 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client, node
     i = 0
     for df, key in ec:  # Start retiring trials.
         logger.info(f'Result: {df}.')
-        # push_result_to_vertex(df, key)
+        # in_cluster = push_result_to_vertex(df, key, in_cluster)
         in_cluster = await IOLoop.current().run_in_executor(None, push_result_to_vertex, df, key, in_cluster)
         i += 1
         active_nodes = len(in_cluster)
         logger.info(f'Completed computations: {i}; Pending: {active_nodes}.')
         if i + active_nodes <= MAX_NUM_ITERATIONS:
-            # push_suggestions_to_cluster(nodes - active_nodes)
+            # in_cluster = push_suggestions_to_cluster(nodes - active_nodes, in_cluster)
             in_cluster = await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes - active_nodes, in_cluster)
         elif i >= MAX_NUM_ITERATIONS:
             logger.info(f'Unclaimed suggestions:\n{in_cluster}')
