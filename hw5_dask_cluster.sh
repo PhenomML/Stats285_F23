@@ -9,4 +9,4 @@
 #SBATCH --output=hw5_dask_cluster.out
 
 ## Run the python script
-time python3 ./main.py
+time python3 ./main.py --type "cluster"

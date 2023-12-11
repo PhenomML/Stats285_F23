@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import time
 import os
+import time
+import argparse
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
@@ -42,21 +43,10 @@ def experiment(*, nrow: int, ncol: int, seed: int) -> DataFrame:
     # Analyze the data using SVD
     U, S, Vh = np.linalg.svd(X)
 
-    # Using first singular vector of U and V to estimate signal
-    u_est = U[:,0]
     v_est = Vh[0,:]
-
-    # Calculate estimate of signal
-    signal_est = S[0] * np.outer(u_est,v_est)
-
-    # Calculate alignment between u_est and u_true
-    u_align = np.inner(u_est,u_true)
 
     # Calculate alignment between v_est and v_true
     v_align = np.inner(v_est,v_true)
-
-    # Calculate distance between signal_est and signal_true
-    signal_error = np.linalg.norm(signal_est-signal_true)/np.sqrt(nrow*ncol)
 
     # Save u_est, v_est, u_true, v_true in a CSV file with an index column
     d = {'nrow': nrow, 'ncol': ncol, 'seed': seed, "v_alignment": v_align}
@@ -106,10 +96,14 @@ def do_local_experiment(size: int = 1, su_id: str = 'su_ID', credentials=None):
 
 
 if __name__ == "__main__":
-    # experiment_1(nrow=1000, ncol=1000, seed=285)
-    # do_local_experiment(size=1, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_1')
-    # do_local_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_large_node')
-    do_local_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_large_node_gbq_2',
-                        credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
-    # do_cluster_experiment(size=1000, su_id='{os.environ.get("TABLE_NAME", "su_ID")}_slurm_cluster_2',
-    #                       credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+    # Parse the argument passed to this function that is either "local" or "cluster"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--type", help="type", type=str, default="local")
+    type = parser.parse_args().type
+
+    if type == "local":
+        do_local_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_large_node_gbq_2',
+                            credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
+    elif type == "cluster":
+        do_cluster_experiment(size=1000, su_id=f'{os.environ.get("TABLE_NAME", "su_ID")}_slurm_cluster_2',
+                              credentials=get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json'))
