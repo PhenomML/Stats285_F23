@@ -2,6 +2,7 @@
 
 import logging
 from pathlib import Path
+import argparse
 import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import LabelEncoder
@@ -210,7 +211,7 @@ def create_config(su_id: str = 'su_id') -> dict:
             'learning_rate': [0.1, 0.5, 1.],
             'num_rounds': [50]
         }],
-        'table_name': f'XYZ_{su_id}',
+        'table_name': f'XYZ_EMS_{su_id}',
         'description': 'XYZ example for Stanford Stats285-F23, Describe what this experiment does for future reference.'
     }
     return ems_spec
@@ -245,8 +246,11 @@ def do_local_experiment(su_id: str = 'su_ID', credentials=None):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--su_id", help="su_id", type=str, default="su_id", required=True)
+    su_id = parser.parse_args().su_id
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
-    do_cluster_experiment('adonoho_test_01', credentials=credentials)
+    do_cluster_experiment(su_id, credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.CATBOOST, 6, 0.25, 0.1, credentials=credentials)

@@ -2,6 +2,7 @@
 
 import logging
 from pathlib import Path
+import argparse
 from tornado.ioloop import IOLoop
 import numpy as np
 from sklearn.metrics import accuracy_score
@@ -230,47 +231,6 @@ def get_vertex_study(study_id: str = 'xyz_example',
     return study
 
 
-def calc_xyz_vertex_on_cluster(table_name: str, client: Client, nodes: int, credentials: service_account.Credentials):
-
-    # MAX_NUM_ITERATIONS = 360  # Same number as the EMS version.
-    MAX_NUM_ITERATIONS = 6 * 10  # Sagi Perel suggestion. Less than the 360 used in EMS example.
-    study = get_vertex_study(study_id=table_name, credentials=credentials)
-    ec = EvalOnCluster(client, table_name)
-    in_cluster = {}
-
-    def push_suggestions_to_cluster(count):
-        for suggestion in study.suggest(count=count):
-            params = suggestion.materialize().parameters.as_dict()
-            params['depth'] = round(params['depth'])
-            params['num_rounds'] = round(params['num_rounds'])
-            key = ec.eval_params(experiment, params)
-            in_cluster[key] = suggestion
-        logger.info(f'Pending computations: {len(in_cluster)}.')
-
-    def push_result_to_vertex(df: DataFrame, key: tuple):
-        measurement = vz.Measurement()
-        measurement.metrics['test_accuracy'] = df.iloc[0]['test_accuracy']
-        suggestion = in_cluster[key]
-        suggestion.add_measurement(measurement=measurement)
-        suggestion.complete(measurement=measurement)
-        del in_cluster[key]
-
-    # Prime the cluster.
-    push_suggestions_to_cluster(8)  # Each node has 2 threads, keeps cluster busy.
-    # push_suggestions_to_cluster(3 * nodes)  # Each node has 2 threads, keeps cluster busy.
-    i = 0
-    for df, key in ec.result():  # Start retiring trials.
-        logger.info(f'Result: {df}.')
-        push_result_to_vertex(df, key)
-        i += 1
-        logger.info(f'Completed computations: {i}; Pending: {len(in_cluster)}.')
-        if i + len(in_cluster) <= MAX_NUM_ITERATIONS:
-            push_suggestions_to_cluster(1)
-    ec.final_push()
-    optimal_trials = study.optimal_trials()
-    logger.info(f'{optimal_trials}')
-
-
 async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
                                            nodes: int, credentials: service_account.Credentials):
 
@@ -446,10 +406,12 @@ def do_vertex_on_cluster_async(table_name: str, credentials=None):
 
 
 if __name__ == "__main__":
-    su_id = 'adonoho'
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--su_id", help="su_id", type=str, default="su_id", required=True)
+    su_id = parser.parse_args().su_id
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
     # do_vertex_on_local_async(f'XYZ_{su_id}_test_07', credentials=credentials)
-    do_vertex_on_cluster_async(f'XYZ_{su_id}_test_08_cluster', credentials=credentials)
+    do_vertex_on_cluster_async(f'XYZ_Vertex_{su_id}', credentials=credentials)
     # setup_xyz_vertex_on_local_node(f'XYZ_{su_id}_test_03', credentials=credentials)
     # setup_xyz_vertex_on_cluster(f'XYZ_{su_id}_vertex_test_01', credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)

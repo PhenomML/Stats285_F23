@@ -223,6 +223,9 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
 
 1. Login to FarmShare.
 
+2. Personalize the environment for your Stanford ID (Replace `su_id` with your actual Stanford ID.):  
+	`export SU_ID=su_id_hw7`
+
 2. Change directory to your project:  
 	`cd Stats285_F23/`
 

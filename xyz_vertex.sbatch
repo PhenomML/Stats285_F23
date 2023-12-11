@@ -10,4 +10,4 @@
 #SBATCH --output=xyz_vertex.out
 
 ## Run the python script
-time python3 ./xyz_vertex.py
+time python3 ./xyz_vertex.py --su_id $SU_ID

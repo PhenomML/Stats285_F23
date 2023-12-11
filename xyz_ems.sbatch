@@ -10,4 +10,4 @@
 #SBATCH --output=xyz_ems.out
 
 ## Run the python script
-time python3 ./xyz_ems.py
+time python3 ./xyz_ems.py --su_id $SU_ID
