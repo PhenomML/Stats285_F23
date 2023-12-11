@@ -1,15 +1,15 @@
-# Homework 7. XYZ -- The Painless Way … Kind of …
+# Homework 7. XYZ -- Capstone Homework Assignment …
 
-We have spent the semester building up to executing the XYZ pattern on multiple data sets.
-This homework will show you how to execute this pattern mostly painlessly.
+We spent the semester building up to this assignment. We will now conduct an XYZ experiment with multiple data sets, multiple algorithms, multiple hyperparameter settings and multiple observables.
+In this homework you will use the framework we constructed for you, to execute this pattern. We hope that we are able to convince you that this emerging computational paradigm can be mostly painless.
 
 ## Overview
 
-This homework is broken into two phases. The first keeps you fully in control of the parameter scanning process utilizing the EMS system. The second phase turns that responsibility over to Google's Vizier with EMS handling the cluster. As we have seen in the lectures, XYZ is the combination of algorithms over data sets by a parameter range. We have also seen how robust the BOOST family of algorithms is on tabular data. This homework allows you to see it for yourself. We will be using XGBoost and LightGBM. When you look at the code, you will also see our attempts to use CatBoost. CatBoost crashes for some values of the parameter set. It is an exercise left for the student, not required to pass the class, to fix the CatBoost code.
+Our homework has two phases. The first places you in control of the parameter scanning process. The second phase turns control over to Google's Vizier. As defined in our lectures, an XYZ experiment applies several algorithms across several data sets across a parameter range. Also in lectures, we discussed the outperformance of boosted trees on tabular data. This homework allows you to explore this outperformance for yourself. We will focus on the XGBoost and LightGBM packages; in principle a state-of-the-art experiment would have to include also some deep learning competitors, but we already know that those methods probably still don't outerperform, and so to save time and money we maintain our focus. Note: you may think that two different algorithms is too few to be studying. We agree, and we originally wanted to study more algos. When you look at the code, you will see vestiges of our attempts to use CatBoost. CatBoost crashes for some values of the parameter set. It is an exercise left for the student, not required to pass the course, to fix the CatBoost code.
 
-There are at least two problems we address in setting up an automated XYZ test. First, we need to get access to the data sets in a useful form. We have provided them for you in BigQuery. As BigQuery charges us per query and the size of the results, and because research funds are finite, we only wish to read BigQuery once per data run. (Also, these databases are somewhat large; one is over 100 MB in size.) The homework app reads the data into the cluster; each node accesses the data from the cluster. Second, each data set needs to be manipulated into a common form for each of the algorithms. We have provided a function, `normalize_dataset()`, that accomplishes this task.
+There are at least two problems we address in conducting an automated XYZ experiment. First, we need to wrangle the data sets into an experimentally-friendly form. We therefore pre-installed them for you in Google BigQuery (GBQ). As GBQ charges us per query and per size of the results, we aim to read BigQuery only once per data run. (Also, these databases are somewhat large; one is over 100 MB in size.) Our supplied homework app first reads the data into the cluster; each node can then later access the data from the cluster. Second, each raw data set needs to be wrangled into a form suitable for each of the algorithms. Our function `normalize_dataset()` accomplishes the wrangling.
 
-Finally, we try to run the same process using each algorithm and return a `DataFrame` with the parameters and results. In more complex analyses, one might also track execution time, memory use, and other performance criteria. When we are using EMS, the data is written to BigQuery and we start the next computation. When we are using Vizier, the data is written to both BigQuery and Vizier; Vizier then makes its next guess and we try again. (When we are using Vizier, we actually have one computation per node running. Hence, Vizier starts refining its guesses based upon values that return quickly. We have seen it declare optimality before longer running computations finish.)
+Our experiment implmenentation code provides an engine that runs the same code for each XYZ hyperparameter instance. It algorithm and returns a `DataFrame` with the input parameters and output results. In a more thorough experiment, one might also track execution time, memory use, and other performance criteria. When we are using EMS, the returned results will be written to BigQuery and we afterwards will start the next computation. When we are using Vizier, the data are written to both BigQuery and Vizier; Vizier then makes its next guess (in Viziereses "suggestion"), and we try again. (When we are using Vizier, we actually have one computation per node running. Hence, Vizier starts refining its guesses based upon values that return quickly. We have seen it declare optimality before longer running computations finish.)
 
 #### `xyz_ems.sbatch`
 
@@ -26,7 +26,7 @@ def experiment(*, url: str, boost: str, depth: int, reg_lambda: float, learning_
     return experiment_local(url=url, X_df=df, y_df=y_df, boost=boost,
                             depth=depth, reg_lambda=reg_lambda, learning_rate=learning_rate, num_rounds=num_rounds)
 ```
-As described above, it reads the data, normalizes it and then runs the algorithm on it. As there is little science in `get_local_dataset()` we will ignore it for the nonce. (If you want to see simple caching/memoization in action, the code is easily followed.) `normalize_dataset()` will convert each DataFrame into one that each algorithm can handle.
+As described above, it reads the data, normalizes it and then runs the algorithm on it. As there is little science in `get_local_dataset()` we will ignore it for the moment. (If you want to see simple caching/memoization in action, the code is easily followed.) `normalize_dataset()` will convert each DataFrame into one that each implemented algorithm is set up to handle.
 ```
 def normalize_dataset(url: str, df: DataFrame) -> (DataFrame, DataFrame):
     match url:
@@ -126,13 +126,13 @@ def experiment_local(*, url: str, X_df: DataFrame, y_df: DataFrame, boost: str,
                            'test_accuracy': test_accuracy},
                      index=[0])
 ```
-This looks like normal code, nothing fancy. It was all tested in a single threaded fashion on a laptop. You can easily see the parts of the code commented out that were used in development. (In general, you should not be in a hurry to delete your development code. You will never know when you may need to use it again. Those of you who are intrigued by the crashing of CatBoost will, most likely, find the leftover code useful.)
+This is normal Python code, tested in a single threaded fashion on a laptop. You can easily see the parts of the code commented out that were used in development. (In general, you should not be in a hurry to delete your development code. You will never know when you may need to use it again. Those of you who are intrigued by the crashing of CatBoost will, most likely, find the leftover code useful.)
 
 #### `xyz_vertex.sbatch`
 
 [Google's Vizier service](https://console.cloud.google.com/vertex-ai/experiments/studies?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId) is a subsidiary service within the general Vertex AI service. Your studies will appear on their [dashboard](https://console.cloud.google.com/vertex-ai/experiments/studies?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId).
 
-We have used Dask to hide a huge amount of complexity. For example, EMS, due to Dask, is being used regularly to manage 1,000 node clusters. This requires a fancy scheduler and an asynchronous data transfer system. But the programming model has remained resolutely single threaded, as is most Python code you encounter. This is a *very good thing*. Yet, when we introduce a foreign server, such as Google Vizier, we can no longer ignore blocking I/O. Without going into detail about how Python's `async`/`await` keywords function, know that they are used to enable us to communicate with Vizier while not breaking our own communication with our cluster.
+We use Dask to hide a huge amount of complexity. Our private library, EMS, due to Dask, is being used regularly to manage 1,000 node clusters. This requires a fancy scheduler and an asynchronous data transfer system. But the programming model has remained resolutely single threaded, as is most Python code you encounter. This is a *very good thing*. Yet, when we introduce a foreign server, such as Google Vizier, we can no longer ignore blocking I/O. Without going into detail about how Python's `async`/`await` keywords function, know that they are used to enable us to communicate with Vizier while not breaking our own communication with our cluster.
 
 The function `calc_xyz_vertex_on_cluster_async()` is simpler than it appears. It is focused around two ideas. First, `push_suggestions_to_cluster()` pulls suggestions from Vizier and pushes them to the cluster to be calculated. This code path uses a sophisticated part of Dask that allows us to dynamically insert computations into the cluster after the work has started. Second, `push_result_to_vertex()` takes results from the cluster and pushes them up to Vizier. Here is the core of the interaction between Vizier and your cluster:
 ```
@@ -214,7 +214,7 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
 ```
 
 
-You will see that we now have 3 bash scripts: `hw5_dask_large.sh` `hw5_dask_cluster.sh` and `hw5_sbatch_array.sh`; three python scripts: `main.py` `map_function.py` `gather_csv_to_gbq.py`; we also have two Jupyterlab notebooks `reading_gbq.ipynb` and `hw5_reduce.ipynb`. 
+You will see that we now have in our Github main folder Stats285_F23, 3 bash scripts: `hw5_dask_large.sh` `hw5_dask_cluster.sh` and `hw5_sbatch_array.sh`; three python scripts: `main.py` `map_function.py` `gather_csv_to_gbq.py`; we also have two Jupyterlab notebooks `reading_gbq.ipynb` and `hw5_reduce.ipynb`. 
 
 In HW3 `hw3.sh` `main.py`, we introduced simple code that created the results of one single task, a **1000 x 1000** SVD of noisy data. This code we ran on both your laptop and a server. 
 
