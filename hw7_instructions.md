@@ -249,241 +249,368 @@ If so, delete it:
 	`source activate stats285`  
 	(Note, FarmShare/Sherlock is different from other Unix/Linux shells.)
 
-3. Examine the contents; does it look modestly familiar?
-   
-4.  Personalize the environment for your Stanford ID (Replace `SU_ID` with your actual Stanford ID.):  
-	`export TABLE_NAME=SU_ID_hw5`
-
-8. Execute `map_function.py` on an array of nodes:  
-	`sbatch hw5_sbatch_array.sh`  
+8. Execute `xyz_ems.py` on an array of nodes:  
+	`sbatch xyz_ems.sbatch`  
 	`squeue -u $USER`
 ```
-	(stats285) adonoho@rice03:~/Stats285_F23$ squeue -u $USER
-			 JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-		   2422878_0      normal hw5_arra  adonoho  R       0:14      1 wheat08
-		   2422878_100    normal hw5_arra  adonoho  R       0:14      1 wheat08
-		   2422878_200    normal hw5_arra  adonoho  R       0:14      1 wheat08
-		   2422878_300    normal hw5_arra  adonoho  R       0:14      1 wheat08
-		   2422878_400    normal hw5_arra  adonoho  R       0:14      1 wheat08
-		   2422878_500    normal hw5_arra  adonoho  R       0:14      1 wheat08
-		   2422878_600    normal hw5_arra  adonoho  R       0:14      1 wheat08
-		   2422878_700    normal hw5_arra  adonoho  R       0:14      1 wheat08
-		   2422878_800    normal hw5_arra  adonoho  R       0:14      1 wheat08
-		   2422878_900    normal hw5_arra  adonoho  R       0:14      1 wheat08
-```
-9. Upon completion, about 2 minutes, look inside `hw5_sbatch_array.err`.  
-The beginning of the file:
-```
-	INFO:root:./map_function.py 1000 1000 300 su_id_hw5
-	INFO:root:./map_function.py 1000 1000 200 su_id_hw5
-	INFO:root:./map_function.py 1000 1000 100 su_id_hw5
-	INFO:root:./map_function.py 1000 1000 0 su_id_hw5
-	INFO:root:./map_function.py 1000 1000 400 su_id_hw5
-	INFO:root:./map_function.py 1000 1000 900 su_id_hw5
-	INFO:root:./map_function.py 1000 1000 700 su_id_hw5
-	INFO:root:./map_function.py 1000 1000 800 su_id_hw5
-	INFO:root:./map_function.py 1000 1000 500 su_id_hw5
-	INFO:root:./map_function.py 1000 1000 600 su_id_hw5
-	INFO:root:Seed: 300; 1.3961942195892334 seconds.
-	INFO:root:Seed: 200; 1.4054896831512451 seconds.
-	INFO:root:Seed: 0; 1.4151535034179688 seconds.
-	INFO:root:Seed: 100; 1.4287505149841309 seconds.
-	INFO:root:Seed: 600; 1.8204312324523926 seconds.
-	INFO:root:Seed: 700; 1.8267004489898682 seconds.
-	INFO:root:Seed: 800; 1.836639642715454 seconds.
-	INFO:root:Seed: 500; 1.8410115242004395 seconds.
-	INFO:root:Seed: 400; 1.8435065746307373 seconds.
-	INFO:root:Seed: 900; 1.8431742191314697 seconds.
-	INFO:root:Seed: 301; 1.026653528213501 seconds.
-	INFO:root:Seed: 201; 1.046555757522583 seconds.
-	INFO:root:Seed: 1; 1.0573809146881104 seconds.
-	INFO:root:Seed: 101; 1.0570011138916016 seconds.
-```  
-The end of the file:  
-```
-	INFO:root:Seed: 99; 0.8401017189025879 seconds.
-	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_000.csv
-	INFO:root:Seed: 994; 0.9245727062225342 seconds.
-	INFO:root:Seed: 695; 0.951512336730957 seconds.
-	INFO:root:Seed: 299; 0.8551983833312988 seconds.
-	INFO:root:Seed: 796; 0.9350428581237793 seconds.
-	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_200.csv
-	INFO:root:Seed: 595; 0.9323587417602539 seconds.
-	INFO:root:Seed: 496; 0.9254944324493408 seconds.
-	INFO:root:Seed: 896; 1.025771141052246 seconds.
-	INFO:root:Seed: 995; 0.910144567489624 seconds.
-	INFO:root:Seed: 797; 0.9598126411437988 seconds.
-	INFO:root:Seed: 696; 0.9822354316711426 seconds.
-	INFO:root:Seed: 596; 1.0276415348052979 seconds.
-	INFO:root:Seed: 497; 1.1631739139556885 seconds.
-	INFO:root:Seed: 996; 0.9988284111022949 seconds.
-	INFO:root:Seed: 897; 1.3057270050048828 seconds.
-	INFO:root:Seed: 798; 0.9735469818115234 seconds.
-	INFO:root:Seed: 697; 0.9932045936584473 seconds.
-	INFO:root:Seed: 597; 0.9295105934143066 seconds.
-	INFO:root:Seed: 498; 0.916872501373291 seconds.
-	INFO:root:Seed: 997; 0.9672515392303467 seconds.
-	INFO:root:Seed: 898; 0.9448280334472656 seconds.
-	INFO:root:Seed: 799; 0.9604976177215576 seconds.
-	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_700.csv
-	INFO:root:Seed: 698; 0.9734225273132324 seconds.
-	INFO:root:Seed: 598; 0.9164829254150391 seconds.
-	INFO:root:Seed: 499; 0.90018630027771 seconds.
-	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_400.csv
-	INFO:root:Seed: 998; 0.9398007392883301 seconds.
-	INFO:root:Seed: 899; 1.0349164009094238 seconds.
-	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_800.csv
-	INFO:root:Seed: 699; 0.9158093929290771 seconds.
-	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_600.csv
-	INFO:root:Seed: 599; 0.8771994113922119 seconds.
-	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_500.csv
-	INFO:root:Seed: 999; 0.9271728992462158 seconds.
-	INFO:root:/home/adonoho/Stats285_F23/su_id_hw5_900.csv
-```
-10. Now we will gather the results together on the login node and send them to GBQ. (GBQ will need a `table_name`, `su_id_hw5` in the example below.):
-```
-	python3 gather_csv_to_gbq.py ${TABLE_NAME} *.csv
-```
-`gather_csv_to_gbq.py` will log its command line arguments and will be followed by GBQ acknowledging the receipt of 1000 rows of data.
-```
-	INFO:root:gather_csv_to_gbq.py su_id_hw5 su_id_hw5_000.csv su_id_hw5_100.csv su_id_hw5_200.csv su_id_hw5_300.csv su_id_hw5_400.csv su_id_hw5_500.csv su_id_hw5_600.csv su_id_hw5_700.csv su_id_hw5_800.csv su_id_hw5_900.csv
-	1000 out of 1000 rows loaded.
-```
-
-11. While it is important to know how your local supercomputer works, it is more important to maintain a common workflow. The `sbatch array` is a very different kind of wrapping code and introduces its own complexity of distributed filesystem mediated communication. The EMS system, exploited in `main.py`, runs the same on your laptop and on a large node on FarmShare. This symmetry builds confidence that you are going to get the same answer only faster. As you will see, EMS also launches a cluster on FarmShare with very modest changes and no complex `sbatch` scripting. 
-   
-    ####
-    After, run the following command:  
-`sbatch hw5_dask_large.sh`  
-`squeue -u $USER`  
-    ####
-    A line similar to the following should be displayed:
-    ```
+(stats285) adonoho@rice13:~/Stats285_F23$ squeue -u $USER
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-           2422892    normal hw5_larg  adonoho  R       1:28      1 wheat12
-    ```
-
-12. In `main.py`, comment out lines 110-111, `do_local_experiment()` and uncomment lines 112-113, `do_cluster_experiment()`. Run the following command:  
-`sbatch hw5_dask_cluster.sh`  
-`squeue -u $USER`  
-Lines similar to the following should be displayed:
+           2426605    normal  xyz_ems  adonoho  R       0:37      1 wheat09
+           2426606    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426607    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426608    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426609    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426610    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426611    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426612    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426613    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426614    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426615    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426616    normal dask-wor  adonoho  R       0:14      1 wheat09
+           2426617    normal dask-wor  adonoho  R       0:14      1 wheat08
+           2426618    normal dask-wor  adonoho  R       0:14      1 wheat08
+           2426619    normal dask-wor  adonoho  R       0:14      1 wheat08
+           2426620    normal dask-wor  adonoho  R       0:14      1 wheat08
+           2426621    normal dask-wor  adonoho  R       0:14      1 wheat08
 ```
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-           2422900    normal dask-wor  adonoho  R       0:05      1 wheat12
-           2422901    normal dask-wor  adonoho  R       0:05      1 wheat12
-           2422902    normal dask-wor  adonoho  R       0:05      1 wheat13
-           2422903    normal dask-wor  adonoho  R       0:05      1 wheat13
-           2422904    normal dask-wor  adonoho  R       0:05      1 wheat14
-           2422897    normal dask-wor  adonoho  R       0:08      1 wheat08
-           2422898    normal dask-wor  adonoho  R       0:08      1 wheat10
-           2422899    normal dask-wor  adonoho  R       0:08      1 wheat11
-           2422896    normal hw5_clus  adonoho  R       0:22      1 wheat08
-```
-
-13. Both versions of the EMS code produce similar logs in `hw5_dask_large.err` and `hw5_dask_cluster.err`. Here's an example from the cluster:
+9. Look inside `xyz_ems.err`.  
+The beginning of the file:  
 ```
 INFO:root:#!/usr/bin/env bash
 
 #SBATCH -J dask-worker
 #SBATCH -n 1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=1
 #SBATCH --mem=4G
-#SBATCH -t 00:15:00
+#SBATCH -t 24:00:00
 
-/home/adonoho/.conda/envs/stats285/bin/python3 -m distributed.cli.dask_worker tcp://171.67.51.68:44039 --nthreads 8 --memory-limit 4.00GiB --name dummy-name --nanny --death-timeout 60
+/home/adonoho/.conda/envs/stats285/bin/python3 -m distributed.cli.dask_worker tcp://171.67.51.69:46403 --nthreads 1 --memory-limit 4.00GiB --name dummy-name --nanny --death-timeout 60
 
-INFO:EMS.manager:<Client: 'tcp://171.67.51.68:44039' processes=0 threads=0, memory=0 B>
-ERROR:EMS.manager:Reason: 404 Not found: Table stanford-stats-285-donoho:EMS.stats285_su_ID_slurm_cluster_2_hw5_1000_blocks was not found in location US
+INFO:root:https://archive.ics.uci.edu/dataset/2/adult
+       age  workclass  fnlwgt  ... hours_per_week  native_country income
+0       54          ?  148657  ...             40          Mexico  <=50K
+1       32    Private  112137  ...             40        Cambodia  <=50K
+2       46    Private  225065  ...             40          Mexico  <=50K
+3       64    Private  213391  ...             40   United-States  <=50K
+4       67    Private  142097  ...              6   United-States  <=50K
+...    ...        ...     ...  ...            ...             ...    ...
+48837   20    Private   86143  ...             30   United-States  <=50K
+48838   48    Private  350440  ...             40        Cambodia   >50K
+48839   22  Local-gov  195532  ...             43   United-States  <=50K
+48840   20    Private  176321  ...             20   United-States  <=50K
+48841   43  State-gov  255835  ...             40   United-States  <=50K
+
+[48842 rows x 15 columns]
+INFO:root:https://www.kaggle.com/datasets/camnugent/california-housing-prices
+       longitude  latitude  ...  median_house_value  ocean_proximity
+0        -116.00     33.19  ...             51300.0           INLAND
+1        -116.00     32.74  ...             43900.0           INLAND
+2        -116.00     34.12  ...             57700.0           INLAND
+3        -120.00     38.52  ...            140600.0           INLAND
+4        -120.00     38.93  ...            313400.0           INLAND
+...          ...       ...  ...                 ...              ...
+20635    -119.34     34.39  ...            231300.0       NEAR OCEAN
+20636    -123.59     38.80  ...            176100.0       NEAR OCEAN
+20637    -119.84     34.44  ...            274300.0       NEAR OCEAN
+20638    -119.84     34.45  ...            331200.0       NEAR OCEAN
+20639    -123.84     39.83  ...            145800.0       NEAR OCEAN
+
+[20640 rows x 10 columns]
+```  
+The start of computation …  
+```
+ERROR:EMS.manager:Reason: 404 Not found: Table stanford-stats-285-donoho:EMS.XYZ_EMS_adonoho_hw7 was not found in location US
 
 Location: US
-Job ID: 2b4f24b6-7361-4884-b160-58dc6877eea9
+Job ID: c69f4d20-bc23-42d3-91dd-b94151d55481
 
-INFO:EMS.manager:Number of Instances to calculate: 1000
-INFO:EMS.manager:Count: 10; Time: 12; Seconds/Instance: 1.2081; Remaining (s): 1196; Remaining Count: 990
-INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
-0  1000  1000   748    -0.999943  ...  0.031577 -0.031767  0.031941 -0.031332
+INFO:EMS.manager:Number of Instances to calculate: 360
+INFO:EMS.manager:Count: 10; Time: 52; Seconds/Instance: 5.1607; Remaining (s): 1806; Remaining Count: 350
+INFO:EMS.manager:                                             url  ... test_accuracy
+0  https://www.kaggle.com/c/higgs-boson/training  ...           1.0
 
-[1 rows x 1004 columns]
-INFO:EMS.manager:Count: 20; Time: 12; Seconds/Instance: 0.6092; Remaining (s): 597; Remaining Count: 980
-INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
-0  1000  1000   271    -0.999943  ...  0.032514 -0.031106  0.031448 -0.030869
+[1 rows x 7 columns]
+WARNING:EMS.manager:_push_to_database(): Number of DataFrames: 12; Length of DataFrames: 12
+                                                  url  ... test_accuracy
+0   https://www.kaggle.com/datasets/camnugent/cali...  ...      0.000000
+1   https://www.kaggle.com/datasets/camnugent/cali...  ...      0.000000
+2         https://archive.ics.uci.edu/dataset/2/adult  ...      0.875320
+3         https://archive.ics.uci.edu/dataset/2/adult  ...      0.876446
+4   https://www.kaggle.com/datasets/camnugent/cali...  ...      0.000000
+5       https://www.kaggle.com/c/higgs-boson/training  ...      1.000000
+6         https://archive.ics.uci.edu/dataset/2/adult  ...      0.874092
+7       https://www.kaggle.com/c/higgs-boson/training  ...      1.000000
+8         https://archive.ics.uci.edu/dataset/2/adult  ...      0.871532
+9       https://www.kaggle.com/c/higgs-boson/training  ...      1.000000
+10   https://archive.ics.uci.edu/dataset/31/covertype  ...      0.685912
+11      https://www.kaggle.com/c/higgs-boson/training  ...      1.000000
 
-[1 rows x 1004 columns]
-INFO:EMS.manager:Count: 30; Time: 13; Seconds/Instance: 0.4340; Remaining (s): 421; Remaining Count: 970
-INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
-0  1000  1000    48    -0.999942  ...  0.031642 -0.031573  0.031408 -0.031282
+[12 rows x 7 columns]
+INFO:pandas_gbq.gbq:12 out of 12 rows loaded.
+INFO:EMS.manager:Count: 20; Time: 64; Seconds/Instance: 3.2122; Remaining (s): 1092; Remaining Count: 340
+INFO:EMS.manager:                                                 url  ... test_accuracy
+0  https://www.kaggle.com/datasets/camnugent/cali...  ...           0.0
 
-[1 rows x 1004 columns]
-INFO:EMS.manager:Count: 40; Time: 13; Seconds/Instance: 0.3375; Remaining (s): 324; Remaining Count: 960
-INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
-0  1000  1000   782    -0.999944  ...  0.032201 -0.031003  0.032151 -0.031873
+[1 rows x 7 columns]
+INFO:EMS.manager:Count: 30; Time: 76; Seconds/Instance: 2.5364; Remaining (s): 837; Remaining Count: 330
+INFO:EMS.manager:                                                 url  ... test_accuracy
+0  https://www.kaggle.com/datasets/camnugent/cali...  ...           0.0
 
-[1 rows x 1004 columns]
-INFO:EMS.manager:Count: 50; Time: 14; Seconds/Instance: 0.2756; Remaining (s): 262; Remaining Count: 950
-INFO:EMS.manager:   nrow  ncol  seed  v_alignment  ...     ve996     ve997    ve998    ve999
-0  1000  1000   433    -0.999945  ...  0.031583 -0.031511  0.03167 -0.03145
-
-[1 rows x 1004 columns]
+[1 rows x 7 columns]
 ```
-It starts by sharing the `sbatch` script it used to create the workers. Then, every ten calculations it posts some performance metrics, Seconds/Instance is of particular interest. It allows you to project how long each invocation of your experiment will likely take. In this case, it took about 77 seconds to calculate 1000 SVDs. Here is the end of the file:
+The end of the file:  
 ```
-WARNING:EMS.manager:batch_result(): Early Push: Length of DataFrames: 200
-WARNING:EMS.manager:_push_to_database(): Number of DataFrames: 200; Length of DataFrames: 200
-     nrow  ncol  seed  v_alignment  ...     ve996     ve997     ve998     ve999
-0    1000  1000   690    -0.999945  ...  0.031443 -0.031443  0.031531 -0.031859
-1    1000  1000   654    -0.999947  ...  0.031676 -0.031047  0.031915 -0.031524
-2    1000  1000   954    -0.999946  ...  0.032172 -0.031818  0.031603 -0.030853
-3    1000  1000    65    -0.999943  ...  0.030796 -0.031628  0.031248 -0.031469
-4    1000  1000   178    -0.999945  ...  0.031113 -0.031387  0.031530 -0.031435
-..    ...   ...   ...          ...  ...       ...       ...       ...       ...
-195  1000  1000   161    -0.999945  ...  0.032281 -0.031565  0.031443 -0.031374
-196  1000  1000   505    -0.999943  ...  0.031187 -0.031334  0.031931 -0.031603
-197  1000  1000   268    -0.999943  ...  0.031281 -0.031061  0.031392 -0.031837
-198  1000  1000   142    -0.999939  ...  0.031596 -0.031979  0.030816 -0.031810
-199  1000  1000   921    -0.999947  ...  0.031462 -0.031619  0.031765 -0.031319
+WARNING:EMS.manager:_push_to_database(): Number of DataFrames: 4; Length of DataFrames: 4
+                                                 url  ... test_accuracy
+0        https://archive.ics.uci.edu/dataset/2/adult  ...      0.863548
+1  https://www.kaggle.com/datasets/camnugent/cali...  ...      0.000000
+2  https://www.kaggle.com/datasets/camnugent/cali...  ...      0.000000
+3  https://www.kaggle.com/datasets/camnugent/cali...  ...      0.000000
 
-[200 rows x 1004 columns]
-INFO:pandas_gbq.gbq:^M200 out of 200 rows loaded.
-INFO:EMS.manager:Performed experiment in 77.0673 seconds
-INFO:EMS.manager:Count: 1000, Seconds/Instance: 0.0771
-45.83user 2.99system 1:34.08elapsed 51%CPU (0avgtext+0avgdata 462232maxresident)k
-760408inputs+40288outputs (245major+500911minor)pagefaults 0swaps
+[4 rows x 7 columns]
+INFO:pandas_gbq.gbq:4 out of 4 rows loaded.
+INFO:EMS.manager:Performed experiment in 4122.9516 seconds
+INFO:EMS.manager:Count: 360, Seconds/Instance: 11.4526
+135.71user 37.15system 1:09:25elapsed 4%CPU (0avgtext+0avgdata 1175392maxresident)k
+1128128inputs+4496outputs (381major+855550minor)pagefaults 0swaps
 ```
+On average, while using 16 nodes, EMS took 183 seconds per experiment, `4122.9516s / 360instances * 16 instances/cluster`.
+
+12. Now, let us do the same experiment but let Vizier drive the computation:  
+	`sbatch xyz_vertex.sbatch`  
+	`squeue -u $USER`
+Lines similar to the following should be displayed:
+```
+(stats285) adonoho@rice13:~/Stats285_F23$ squeue -u $USER
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+           2426587    normal xyz_vert  adonoho  R       4:56      1 wheat08
+           2426588    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426589    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426590    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426591    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426592    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426593    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426594    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426595    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426596    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426597    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426598    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426599    normal dask-wor  adonoho  R       4:01      1 wheat08
+           2426600    normal dask-wor  adonoho  R       4:01      1 wheat09
+           2426601    normal dask-wor  adonoho  R       4:01      1 wheat09
+           2426602    normal dask-wor  adonoho  R       4:01      1 wheat09
+           2426603    normal dask-wor  adonoho  R       4:01      1 wheat09
+```
+9. Look inside `xyz_vertex.err`.  
+The beginning of the file:  
+```
+INFO:root:#!/usr/bin/env bash
+
+#SBATCH -J dask-worker
+#SBATCH -n 1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=4G
+#SBATCH -t 24:00:00
+
+/home/adonoho/.conda/envs/stats285/bin/python3 -m distributed.cli.dask_worker tcp://171.67.51.68:42485 --nthreads 1 --memory-limit 4.00GiB --name dummy-name --nanny --death-timeout 60
+
+INFO:root:https://archive.ics.uci.edu/dataset/2/adult
+       age  workclass  fnlwgt  ... hours_per_week  native_country income
+0       54          ?  148657  ...             40          Mexico  <=50K
+1       32    Private  112137  ...             40        Cambodia  <=50K
+2       46    Private  225065  ...             40          Mexico  <=50K
+3       64    Private  213391  ...             40   United-States  <=50K
+4       67    Private  142097  ...              6   United-States  <=50K
+...    ...        ...     ...  ...            ...             ...    ...
+48837   20    Private   86143  ...             30   United-States  <=50K
+48838   48    Private  350440  ...             40        Cambodia   >50K
+48839   22  Local-gov  195532  ...             43   United-States  <=50K
+48840   20    Private  176321  ...             20   United-States  <=50K
+48841   43  State-gov  255835  ...             40   United-States  <=50K
+
+[48842 rows x 15 columns]
+INFO:root:https://www.kaggle.com/datasets/camnugent/california-housing-prices
+       longitude  latitude  ...  median_house_value  ocean_proximity
+0        -116.00     33.19  ...             51300.0           INLAND
+1        -116.00     32.74  ...             43900.0           INLAND
+2        -116.00     34.12  ...             57700.0           INLAND
+3        -120.00     38.52  ...            140600.0           INLAND
+4        -120.00     38.93  ...            313400.0           INLAND
+...          ...       ...  ...                 ...              ...
+20635    -119.34     34.39  ...            231300.0       NEAR OCEAN
+20636    -123.59     38.80  ...            176100.0       NEAR OCEAN
+20637    -119.84     34.44  ...            274300.0       NEAR OCEAN
+20638    -119.84     34.45  ...            331200.0       NEAR OCEAN
+20639    -123.84     39.83  ...            145800.0       NEAR OCEAN
+
+[20640 rows x 10 columns]
+```
+The start of computation …  
+```
+INFO:absl:Adding child parameters {'reg_lambda'} to 1 subspaces 
+INFO:absl:Adding child parameters {'learning_rate'} to 1 subspaces 
+INFO:absl:Adding child parameters {'depth'} to 1 subspaces 
+INFO:absl:Adding child parameters {'num_rounds'} to 1 subspaces 
+INFO:absl:Adding child parameters {'url'} to 1 subspaces 
+INFO:absl:Adding child parameters {'boost'} to 1 subspaces 
+INFO:root:Call Vizier.
+INFO:google.cloud.aiplatform.vizier.study:Suggest Study study backing LRO: projects/21106255545/locations/us-central1/studies/323251796053/operations/323251796053__1
+INFO:google.cloud.aiplatform.vizier.study:<class 'google.cloud.aiplatform_v1.services.vizier_service.client.VizierServiceClient'>
+INFO:google.cloud.aiplatform.vizier.study:Study study suggested. Resource name: projects/21106255545/locations/us-central1/studies/323251796053
+INFO:root:EC Key: ('lightgbm', 8, 0.55, 50, 2.125, 'https://archive.ics.uci.edu/dataset/2/adult')
+Params: {'boost': 'lightgbm', 'depth': 8, 'learning_rate': 0.55, 'num_rounds': 50, 'reg_lambda': 2.125, 'url': 'https://archive.ics.uci.edu/dataset/2/adult'}
+INFO:root:EC Key: ('xgboost', 10, 0.45018079057923976, 50, 1.5002472492923795, 'https://www.kaggle.com/c/higgs-boson/training')
+Params: {'boost': 'xgboost', 'depth': 10, 'learning_rate': 0.45018079057923976, 'num_rounds': 50, 'reg_lambda': 1.5002472492923795, 'url': 'https://www.kaggle.com/c/higgs-boson/training'}
+INFO:root:EC Key: ('xgboost', 6, 0.732120410548891, 50, 2.7035596087532916, 'https://www.kaggle.com/datasets/camnugent/california-housing-prices')
+Params: {'boost': 'xgboost', 'depth': 6, 'learning_rate': 0.732120410548891, 'num_rounds': 50, 'reg_lambda': 2.7035596087532916, 'url': 'https://www.kaggle.com/datasets/camnugent/california-housing-prices'}
+INFO:root:EC Key: ('lightgbm', 6, 0.9378906640804748, 50, 2.0014312881620313, 'https://archive.ics.uci.edu/dataset/31/covertype')
+Params: {'boost': 'lightgbm', 'depth': 6, 'learning_rate': 0.9378906640804748, 'num_rounds': 50, 'reg_lambda': 2.0014312881620313, 'url': 'https://archive.ics.uci.edu/dataset/31/covertype'}
+INFO:root:EC Key: ('xgboost', 6, 0.5839490038051907, 50, 1.2550818377736495, 'https://archive.ics.uci.edu/dataset/31/covertype')
+Params: {'boost': 'xgboost', 'depth': 6, 'learning_rate': 0.5839490038051907, 'num_rounds': 50, 'reg_lambda': 1.2550818377736495, 'url': 'https://archive.ics.uci.edu/dataset/31/covertype'}
+INFO:root:EC Key: ('lightgbm', 8, 0.6440422069033257, 50, 1.6276452112558346, 'https://www.kaggle.com/datasets/camnugent/california-housing-prices')
+Params: {'boost': 'lightgbm', 'depth': 8, 'learning_rate': 0.6440422069033257, 'num_rounds': 50, 'reg_lambda': 1.6276452112558346, 'url': 'https://www.kaggle.com/datasets/camnugent/california-housing-prices'}
+INFO:root:EC Key: ('lightgbm', 6, 0.31744527196580163, 50, 2.7051093651867184, 'https://www.kaggle.com/c/higgs-boson/training')
+Params: {'boost': 'lightgbm', 'depth': 6, 'learning_rate': 0.31744527196580163, 'num_rounds': 50, 'reg_lambda': 2.7051093651867184, 'url': 'https://www.kaggle.com/c/higgs-boson/training'}
+INFO:root:EC Key: ('xgboost', 10, 0.2295345871709696, 50, 3.455495947166911, 'https://archive.ics.uci.edu/dataset/2/adult')
+Params: {'boost': 'xgboost', 'depth': 10, 'learning_rate': 0.2295345871709696, 'num_rounds': 50, 'reg_lambda': 3.455495947166911, 'url': 'https://archive.ics.uci.edu/dataset/2/adult'}
+INFO:root:EC Key: ('xgboost', 6, 0.9575220966227492, 50, 1.1073796544848755, 'https://archive.ics.uci.edu/dataset/2/adult')
+Params: {'boost': 'xgboost', 'depth': 6, 'learning_rate': 0.9575220966227492, 'num_rounds': 50, 'reg_lambda': 1.1073796544848755, 'url': 'https://archive.ics.uci.edu/dataset/2/adult'}
+INFO:root:EC Key: ('lightgbm', 8, 0.539608041858728, 50, 1.3988017852260832, 'https://www.kaggle.com/datasets/camnugent/california-housing-prices')
+Params: {'boost': 'lightgbm', 'depth': 8, 'learning_rate': 0.539608041858728, 'num_rounds': 50, 'reg_lambda': 1.3988017852260832, 'url': 'https://www.kaggle.com/datasets/camnugent/california-housing-prices'}
+INFO:root:EC Key: ('lightgbm', 10, 0.21045844620837129, 50, 0.5552733772530185, 'https://archive.ics.uci.edu/dataset/31/covertype')
+Params: {'boost': 'lightgbm', 'depth': 10, 'learning_rate': 0.21045844620837129, 'num_rounds': 50, 'reg_lambda': 0.5552733772530185, 'url': 'https://archive.ics.uci.edu/dataset/31/covertype'}
+INFO:root:EC Key: ('lightgbm', 10, 0.4543621438395158, 50, 3.2986838492476362, 'https://archive.ics.uci.edu/dataset/31/covertype')
+Params: {'boost': 'lightgbm', 'depth': 10, 'learning_rate': 0.4543621438395158, 'num_rounds': 50, 'reg_lambda': 3.2986838492476362, 'url': 'https://archive.ics.uci.edu/dataset/31/covertype'}
+INFO:root:EC Key: ('xgboost', 8, 0.9582659615559587, 50, 3.881355942788213, 'https://www.kaggle.com/c/higgs-boson/training')
+Params: {'boost': 'xgboost', 'depth': 8, 'learning_rate': 0.9582659615559587, 'num_rounds': 50, 'reg_lambda': 3.881355942788213, 'url': 'https://www.kaggle.com/c/higgs-boson/training'}
+INFO:root:EC Key: ('xgboost', 8, 0.34367778995114917, 50, 1.2913768005643165, 'https://www.kaggle.com/datasets/camnugent/california-housing-prices')
+Params: {'boost': 'xgboost', 'depth': 8, 'learning_rate': 0.34367778995114917, 'num_rounds': 50, 'reg_lambda': 1.2913768005643165, 'url': 'https://www.kaggle.com/datasets/camnugent/california-housing-prices'}
+INFO:root:EC Key: ('lightgbm', 10, 0.7514220574065439, 50, 0.9292980414014104, 'https://www.kaggle.com/c/higgs-boson/training')
+Params: {'boost': 'lightgbm', 'depth': 10, 'learning_rate': 0.7514220574065439, 'num_rounds': 50, 'reg_lambda': 0.9292980414014104, 'url': 'https://www.kaggle.com/c/higgs-boson/training'}
+INFO:root:EC Key: ('xgboost', 6, 0.7888275754708014, 50, 0.4864532010665985, 'https://www.kaggle.com/c/higgs-boson/training')
+Params: {'boost': 'xgboost', 'depth': 6, 'learning_rate': 0.7888275754708014, 'num_rounds': 50, 'reg_lambda': 0.4864532010665985, 'url': 'https://www.kaggle.com/c/higgs-boson/training'}
+INFO:root:EC Key: ('xgboost', 8, 0.1109200834494655, 50, 2.3956399674195703, 'https://archive.ics.uci.edu/dataset/31/covertype')
+Params: {'boost': 'xgboost', 'depth': 8, 'learning_rate': 0.1109200834494655, 'num_rounds': 50, 'reg_lambda': 2.3956399674195703, 'url': 'https://archive.ics.uci.edu/dataset/31/covertype'}
+INFO:root:EC Key: ('xgboost', 8, 0.14115867295860712, 50, 3.901439263950875, 'https://archive.ics.uci.edu/dataset/31/covertype')
+Params: {'boost': 'xgboost', 'depth': 8, 'learning_rate': 0.14115867295860712, 'num_rounds': 50, 'reg_lambda': 3.901439263950875, 'url': 'https://archive.ics.uci.edu/dataset/31/covertype'}
+INFO:root:EC Key: ('xgboost', 6, 0.9941588881278478, 50, 3.817822838974222, 'https://archive.ics.uci.edu/dataset/31/covertype')
+Params: {'boost': 'xgboost', 'depth': 6, 'learning_rate': 0.9941588881278478, 'num_rounds': 50, 'reg_lambda': 3.817822838974222, 'url': 'https://archive.ics.uci.edu/dataset/31/covertype'}
+INFO:root:EC Key: ('xgboost', 8, 0.31844189437443704, 50, 1.57897699926561, 'https://archive.ics.uci.edu/dataset/2/adult')
+Params: {'boost': 'xgboost', 'depth': 8, 'learning_rate': 0.31844189437443704, 'num_rounds': 50, 'reg_lambda': 1.57897699926561, 'url': 'https://archive.ics.uci.edu/dataset/2/adult'}
+INFO:root:EC Key: ('lightgbm', 10, 0.1680943606365825, 50, 3.905196784623627, 'https://www.kaggle.com/datasets/camnugent/california-housing-prices')
+Params: {'boost': 'lightgbm', 'depth': 10, 'learning_rate': 0.1680943606365825, 'num_rounds': 50, 'reg_lambda': 3.905196784623627, 'url': 'https://www.kaggle.com/datasets/camnugent/california-housing-prices'}
+INFO:root:EC Key: ('xgboost', 8, 0.39828192456794, 50, 2.876826266061232, 'https://www.kaggle.com/datasets/camnugent/california-housing-prices')
+Params: {'boost': 'xgboost', 'depth': 8, 'learning_rate': 0.39828192456794, 'num_rounds': 50, 'reg_lambda': 2.876826266061232, 'url': 'https://www.kaggle.com/datasets/camnugent/california-housing-prices'}
+INFO:root:EC Key: ('xgboost', 8, 0.601470460919959, 50, 2.2808297795533874, 'https://archive.ics.uci.edu/dataset/31/covertype')
+Params: {'boost': 'xgboost', 'depth': 8, 'learning_rate': 0.601470460919959, 'num_rounds': 50, 'reg_lambda': 2.2808297795533874, 'url': 'https://archive.ics.uci.edu/dataset/31/covertype'}
+INFO:root:EC Key: ('xgboost', 8, 0.4548634707368746, 50, 3.8275033626959813, 'https://www.kaggle.com/datasets/camnugent/california-housing-prices')
+Params: {'boost': 'xgboost', 'depth': 8, 'learning_rate': 0.4548634707368746, 'num_rounds': 50, 'reg_lambda': 3.8275033626959813, 'url': 'https://www.kaggle.com/datasets/camnugent/california-housing-prices'}
+INFO:root:EC Key: ('lightgbm', 6, 0.9676577267092487, 50, 3.8829372911643665, 'https://www.kaggle.com/c/higgs-boson/training')
+Params: {'boost': 'lightgbm', 'depth': 6, 'learning_rate': 0.9676577267092487, 'num_rounds': 50, 'reg_lambda': 3.8829372911643665, 'url': 'https://www.kaggle.com/c/higgs-boson/training'}
+INFO:root:EC Key: ('xgboost', 6, 0.8832490507572791, 50, 0.34624966391664275, 'https://www.kaggle.com/datasets/camnugent/california-housing-prices')
+Params: {'boost': 'xgboost', 'depth': 6, 'learning_rate': 0.8832490507572791, 'num_rounds': 50, 'reg_lambda': 0.34624966391664275, 'url': 'https://www.kaggle.com/datasets/camnugent/california-housing-prices'}
+INFO:root:EC Key: ('xgboost', 10, 0.7822090251655713, 50, 3.0559177136816333, 'https://archive.ics.uci.edu/dataset/2/adult')
+Params: {'boost': 'xgboost', 'depth': 10, 'learning_rate': 0.7822090251655713, 'num_rounds': 50, 'reg_lambda': 3.0559177136816333, 'url': 'https://archive.ics.uci.edu/dataset/2/adult'}
+INFO:root:EC Key: ('lightgbm', 8, 0.3268763511687526, 50, 3.9902381194770284, 'https://archive.ics.uci.edu/dataset/2/adult')
+Params: {'boost': 'lightgbm', 'depth': 8, 'learning_rate': 0.3268763511687526, 'num_rounds': 50, 'reg_lambda': 3.9902381194770284, 'url': 'https://archive.ics.uci.edu/dataset/2/adult'}
+INFO:root:EC Key: ('lightgbm', 8, 1.0, 50, 1.7531397815842582, 'https://archive.ics.uci.edu/dataset/31/covertype')
+Params: {'boost': 'lightgbm', 'depth': 8, 'learning_rate': 1.0, 'num_rounds': 50, 'reg_lambda': 1.7531397815842582, 'url': 'https://archive.ics.uci.edu/dataset/31/covertype'}
+INFO:root:EC Key: ('lightgbm', 8, 0.1, 50, 0.4703124319083829, 'https://archive.ics.uci.edu/dataset/2/adult')
+Params: {'boost': 'lightgbm', 'depth': 8, 'learning_rate': 0.1, 'num_rounds': 50, 'reg_lambda': 0.4703124319083829, 'url': 'https://archive.ics.uci.edu/dataset/2/adult'}
+INFO:root:EC Key: ('xgboost', 10, 0.38246408863907266, 50, 0.9180991099688451, 'https://archive.ics.uci.edu/dataset/2/adult')
+Params: {'boost': 'xgboost', 'depth': 10, 'learning_rate': 0.38246408863907266, 'num_rounds': 50, 'reg_lambda': 0.9180991099688451, 'url': 'https://archive.ics.uci.edu/dataset/2/adult'}
+INFO:root:EC Key: ('lightgbm', 8, 0.6545002408593917, 50, 0.25, 'https://archive.ics.uci.edu/dataset/2/adult')
+Params: {'boost': 'lightgbm', 'depth': 8, 'learning_rate': 0.6545002408593917, 'num_rounds': 50, 'reg_lambda': 0.25, 'url': 'https://archive.ics.uci.edu/dataset/2/adult'}
+INFO:root:Pending computations: 32.
+INFO:root:Result:                                                  url  ... test_accuracy
+0  https://www.kaggle.com/datasets/camnugent/cali...  ...           0.0
+
+[1 rows x 7 columns].
+INFO:root:Push result to Vizier, EC Key: ('xgboost', 6, 0.732120410548891, 50, 2.7035596087532916, 'https://www.kaggle.com/datasets/camnugent/california-housing-prices')
+INFO:root:End Push.
+INFO:root:Completed computations: 1; Pending: 31.
+INFO:root:Call Vizier.
+INFO:google.cloud.aiplatform.vizier.study:Suggest Study study backing LRO: projects/21106255545/locations/us-central1/studies/323251796053/operations/323251796053__2
+INFO:google.cloud.aiplatform.vizier.study:<class 'google.cloud.aiplatform_v1.services.vizier_service.client.VizierServiceClient'>
+INFO:google.cloud.aiplatform.vizier.study:Study study suggested. Resource name: projects/21106255545/locations/us-central1/studies/323251796053
+INFO:root:Pending computations: 31.
+INFO:root:Result:                                            url  ... test_accuracy
+0  https://archive.ics.uci.edu/dataset/2/adult  ...      0.874194
+
+[1 rows x 7 columns].
+```
+End of computation and optimal trials:
+```
+INFO:root:Finishing
+WARNING:EMS.manager:_push_to_database(): Number of DataFrames: 5; Length of DataFrames: 5
+                                                 url  ... test_accuracy
+0      https://www.kaggle.com/c/higgs-boson/training  ...           1.0
+1  https://www.kaggle.com/datasets/camnugent/cali...  ...           0.0
+2      https://www.kaggle.com/c/higgs-boson/training  ...           1.0
+3      https://www.kaggle.com/c/higgs-boson/training  ...           1.0
+4      https://www.kaggle.com/c/higgs-boson/training  ...           1.0
+
+[5 rows x 7 columns]
+INFO:pandas_gbq.gbq:5 out of 5 rows loaded.
+INFO:root:[<google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa949598150> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/2, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943c97b90> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/7, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943f6b610> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/13, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943f68f10> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/15, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943fb4b10> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/16, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa94aab4910> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/25, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa94aab48d0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/33, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa9496cde90> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/34, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943d05fd0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/35, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943d04ad0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/36, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943e1d650> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/37, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943e1c590> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/38, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943e1d150> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/39, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943f6ee50> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/40, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943fe5a90> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/41, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa949797290> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/42, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa949796890> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/47, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943dd6850> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/48, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943dd4e50> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/49, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943c9b450> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/50, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943c9bc10> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/51, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943de97d0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/52, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943dea150> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/53, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942096d10> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/54, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942095890> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/55, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942094a50> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/56, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942095190> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/57, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa9420978d0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/59, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa9420952d0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/60, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942097050> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/61, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942096c50> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/62, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942096b50> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/63, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942094750> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/64, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942095490> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/65, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942097790> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/66, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa942094a90> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/68, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943c89f50> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/70, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943c8b0d0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/72, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943c8a2d0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/82, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa94953ff90> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/83, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa94953fdd0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/84, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943c78b10> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/85, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943c7b910> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/86, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa948779550> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/87, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa94877be50> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/88, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa9487790d0> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/89, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943cdc190> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/90, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943cdd350> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/91, <google.cloud.aiplatform.vizier.trial.Trial object at 0x7fa943c61a90> 
+resource name: projects/21106255545/locations/us-central1/studies/323251796053/trials/92]
+81.65user 24.85system 16:29.33elapsed 10%CPU (0avgtext+0avgdata 1229164maxresident)k
+1168616inputs+4104outputs (380major+871197minor)pagefaults 0swaps
+```
+
+13. Up on BigQuery, you can check that your data has been saved with [the console](https://console.cloud.google.com/bigquery?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId&ws=!1m4!1m3!3m2!1sstanford-stats-285-donoho!2sEMS). Your databases will be named: `XYZ_EMS_su_id_hw7` and `XYZ_Vertex_su_id_hw7` where `su_id` is the Stanford ID you set in step 2.
+
+14. Up on Vizier/Vertex, you can see your study [here](https://console.cloud.google.com/vertex-ai/experiments/studies?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId). It has the same name as in the EMS dataset on BigQuery.
+
 #### Performing Analysis with Google Colab.
 
-1. Open the `hw5_reduce.ipynb` notebook on the Github website.
-2. Click the 'Open in Colab' button. (Alternatively, you can go directly to [this link](https://colab.research.google.com/github/adonoho/Stats285_F23/blob/main/hw5_reduce.ipynb)).
-   * *Warning:* By default, you will not be able to save changes (which we will ask you to make in next steps) to 
-     this notebook. To save changes, you will need to make a copy of the notebook in your Google Drive by 
-     clicking File -> Save a copy in Drive.
-   * Make sure you are logged into your `suid@stanford.edu` Google account. Otherwise, you will not be able to read the
-     from the GBQ database.
-     **Edit the notebook changing the fragment** 'HW5_SUID_hw5' to something like 'HW5_suid_hw5' where suid denotes your Stanford ID.
-3. Run the code in the notebook. 
-    * This code will read the data from the cloud database and perform the Tall & Skinny SVD to form
-      an approximation of `v_true` (defined in the `generate_data` function of `map_function.py`) 
-      using `vt` which is the top right singular vector of the data matrix formed by collecting
-      1000 different noisy measurements of the underlying $1000 \times 1000$ matrix.
-4. Compare (a) the accuracy of using this `vt` to estimate `v_true` with (b) accuracy of the estimate obtained
-   from using only one approximation formed using one $1000 \times 1000$ matrix in previous homeworks.
 
 ## Submitting on Canvas
-To get credit for this homework, you should submit the following on Canvas:
-
-1. **Short Answer:** Answer the following quests and submit them as a PDF file on Canvas.
-   * Read the `main.py` file. For each function inside (`generate_data`, `experiment`, `build_params`, `do_cluster_experiment`,
-     and `do_local_experiment`), describe what it does.
-   * How do the functions in `main.py` interact with each other?
-   * Using the outputs found in `hw5_sbatch_array.err`, `hw5_dask_large.err`, and `hw5_dask_cluster.err`;
-     estimate how long each of their corresponding scripts took to run? Which one(s) were the fastest? 
-     Which one(s) were the slowest? Explain why.
-   * Compare the accuracy from using `vt` to estimate `v_true` in `hw5_reduce.ipynb` to that obtained from using only one 
-     approximation formed using one $1000 \times 1000$ matrix in earlier homeworks.
-   * Describe your experiences with this homework. What parts had the most "friction"? Which parts felt the most
-     "frictionless"?
-2. **Files:** Submit the following files on Canvas:
-   * `hw5_sbatch_array.err`, `hw5_dask_large.err`, and `hw5_dask_cluster.err` (You can either `scp` them from the cluster or 
-     copy-and-paste their contents from terminal)
-   * Screenshots of your outputs in `hw5_reduce.ipynb`.
-   * On Google Colab, click File -> Download -> Download .ipynb. Submit the downloaded notebook (which should contain
-     your edits and outputs).
