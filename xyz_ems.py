@@ -158,7 +158,7 @@ def category_encode(df: DataFrame) -> DataFrame:
     # Select object columns
     object_cols = df.select_dtypes(include='object').columns
 
-    # One-shot encode these columns
+    # One-hot encode these columns
     df_encoded = pd.get_dummies(df, columns=object_cols)
 
     # Preview
@@ -210,17 +210,8 @@ def create_config(su_id: str = 'su_id') -> dict:
             'learning_rate': [0.1, 0.5, 1.],
             'num_rounds': [50]
         }],
-        'param_types': {
-            'depth': 'int',
-            'reg_lambda': 'float',
-            'boost': 'str',
-            'url': 'str',
-            'learning_rate': 'float',
-            'num_rounds': 'int'
-        },
         'table_name': f'XYZ_{su_id}',
-        'GCP_project_id': 'stanford-stats-285-donoho',
-        'description': 'Describe what this experiment does for future reference.'
+        'description': 'XYZ example for Stanford Stats285-F23, Describe what this experiment does for future reference.'
     }
     return ems_spec
 
@@ -236,7 +227,7 @@ def setup_experiment(url: str, boost: str, depth: int, reg_lambda: float, learni
 
 def do_cluster_experiment(su_id: str = 'su_ID', credentials=None):
     exp = create_config(su_id=su_id)
-    nodes = 64
+    nodes = 16
     with SLURMCluster(cores=1, memory='4GiB', processes=1, walltime='24:00:00') as cluster:
         cluster.scale(jobs=nodes)
         logging.info(cluster.job_script())
@@ -255,7 +246,6 @@ def do_local_experiment(su_id: str = 'su_ID', credentials=None):
 
 if __name__ == "__main__":
     credentials = get_gbq_credentials('stanford-stats-285-donoho-0dc233389eb9.json')
-    # credentials = get_gbq_credentials('stanford-stats-285-donoho-vizier-b8a57b59c6d6.json')
     do_cluster_experiment('adonoho_test_01', credentials=credentials)
     # do_local_experiment('adonoho_test_01', credentials=credentials)
     # setup_experiment(StudyURL.UCIML_ADULT_INCOME, StudyBOOST.XGBOOST, 6, 0.25, 0.1, credentials=credentials)

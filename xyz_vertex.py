@@ -318,8 +318,9 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
         if i < MAX_NUM_ITERATIONS:
             # push_suggestions_to_cluster(nodes)
             await IOLoop.current().run_in_executor(None, push_suggestions_to_cluster, nodes)
-        if i >= MAX_NUM_ITERATIONS and active_suggestions > 0:
-            logger.info(f'Unclaimed suggestions:\n{in_cluster}')
+        else:
+            if active_suggestions > 0:
+                logger.info(f'Unclaimed suggestions:\n{in_cluster}')
             break
     logger.info('Finishing')
     ec.final_push()
