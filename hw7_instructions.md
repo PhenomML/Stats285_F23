@@ -219,39 +219,15 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
 
 ## Instructions (Not yet done for HW7.)
 
-#### Getting Database Access Credentials onto your laptop and Farmshare account
-
-1. Open a terminal window on your laptop. In the shell, run this command:  
-    `echo -n -e "\033]0;LAPTOP\007"`
-
-2. Open another terminal window.  In the shell, run this command:
-    `echo -n -e "\033]0;FARMSHARE\007"`
-   Login to FarmShare. [or Sherlock, if you have an account there] 
-
-4. [LAPTOP WEB BROWSER] Download the security credentials (it is a `.json` file) from Canvas > Files > Homework. (On Mac, the file will end up in your `~/Downloads/` directory.)
-
-5. [LAPTOP terminal] On your laptop at your login directory:  
-	`mkdir .config/gcloud`  
-	`cp ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json ~/.config/gcloud/`
-
-6. [FARMSHARE terminal] On FarmShare at your login directory:  
-	`mkdir .config/gcloud`  
-	`scp  ~/Downloads/stanford-stats-285-donoho-0dc233389eb9.json su_id@rice.stanford.edu:~/.config/gcloud/`
-
 #### Running code on FarmShare/Sherlock
 
-*the following commands are all to be used inside the [FARMSHARE terminal] window*
+1. Login to FarmShare.
 
-1. Clone the HW repository. (Note: Its name has changed.):  
-	`git clone https://github.com/adonoho/Stats285_F23`
-
-2. Change directory to  
+2. Change directory to your project:  
 	`cd Stats285_F23/`
 
-3. Examine the contents; does it look modestly familiar?
-   
-4.  Personalize the environment for your Stanford ID (Replace `SU_ID` with your actual Stanford ID.):  
-	`export TABLE_NAME=SU_ID_hw5`
+1. Pull the latest version of the code:  
+	`git pull`
 
 5. Check if the `conda` environment `stats285` is still around?  
 ```
@@ -268,7 +244,12 @@ If so, delete it:
 
 7. Turn it on:  
 	`source activate stats285`  
-	(Note, FarmShare is different from other Unix/Linux shells.)
+	(Note, FarmShare/Sherlock is different from other Unix/Linux shells.)
+
+3. Examine the contents; does it look modestly familiar?
+   
+4.  Personalize the environment for your Stanford ID (Replace `SU_ID` with your actual Stanford ID.):  
+	`export TABLE_NAME=SU_ID_hw5`
 
 8. Execute `map_function.py` on an array of nodes:  
 	`sbatch hw5_sbatch_array.sh`  

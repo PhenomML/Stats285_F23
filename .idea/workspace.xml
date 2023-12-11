@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bcceca7f-a96c-42ce-9a55-ee0258d1e53c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/hw7_instructions.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xyz_ems.py" beforeDir="false" afterPath="$PROJECT_DIR$/xyz_ems.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xyz_ems.sbatch" beforeDir="false" afterPath="$PROJECT_DIR$/xyz_ems.sbatch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xyz_vertex.py" beforeDir="false" afterPath="$PROJECT_DIR$/xyz_vertex.py" afterDir="false" />
-    </list>
+    <list default="true" id="bcceca7f-a96c-42ce-9a55-ee0258d1e53c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -425,7 +418,7 @@
       <workItem from="1701901862916" duration="958000" />
       <workItem from="1701902974054" duration="8962000" />
       <workItem from="1702248150794" duration="197000" />
-      <workItem from="1702248361077" duration="2406000" />
+      <workItem from="1702248361077" duration="2659000" />
     </task>
     <servers />
   </component>
