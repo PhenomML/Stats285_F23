@@ -630,13 +630,35 @@ If so, delete it (this might take a few minutes to an hour):
 	####
 	Your databases will be named: `XYZ_EMS_su_id_hw7` and `XYZ_Vertex_su_id_hw7` where `su_id` is the Stanford ID you set in step 2.
 
+	**Submit:** Take a screenshopt of this table in the BiqQuery console and submit it on Canvas.
+
 14. Up on Vizier/Vertex, you can see your study [here](https://console.cloud.google.com/vertex-ai/experiments/studies?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId). It has the same name as in the EMS dataset on BigQuery.
 	####
 	Troubleshooting: Similar to the previous step, you need to be logged into your Stanford email. If it keeps defaulting
 	to a different email, open an incognito window and copy the following link into the address bar:
 	[https://console.cloud.google.com/vertex-ai/experiments/studies?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId](https://console.cloud.google.com/vertex-ai/experiments/studies?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId)
-
-#### Performing Analysis with Google Colab.
-
+	####
+	Click on the 'Analysis' tab to see a visual representation of your study. 
+	
+	**Submit:** Take a screenshot of the "Parallel Coordinates Chart" and submit it on Canvas.
 
 ## Submitting on Canvas
+
+Submit the following:
+1. A screenshot of the EMS table you generated on BigQuery.
+2. A screenshot of the Vizier/Vertex Parallel Coordinates Chart.
+3. **Short Answer Questions:** In a PDF document, answer the following questions:
+   1. By interacting with the Parallel Coordinates Chart in the 'Analysis' tab of the Vizier Console,
+       answer the following questions:
+       * Which parameter influences the test accuracy the most?
+       * Which parameter influences the test accuracy the least?
+       * Which method seems to perform better out of the two?
+       * Does there seem to be any interactions between the different parameters?
+       * What else might you observe from the chart?
+   2. Explain your experience working with the EMS system. What are its strengths and limitations?
+   3. Explain your experience working with the Vizier/Vertex system. What are its strengths and limitations?
+4. **Long Answer Question:** Answer the following question in the same PDF.
+    * In STATS 285, we've gone many open source 
+    and commercial tools for data wrangling, analysis, and visualization. Describe an ideal data science 'stack' that 
+    you would build to perform large-scale computational studies in your area of expertise (your "major" at Stanford). 
+    It could include tools that we did not cover in class. Explain why you chose each tool and how they would fit together. 
