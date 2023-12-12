@@ -1,4 +1,4 @@
-# Homework 7. XYZ -- Capstone Homework Assignment …
+# Homework 7. XYZ and Vizier
 
 We spent the semester building up to this assignment. We will now conduct an XYZ experiment with multiple data sets, multiple algorithms, multiple hyperparameter settings and multiple observables.
 In this homework you will use the framework we constructed for you, to execute this pattern. We hope that we are able to convince you that this emerging computational paradigm can be mostly painless.
@@ -217,7 +217,7 @@ async def calc_xyz_vertex_on_cluster_async(table_name: str, client: Client,
     logger.info(f'{optimal_trials}')
 ```
 
-## Instructions (Not yet done for HW7.)
+## Instructions
 
 #### Running code on FarmShare/Sherlock
 
