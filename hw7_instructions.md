@@ -630,7 +630,7 @@ If so, delete it (this might take a few minutes to an hour):
 	address bar:
 	[https://console.cloud.google.com/bigquery?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId&ws=!1m4!1m3!3m2!1sstanford-stats-285-donoho!2sEMS](https://console.cloud.google.com/bigquery?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId&ws=!1m4!1m3!3m2!1sstanford-stats-285-donoho!2sEMS)
 	
-	Then, log into your Stanford account.
+	Then, log into your Stanford account and proceed from there.
 	####
 
 14. Up on Vizier/Vertex, you can see your study [here](https://console.cloud.google.com/vertex-ai/experiments/studies?orgonly=true&project=stanford-stats-285-donoho&supportedpurview=organizationId). It has the same name as in the EMS dataset on BigQuery.
